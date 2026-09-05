@@ -1,0 +1,910 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Times New Roman", Times, serif;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+
+/* =========================================
+   MAIN BACKGROUND
+========================================= */
+
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #3d2364 0%,
+      #211342 35%,
+      #100b2d 70%,
+      #07051c 100%
+    );
+}
+
+
+/* =========================================
+   BACKGROUND SHAPES CONTAINER
+========================================= */
+
+.background-shapes {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================
+   GLOW EFFECTS
+========================================= */
+
+.glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(70px);
+
+  opacity: 0.35;
+
+  animation: glowMove 8s ease-in-out infinite alternate;
+}
+
+
+/* Left glow */
+
+.glow-one {
+  width: 350px;
+  height: 350px;
+
+  left: -120px;
+  top: 30%;
+
+  background: #742ca8;
+}
+
+
+/* Right glow */
+
+.glow-two {
+  width: 400px;
+  height: 400px;
+
+  right: -150px;
+  top: 5%;
+
+  background: #53258e;
+
+  animation-delay: 2s;
+}
+
+
+/* Bottom glow */
+
+.glow-three {
+  width: 300px;
+  height: 300px;
+
+  left: 35%;
+  bottom: -180px;
+
+  background: #8d35b5;
+
+  animation-delay: 4s;
+}
+
+
+@keyframes glowMove {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+
+}
+
+
+/* =========================================
+   GEOMETRIC SHAPES
+========================================= */
+
+.shape {
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  border: 2px solid rgba(205, 184, 255, 0.55);
+
+  opacity: 0.65;
+
+  transform: rotate(25deg);
+
+  animation: floatingShape 7s ease-in-out infinite;
+}
+
+
+/* =========================================
+   TOP RIGHT SHAPE
+========================================= */
+
+.shape-one {
+
+  top: -45px;
+  right: 70px;
+
+  clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    90% 75%,
+    50% 100%,
+    10% 75%,
+    0% 25%
+  );
+
+}
+
+
+/* =========================================
+   TOP RIGHT SECOND SHAPE
+========================================= */
+
+.shape-two {
+
+  width: 220px;
+  height: 220px;
+
+  top: 40px;
+  right: -80px;
+
+  transform: rotate(40deg);
+
+  clip-path: polygon(
+    25% 0%,
+    75% 0%,
+    100% 50%,
+    75% 100%,
+    25% 100%,
+    0% 50%
+  );
+
+  animation-delay: 2s;
+}
+
+
+/* =========================================
+   LEFT MIDDLE SHAPE
+========================================= */
+
+.shape-three {
+
+  width: 190px;
+  height: 190px;
+
+  left: -90px;
+  top: 28%;
+
+  transform: rotate(15deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 20%,
+    100% 65%,
+    60% 100%,
+    15% 80%,
+    0% 35%
+  );
+
+  animation-delay: 1s;
+}
+
+
+/* =========================================
+   BOTTOM LEFT BIG SHAPE
+========================================= */
+
+.shape-four {
+
+  width: 300px;
+  height: 300px;
+
+  left: -100px;
+  bottom: -100px;
+
+  transform: rotate(20deg);
+
+  clip-path: polygon(
+    30% 0%,
+    75% 5%,
+    100% 45%,
+    85% 90%,
+    40% 100%,
+    0% 65%,
+    5% 25%
+  );
+
+  animation-delay: 3s;
+}
+
+
+/* =========================================
+   BOTTOM LEFT SECOND SHAPE
+========================================= */
+
+.shape-five {
+
+  width: 180px;
+  height: 180px;
+
+  left: 130px;
+  bottom: -70px;
+
+  transform: rotate(45deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 25%,
+    100% 70%,
+    50% 100%,
+    0% 70%,
+    10% 25%
+  );
+
+  animation-delay: 1.5s;
+}
+
+
+/* =========================================
+   RIGHT SIDE SHAPE
+========================================= */
+
+.shape-six {
+
+  width: 150px;
+  height: 150px;
+
+  right: -60px;
+  bottom: 25%;
+
+  transform: rotate(30deg);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 50%,
+    50% 100%,
+    0% 50%
+  );
+
+  animation-delay: 4s;
+}
+
+
+/* =========================================
+   SMALL TOP LEFT SHAPE
+========================================= */
+
+.shape-seven {
+
+  width: 110px;
+  height: 110px;
+
+  left: 5%;
+  top: 5%;
+
+  transform: rotate(35deg);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 30%,
+    80% 80%,
+    30% 100%,
+    0% 50%
+  );
+
+  animation-delay: 2.5s;
+}
+
+
+/* =========================================
+   SHAPE ANIMATION
+========================================= */
+
+@keyframes floatingShape {
+
+  0% {
+    transform:
+      translateY(0px)
+      rotate(25deg);
+  }
+
+  50% {
+    transform:
+      translateY(-20px)
+      rotate(35deg);
+  }
+
+  100% {
+    transform:
+      translateY(0px)
+      rotate(25deg);
+  }
+
+}
+
+
+/* =========================================
+   STAR / SPARKLE
+========================================= */
+
+.star {
+  position: absolute;
+
+  color: rgba(226, 216, 255, 0.8);
+
+  font-size: 35px;
+
+  animation: starFloat 4s ease-in-out infinite;
+}
+
+
+.star-one {
+  right: 12%;
+  bottom: 18%;
+}
+
+
+.star-two {
+  left: 25%;
+  top: 15%;
+
+  font-size: 22px;
+
+  animation-delay: 1s;
+}
+
+
+.star-three {
+  right: 30%;
+  top: 8%;
+
+  font-size: 18px;
+
+  animation-delay: 2s;
+}
+
+
+@keyframes starFloat {
+
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.2) rotate(20deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.4;
+  }
+
+}
+
+
+/* =========================================
+   LOGIN CARD
+========================================= */
+
+.sign-in {
+
+  position: relative;
+
+  z-index: 10;
+
+  width: 490px;
+
+  min-height: 504px;
+
+  padding: 55px 55px 40px;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(190, 90, 220, 0.15);
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+}
+
+
+/* =========================================
+   HEADING
+========================================= */
+
+.detail1 {
+
+  text-align: center;
+
+  margin-bottom: 25px;
+
+}
+
+
+.h2one {
+
+  color: #8c0c91;
+
+  font-size: 40px;
+
+  margin-bottom: 3px;
+
+}
+
+
+.h4one {
+
+  color: #b21caf;
+
+  font-size: 27px;
+
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+form {
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 17px;
+}
+
+
+/* =========================================
+   INPUT ROW
+========================================= */
+
+.input-row {
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+/* =========================================
+   NORMAL INPUT
+========================================= */
+
+.input-row > input {
+
+  width: 100%;
+
+  height: 50px;
+
+  padding: 0 15px;
+
+  border: 1px solid #999;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 16px;
+
+  color: #333;
+
+  transition: 0.3s;
+}
+
+
+.input-row > input:focus {
+
+  border-color: #aa16a8;
+
+  box-shadow:
+    0 0 0 3px rgba(170, 22, 168, 0.12);
+}
+
+
+.input-row > input::placeholder {
+
+  color: #777;
+}
+
+
+/* =========================================
+   PASSWORD CONTAINER
+========================================= */
+
+.password-container {
+
+  position: relative;
+
+  width: 100%;
+}
+
+
+/* =========================================
+   PASSWORD INPUT
+========================================= */
+
+.password-container input {
+
+  width: 100%;
+
+  height: 50px;
+
+  padding: 0 50px 0 15px;
+
+  border: 1px solid #999;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 16px;
+
+  color: #333;
+
+  transition: 0.3s;
+}
+
+
+.password-container input:focus {
+
+  border-color: #aa16a8;
+
+  box-shadow:
+    0 0 0 3px rgba(170, 22, 168, 0.12);
+}
+
+
+/* =========================================
+   EYE BUTTON
+========================================= */
+
+.password-eye {
+
+  position: absolute;
+
+  right: 14px;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  border: none;
+
+  background: transparent;
+
+  color: #666;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 5px;
+}
+
+
+.password-eye:hover {
+
+  color: #a516a8;
+
+}
+
+
+/* =========================================
+   ERROR MESSAGE
+========================================= */
+
+.input-error {
+
+  color: #d60000;
+
+  font-size: 14px;
+
+  margin-top: 5px;
+
+  margin-left: 5px;
+
+}
+
+
+/* =========================================
+   LOGIN BUTTON
+========================================= */
+
+#btn1 {
+
+  width: 62%;
+
+  height: 50px;
+
+  margin: 7px auto 0;
+
+  border: none;
+
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #a914a8,
+      #bd22bd
+    );
+
+  color: white;
+
+  font-size: 18px;
+
+  cursor: pointer;
+
+  font-weight: bold;
+
+  transition: 0.3s;
+
+  box-shadow:
+    0 5px 15px rgba(169, 20, 168, 0.3);
+}
+
+
+#btn1:hover {
+
+  background:
+    linear-gradient(
+      135deg,
+      #851285,
+      #a914a8
+    );
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(169, 20, 168, 0.4);
+}
+
+
+/* =========================================
+   OR TEXT
+========================================= */
+
+.para1 {
+
+  margin: 22px 0 17px;
+
+  color: #666;
+
+  font-size: 15px;
+
+}
+
+
+/* =========================================
+   GOOGLE BUTTON
+========================================= */
+
+#google {
+
+  width: 100%;
+
+  height: 50px;
+
+  border-radius: 11px;
+
+  border: 1px solid #999;
+
+  background: white;
+
+  cursor: pointer;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 16px;
+
+  color: #333;
+
+  transition: 0.3s;
+}
+
+
+#google:hover {
+
+  background: #f7f2f8;
+
+  border-color: #a516a8;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   SIGNUP TEXT
+========================================= */
+
+.signup-text {
+
+  margin-top: 22px;
+
+  color: #555;
+
+  font-size: 16px;
+
+}
+
+
+/* =========================================
+   SIGNUP BUTTON
+========================================= */
+
+#btn2 {
+
+  border: none;
+
+  background: transparent;
+
+  color: #8e128e;
+
+  font-weight: bold;
+
+  font-size: 16px;
+
+  cursor: pointer;
+
+}
+
+
+#btn2:hover {
+
+  color: #bd22bd;
+
+  text-decoration: underline;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+  .sign-in {
+
+    width: 90%;
+
+    max-width: 450px;
+
+    min-height: auto;
+
+    padding: 40px 30px;
+  }
+
+
+  .shape-four {
+
+    width: 220px;
+    height: 220px;
+  }
+
+
+  .shape-five {
+
+    display: none;
+  }
+
+
+  .shape-one {
+
+    right: -70px;
+  }
+
+
+  .shape-three {
+
+    left: -100px;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .sign-in {
+
+    width: 94%;
+
+    padding: 35px 22px;
+  }
+
+
+  .h2one {
+
+    font-size: 34px;
+  }
+
+
+  .h4one {
+
+    font-size: 24px;
+  }
+
+
+  #btn1 {
+
+    width: 70%;
+  }
+
+
+  .para1 {
+
+    font-size: 13px;
+  }
+
+}

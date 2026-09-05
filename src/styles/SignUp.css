@@ -1,0 +1,1875 @@
+
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   SIGNUP PAGE BACKGROUND
+========================================= */
+
+.signup-container {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #3d2364 0%,
+      #211342 35%,
+      #100b2d 70%,
+      #07051c 100%
+    );
+}
+
+
+/* =========================================
+   BACKGROUND LAYER
+========================================= */
+
+.signup-background {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================
+   GLOW EFFECTS
+========================================= */
+
+.signup-glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(80px);
+
+  opacity: 0.35;
+
+  animation: signupGlowMove 8s ease-in-out infinite alternate;
+}
+
+
+.signup-glow-one {
+  width: 350px;
+  height: 350px;
+
+  left: -120px;
+  top: 30%;
+
+  background: #742ca8;
+}
+
+
+.signup-glow-two {
+  width: 400px;
+  height: 400px;
+
+  right: -150px;
+  top: 5%;
+
+  background: #53258e;
+
+  animation-delay: 2s;
+}
+
+
+.signup-glow-three {
+  width: 300px;
+  height: 300px;
+
+  left: 35%;
+  bottom: -180px;
+
+  background: #8d35b5;
+
+  animation-delay: 4s;
+}
+
+
+@keyframes signupGlowMove {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+
+}
+
+
+/* =========================================
+   GEOMETRIC SHAPES
+========================================= */
+
+.signup-shape {
+  position: absolute;
+
+  border: 2px solid rgba(205, 184, 255, 0.55);
+
+  opacity: 0.65;
+
+  animation: signupShapeFloat 7s ease-in-out infinite;
+}
+
+
+/* TOP RIGHT */
+
+.signup-shape-one {
+  width: 170px;
+  height: 170px;
+
+  top: -45px;
+  right: 70px;
+
+  transform: rotate(25deg);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    90% 75%,
+    50% 100%,
+    10% 75%,
+    0% 25%
+  );
+}
+
+
+/* TOP RIGHT SECOND */
+
+.signup-shape-two {
+  width: 220px;
+  height: 220px;
+
+  top: 40px;
+  right: -80px;
+
+  transform: rotate(40deg);
+
+  clip-path: polygon(
+    25% 0%,
+    75% 0%,
+    100% 50%,
+    75% 100%,
+    25% 100%,
+    0% 50%
+  );
+
+  animation-delay: 2s;
+}
+
+
+/* LEFT MIDDLE */
+
+.signup-shape-three {
+  width: 190px;
+  height: 190px;
+
+  left: -90px;
+  top: 28%;
+
+  transform: rotate(15deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 20%,
+    100% 65%,
+    60% 100%,
+    15% 80%,
+    0% 35%
+  );
+
+  animation-delay: 1s;
+}
+
+
+/* BOTTOM LEFT */
+
+.signup-shape-four {
+  width: 300px;
+  height: 300px;
+
+  left: -100px;
+  bottom: -100px;
+
+  transform: rotate(20deg);
+
+  clip-path: polygon(
+    30% 0%,
+    75% 5%,
+    100% 45%,
+    85% 90%,
+    40% 100%,
+    0% 65%,
+    5% 25%
+  );
+
+  animation-delay: 3s;
+}
+
+
+/* BOTTOM LEFT SECOND */
+
+.signup-shape-five {
+  width: 180px;
+  height: 180px;
+
+  left: 130px;
+  bottom: -70px;
+
+  transform: rotate(45deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 25%,
+    100% 70%,
+    50% 100%,
+    0% 70%,
+    10% 25%
+  );
+
+  animation-delay: 1.5s;
+}
+
+
+@keyframes signupShapeFloat {
+
+  0% {
+    transform: translateY(0px) rotate(25deg);
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(35deg);
+  }
+
+  100% {
+    transform: translateY(0px) rotate(25deg);
+  }
+
+}
+
+
+/* =========================================
+   STARS
+========================================= */
+
+.signup-star {
+  position: absolute;
+
+  color: rgba(226, 216, 255, 0.8);
+
+  font-size: 35px;
+
+  animation: signupStarFloat 4s ease-in-out infinite;
+}
+
+
+.signup-star-one {
+  right: 12%;
+  bottom: 18%;
+}
+
+
+.signup-star-two {
+  left: 20%;
+  top: 15%;
+
+  font-size: 22px;
+
+  animation-delay: 1s;
+}
+
+
+.signup-star-three {
+  right: 30%;
+  top: 8%;
+
+  font-size: 18px;
+
+  animation-delay: 2s;
+}
+
+
+@keyframes signupStarFloat {
+
+  0% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.2) rotate(20deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.8) rotate(0deg);
+    opacity: 0.4;
+  }
+
+}
+
+
+/* =========================================
+   IMPORTANT
+   KEEP ONLY ONE WHITE CARD
+========================================= */
+
+.signup-container .sign-in {
+  position: relative;
+
+  z-index: 10;
+
+  /* YOUR EXISTING CARD SIZE */
+  background: rgba(255, 255, 255, 0.97);
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(190, 90, 220, 0.15);
+}* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family:
+        'Times New Roman',
+        Times,
+        serif;
+}
+
+
+/* =========================
+   HTML / BODY / ROOT
+========================= */
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =========================
+   SIGNUP CONTAINER
+========================= */
+
+.signup-container {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: linear-gradient(
+        135deg,
+        #20002c,
+        #99739c
+    );
+}
+
+
+/* =========================
+   SIGNUP CARD
+========================= */
+
+.sign-in {
+    width: 380px;
+
+    padding: 46px;
+
+    border-radius: 20px;
+
+    background: white;
+
+    box-shadow:
+        0px 5px 15px
+        rgba(0, 0, 0, 0.2);
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+/* =========================
+   HEADING
+========================= */
+
+.detail1 {
+    text-align: center;
+
+    margin-bottom: 20px;
+}
+
+
+.h2one {
+    color: purple;
+
+    font-size: 36px;
+
+    margin-bottom: 5px;
+}
+
+
+.h4one {
+    color: rgb(173, 30, 173);
+
+    font-size: 26px;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+form {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* =========================
+   NORMAL INPUT
+========================= */
+
+form > input {
+    width: 100%;
+
+    height: 42px;
+
+    padding-left: 12px;
+
+    padding-right: 12px;
+
+    border: 1px solid #999;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+
+/* Input focus */
+
+form > input:focus {
+    border-color: rgb(173, 30, 173);
+
+    box-shadow:
+        0 0 5px
+        rgba(173, 30, 173, 0.3);
+}
+
+
+/* =========================
+   PASSWORD CONTAINER
+========================= */
+
+.signup-password-container {
+    width: 100%;
+
+    height: 42px;
+
+    position: relative;
+}
+
+
+/* =========================
+   PASSWORD INPUT
+========================= */
+
+.signup-password-container input {
+    width: 100%;
+
+    height: 42px;
+
+    padding-left: 12px;
+
+    padding-right: 45px;
+
+    border: 1px solid #999;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.3s;
+}
+
+
+/* Password focus */
+
+.signup-password-container input:focus {
+    border-color: rgb(173, 30, 173);
+
+    box-shadow:
+        0 0 5px
+        rgba(173, 30, 173, 0.3);
+}
+
+
+/* =========================
+   EYE BUTTON
+========================= */
+
+.signup-password-eye {
+    position: absolute;
+
+    right: 10px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 28px;
+
+    height: 28px;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 0;
+
+    margin: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    color: #555;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    transition: 0.2s;
+}
+
+
+/* Eye hover */
+
+.signup-password-eye:hover {
+    color: rgb(173, 30, 173);
+}
+
+
+/* Eye active */
+
+.signup-password-eye:active {
+    transform:
+        translateY(-50%)
+        scale(0.9);
+}
+
+
+/* Remove outline */
+
+.signup-password-eye:focus {
+    outline: none;
+}
+
+
+/* =========================
+   SIGNUP BUTTON
+========================= */
+
+#btn1 {
+    width: 62%;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 10px;
+    font-family: 'Times New Roman', Times, serif;
+
+    background: rgb(173, 30, 173);
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    align-self: center;
+
+    transition: 0.3s;
+}
+
+
+/* Button hover */
+
+#btn1:hover {
+    background: purple;
+
+    transform: scale(1.02);
+}
+
+
+/* Button active */
+
+#btn1:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================
+   OR CONTINUE TEXT
+========================= */
+
+.para1 {
+    margin: 20px 0;
+
+    color: gray;
+
+    font-size: 15px;
+
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   GOOGLE BUTTON
+========================= */
+
+#google {
+    width: 100%;
+
+    height: 42px;
+
+    border-radius: 10px;
+
+    border: 1px solid #999;
+
+    background: white;
+
+    cursor: pointer;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 15px;
+
+    transition: 0.3s;
+}
+
+
+/* Google hover */
+
+#google:hover {
+    background: #f5f5f5;
+
+    transform: scale(1.01);
+}
+
+
+/* Google active */
+
+#google:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================
+   LOGIN LINK
+========================= */
+
+#btn2 {
+    color: purple;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+    margin-left: 4px;
+}
+
+
+/* Login hover */
+
+#btn2:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   PARAGRAPH
+========================= */
+
+.sign-in > p {
+    margin-top: 10px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #555;
+}
+
+
+/* =========================
+   PLACEHOLDER
+========================= */
+
+input::placeholder {
+    color: #777;
+}
+
+
+/* =========================
+   AUTOFILL
+========================= */
+
+input:-webkit-autofill {
+    -webkit-box-shadow:
+        0 0 0 1000px white inset;
+
+    -webkit-text-fill-color: #333;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 500px) {
+
+    .signup-container {
+        padding: 20px;
+    }
+
+    .sign-in {
+        width: 100%;
+
+        max-width: 380px;
+
+        padding: 25px;
+    }
+
+    .h2one {
+        font-size: 32px;
+    }
+
+    .h4one {
+        font-size: 24px;
+    }
+
+    #btn1 {
+        width: 62%;
+    }
+
+    .para1 {
+        font-size: 13px;
+    }
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 350px) {
+
+    .sign-in {
+        padding: 20px;
+    }
+
+    .h2one {
+        font-size: 29px;
+    }
+
+    .h4one {
+        font-size: 22px;
+    }
+
+    #btn1 {
+        width: 70%;
+    }
+
+    #google {
+        font-size: 13px;
+    }
+}
+/* =========================================
+   SIGNUP PAGE BACKGROUND
+========================================= */
+
+.signup-container {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #3d2364 0%,
+      #211342 35%,
+      #100b2d 70%,
+      #07051c 100%
+    );
+}
+
+
+/* =========================================
+   BACKGROUND SHAPES CONTAINER
+========================================= */
+
+.background-shapes {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================
+   GLOW EFFECTS
+========================================= */
+
+.glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(70px);
+
+  opacity: 0.35;
+
+  animation:
+    glowMove 8s ease-in-out infinite alternate;
+}
+
+
+/* LEFT GLOW */
+
+.glow-one {
+  width: 350px;
+  height: 350px;
+
+  left: -120px;
+  top: 30%;
+
+  background: #742ca8;
+}
+
+
+/* RIGHT GLOW */
+
+.glow-two {
+  width: 400px;
+  height: 400px;
+
+  right: -150px;
+  top: 5%;
+
+  background: #53258e;
+
+  animation-delay: 2s;
+}
+
+
+/* BOTTOM GLOW */
+
+.glow-three {
+  width: 300px;
+  height: 300px;
+
+  left: 35%;
+  bottom: -180px;
+
+  background: #8d35b5;
+
+  animation-delay: 4s;
+}
+
+
+/* GLOW ANIMATION */
+
+@keyframes glowMove {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(0.9);
+  }
+
+}
+
+
+/* =========================================
+   GEOMETRIC SHAPES
+========================================= */
+
+.shape {
+  position: absolute;
+
+  width: 170px;
+  height: 170px;
+
+  border: 2px solid rgba(205, 184, 255, 0.55);
+
+  opacity: 0.65;
+
+  transform: rotate(25deg);
+
+  animation:
+    floatingShape 7s ease-in-out infinite;
+}
+
+
+/* =========================================
+   TOP RIGHT SHAPE
+========================================= */
+
+.shape-one {
+
+  top: -45px;
+  right: 70px;
+
+  clip-path: polygon(
+    50% 0%,
+    100% 25%,
+    90% 75%,
+    50% 100%,
+    10% 75%,
+    0% 25%
+  );
+
+}
+
+
+/* =========================================
+   TOP RIGHT SECOND SHAPE
+========================================= */
+
+.shape-two {
+
+  width: 220px;
+  height: 220px;
+
+  top: 40px;
+  right: -80px;
+
+  transform: rotate(40deg);
+
+  clip-path: polygon(
+    25% 0%,
+    75% 0%,
+    100% 50%,
+    75% 100%,
+    25% 100%,
+    0% 50%
+  );
+
+  animation-delay: 2s;
+
+}
+
+
+/* =========================================
+   LEFT MIDDLE SHAPE
+========================================= */
+
+.shape-three {
+
+  width: 190px;
+  height: 190px;
+
+  left: -90px;
+  top: 28%;
+
+  transform: rotate(15deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 20%,
+    100% 65%,
+    60% 100%,
+    15% 80%,
+    0% 35%
+  );
+
+  animation-delay: 1s;
+
+}
+
+
+/* =========================================
+   BOTTOM LEFT BIG SHAPE
+========================================= */
+
+.shape-four {
+
+  width: 300px;
+  height: 300px;
+
+  left: -100px;
+  bottom: -100px;
+
+  transform: rotate(20deg);
+
+  clip-path: polygon(
+    30% 0%,
+    75% 5%,
+    100% 45%,
+    85% 90%,
+    40% 100%,
+    0% 65%,
+    5% 25%
+  );
+
+  animation-delay: 3s;
+
+}
+
+
+/* =========================================
+   BOTTOM LEFT SECOND SHAPE
+========================================= */
+
+.shape-five {
+
+  width: 180px;
+  height: 180px;
+
+  left: 130px;
+  bottom: -70px;
+
+  transform: rotate(45deg);
+
+  clip-path: polygon(
+    50% 0%,
+    90% 25%,
+    100% 70%,
+    50% 100%,
+    0% 70%,
+    10% 25%
+  );
+
+  animation-delay: 1.5s;
+
+}
+
+
+/* =========================================
+   RIGHT SIDE SHAPE
+========================================= */
+
+.shape-six {
+
+  width: 150px;
+  height: 150px;
+
+  right: -60px;
+  bottom: 25%;
+
+  transform: rotate(30deg);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 50%,
+    50% 100%,
+    0% 50%
+  );
+
+  animation-delay: 4s;
+
+}
+
+
+/* =========================================
+   SMALL TOP LEFT SHAPE
+========================================= */
+
+.shape-seven {
+
+  width: 110px;
+  height: 110px;
+
+  left: 5%;
+  top: 5%;
+
+  transform: rotate(35deg);
+
+  clip-path: polygon(
+    50% 0%,
+    100% 30%,
+    80% 80%,
+    30% 100%,
+    0% 50%
+  );
+
+  animation-delay: 2.5s;
+
+}
+
+
+/* =========================================
+   SHAPE ANIMATION
+========================================= */
+
+@keyframes floatingShape {
+
+  0% {
+    transform:
+      translateY(0px)
+      rotate(25deg);
+  }
+
+  50% {
+    transform:
+      translateY(-20px)
+      rotate(35deg);
+  }
+
+  100% {
+    transform:
+      translateY(0px)
+      rotate(25deg);
+  }
+
+}
+
+
+/* =========================================
+   STARS / SPARKLES
+========================================= */
+
+.star {
+  position: absolute;
+
+  color: rgba(226, 216, 255, 0.8);
+
+  font-size: 35px;
+
+  animation:
+    starFloat 4s ease-in-out infinite;
+}
+
+
+.star-one {
+  right: 12%;
+  bottom: 18%;
+}
+
+
+.star-two {
+  left: 25%;
+  top: 15%;
+
+  font-size: 22px;
+
+  animation-delay: 1s;
+}
+
+
+.star-three {
+  right: 30%;
+  top: 8%;
+
+  font-size: 18px;
+
+  animation-delay: 2s;
+}
+
+
+/* =========================================
+   STAR ANIMATION
+========================================= */
+
+@keyframes starFloat {
+
+  0% {
+    transform:
+      scale(0.8)
+      rotate(0deg);
+
+    opacity: 0.4;
+  }
+
+  50% {
+    transform:
+      scale(1.2)
+      rotate(20deg);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      scale(0.8)
+      rotate(0deg);
+
+    opacity: 0.4;
+  }
+
+}
+
+
+/* =========================================
+   KEEP SIGNUP CARD ABOVE BACKGROUND
+========================================= */
+
+.signup-container .sign-in {
+  position: relative;
+
+  z-index: 10;
+}
+
+/* =========================================
+   SIGNUP BACKGROUND
+========================================= */
+
+.signup-container {
+    width: 100%;
+    min-height: 100vh;
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #34205f 0%,
+            #211342 35%,
+            #100b2d 70%,
+            #05031a 100%
+        );
+}
+
+
+/* =========================================
+   BACKGROUND LAYER
+========================================= */
+
+.background-shapes {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* =========================================
+   PURPLE GLOW EFFECTS
+========================================= */
+
+.glow {
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(90px);
+
+    opacity: 0.45;
+
+    pointer-events: none;
+
+    animation:
+        glowMove 8s ease-in-out infinite alternate;
+}
+
+
+/* LEFT PURPLE GLOW */
+
+.glow-one {
+    width: 420px;
+    height: 420px;
+
+    left: -180px;
+    top: 25%;
+
+    background: #7b20b5;
+}
+
+
+/* RIGHT PURPLE GLOW */
+
+.glow-two {
+    width: 450px;
+    height: 450px;
+
+    right: -180px;
+    top: 0%;
+
+    background: #7024c7;
+
+    animation-delay: 2s;
+}
+
+
+/* BOTTOM PURPLE GLOW */
+
+.glow-three {
+    width: 400px;
+    height: 400px;
+
+    left: 35%;
+    bottom: -250px;
+
+    background: #8b24d1;
+
+    animation-delay: 4s;
+}
+
+
+/* GLOW ANIMATION */
+
+@keyframes glowMove {
+
+    0% {
+        transform: scale(1);
+        opacity: 0.35;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(0.95);
+        opacity: 0.4;
+    }
+}
+
+
+/* =========================================
+   GEOMETRIC OUTLINE SHAPES
+========================================= */
+
+.shape {
+    position: absolute;
+
+    border: 2px solid rgba(220, 205, 255, 0.55);
+
+    background: transparent;
+
+    opacity: 0.7;
+
+    pointer-events: none;
+
+    animation:
+        floatingShape 8s ease-in-out infinite;
+}
+
+
+/* =========================================
+   TOP RIGHT LARGE HEXAGON
+========================================= */
+
+.shape-one {
+
+    width: 180px;
+    height: 180px;
+
+    top: -65px;
+    right: 70px;
+
+    transform: rotate(20deg);
+
+    clip-path: polygon(
+        25% 0%,
+        75% 0%,
+        100% 50%,
+        75% 100%,
+        25% 100%,
+        0% 50%
+    );
+}
+
+
+/* =========================================
+   TOP RIGHT SECOND SHAPE
+========================================= */
+
+.shape-two {
+
+    width: 220px;
+    height: 220px;
+
+    top: 70px;
+    right: -75px;
+
+    transform: rotate(35deg);
+
+    clip-path: polygon(
+        30% 0%,
+        70% 5%,
+        100% 35%,
+        90% 75%,
+        55% 100%,
+        15% 85%,
+        0% 45%
+    );
+
+    animation-delay: 2s;
+}
+
+
+/* =========================================
+   LEFT SIDE HEXAGON
+========================================= */
+
+.shape-three {
+
+    width: 180px;
+    height: 180px;
+
+    left: -85px;
+    top: 30%;
+
+    transform: rotate(15deg);
+
+    clip-path: polygon(
+        50% 0%,
+        90% 20%,
+        100% 65%,
+        60% 100%,
+        15% 80%,
+        0% 35%
+    );
+
+    animation-delay: 1s;
+}
+
+
+/* =========================================
+   BOTTOM LEFT LARGE SHAPE
+========================================= */
+
+.shape-four {
+
+    width: 320px;
+    height: 320px;
+
+    left: -130px;
+    bottom: -120px;
+
+    transform: rotate(15deg);
+
+    clip-path: polygon(
+        30% 0%,
+        70% 5%,
+        100% 40%,
+        85% 80%,
+        50% 100%,
+        10% 85%,
+        0% 45%
+    );
+
+    animation-delay: 3s;
+}
+
+
+/* =========================================
+   BOTTOM LEFT SMALL SHAPE
+========================================= */
+
+.shape-five {
+
+    width: 150px;
+    height: 150px;
+
+    left: 150px;
+    bottom: -55px;
+
+    transform: rotate(25deg);
+
+    clip-path: polygon(
+        50% 0%,
+        100% 50%,
+        50% 100%,
+        0% 50%
+    );
+
+    animation-delay: 1.5s;
+}
+
+
+/* =========================================
+   RIGHT SIDE DIAMOND
+========================================= */
+
+.shape-six {
+
+    width: 130px;
+    height: 130px;
+
+    right: -50px;
+    bottom: 22%;
+
+    transform: rotate(45deg);
+
+    clip-path: polygon(
+        50% 0%,
+        100% 50%,
+        50% 100%,
+        0% 50%
+    );
+
+    animation-delay: 4s;
+}
+
+
+/* =========================================
+   TOP LEFT SMALL SHAPE
+========================================= */
+
+.shape-seven {
+
+    width: 90px;
+    height: 90px;
+
+    left: 4%;
+    top: 6%;
+
+    transform: rotate(25deg);
+
+    clip-path: polygon(
+        50% 0%,
+        100% 30%,
+        80% 80%,
+        30% 100%,
+        0% 50%
+    );
+
+    animation-delay: 2.5s;
+}
+
+
+/* =========================================
+   FLOATING ANIMATION
+========================================= */
+
+@keyframes floatingShape {
+
+    0% {
+        transform:
+            translateY(0)
+            rotate(25deg);
+    }
+
+    50% {
+        transform:
+            translateY(-18px)
+            rotate(35deg);
+    }
+
+    100% {
+        transform:
+            translateY(0)
+            rotate(25deg);
+    }
+}
+
+
+/* =========================================
+   STARS / SPARKLES
+========================================= */
+
+.star {
+    position: absolute;
+
+    color: rgba(235, 225, 255, 0.9);
+
+    font-size: 30px;
+
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.6);
+
+    animation:
+        starFloat 4s ease-in-out infinite;
+
+    pointer-events: none;
+}
+
+
+/* LARGE STAR */
+
+.star-one {
+    right: 12%;
+    bottom: 20%;
+
+    font-size: 38px;
+}
+
+
+/* TOP LEFT STAR */
+
+.star-two {
+    left: 19%;
+    top: 17%;
+
+    font-size: 24px;
+
+    animation-delay: 1s;
+}
+
+
+/* TOP RIGHT STAR */
+
+.star-three {
+    right: 30%;
+    top: 9%;
+
+    font-size: 20px;
+
+    animation-delay: 2s;
+}
+
+
+/* =========================================
+   STAR ANIMATION
+========================================= */
+
+@keyframes starFloat {
+
+    0% {
+        transform:
+            scale(0.8)
+            rotate(0deg);
+
+        opacity: 0.4;
+    }
+
+    50% {
+        transform:
+            scale(1.2)
+            rotate(20deg);
+
+        opacity: 1;
+    }
+
+    100% {
+        transform:
+            scale(0.8)
+            rotate(0deg);
+
+        opacity: 0.4;
+    }
+}
+
+
+/* =========================================
+   EXTRA SMALL STARS
+   Created using pseudo elements
+========================================= */
+
+.background-shapes::before,
+.background-shapes::after {
+
+    content: "✦";
+
+    position: absolute;
+
+    color: rgba(220, 210, 255, 0.65);
+
+    font-size: 16px;
+
+    animation:
+        smallStarFloat 5s ease-in-out infinite;
+}
+
+
+/* LEFT SMALL STAR */
+
+.background-shapes::before {
+
+    left: 7%;
+    top: 42%;
+}
+
+
+/* RIGHT SMALL STAR */
+
+.background-shapes::after {
+
+    right: 22%;
+    top: 32%;
+
+    font-size: 12px;
+
+    animation-delay: 2s;
+}
+
+
+@keyframes smallStarFloat {
+
+    0% {
+        transform: scale(0.7);
+        opacity: 0.3;
+    }
+
+    50% {
+        transform: scale(1.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.7);
+        opacity: 0.3;
+    }
+}
+
+
+/* =========================================
+   KEEP SIGNUP CARD ABOVE BACKGROUND
+========================================= */
+
+.signup-container > .sign-in {
+
+    position: relative;
+
+    z-index: 10;
+}
+
+
+/* =========================================
+   RESPONSIVE BACKGROUND
+========================================= */
+
+@media (max-width: 700px) {
+
+    .shape-four {
+        width: 230px;
+        height: 230px;
+    }
+
+    .shape-five {
+        display: none;
+    }
+
+    .shape-one {
+        right: -70px;
+    }
+
+    .shape-three {
+        left: -100px;
+    }
+
+    .glow-one {
+        width: 280px;
+        height: 280px;
+    }
+
+    .glow-two {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+
+@media (max-width: 450px) {
+
+    .shape-two {
+        width: 150px;
+        height: 150px;
+    }
+
+    .shape-six,
+    .shape-seven {
+        display: none;
+    }
+
+    .glow {
+        filter: blur(70px);
+    }
+}

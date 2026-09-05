@@ -1,0 +1,919 @@
+/* =========================================================
+   EVENTS PAGE - PREMIUM BLACK THEME
+========================================================= */
+
+.events-page {
+  min-height: 100vh;
+
+  padding: 32px 6% 60px;
+
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(255, 255, 255, 0.06),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(255, 255, 255, 0.035),
+      transparent 25%
+    ),
+    #050505;
+
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+.events-page::before {
+  content: "";
+
+  position: absolute;
+
+  width: 450px;
+  height: 450px;
+
+  top: -250px;
+  right: -150px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+.events-page::after {
+  content: "";
+
+  position: absolute;
+
+  width: 400px;
+  height: 400px;
+
+  bottom: -220px;
+  left: -180px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.02);
+
+  filter: blur(80px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   FILTER CONTAINER
+========================================================= */
+
+.event-filter-container {
+  position: relative;
+
+  z-index: 10;
+
+  width: 100%;
+  max-width: 1300px;
+
+  margin: 0 auto 38px;
+
+  padding: 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  background: rgba(17, 17, 17, 0.88);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 18px;
+
+  backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+  animation: filterEntrance 0.55s ease forwards;
+}
+
+
+@keyframes filterEntrance {
+  from {
+    opacity: 0;
+
+    transform: translateY(-15px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
+
+.search-box {
+  position: relative;
+
+  flex: 1;
+
+  min-width: 230px;
+
+  display: flex;
+
+  align-items: center;
+}
+
+
+.search-box input {
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 45px 0 15px;
+
+  background: #0b0b0b;
+
+  color: #ffffff;
+
+  border: 1px solid #242424;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.search-box input::placeholder {
+  color: #666;
+}
+
+
+.search-box input:hover {
+  background: #101010;
+
+  border-color: #3a3a3a;
+}
+
+
+.search-box input:focus {
+  background: #111111;
+
+  border-color: rgba(255, 255, 255, 0.65);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.05),
+    0 0 25px rgba(255, 255, 255, 0.06);
+}
+
+
+.search-box span {
+  position: absolute;
+
+  right: 15px;
+
+  color: #777;
+
+  font-size: 16px;
+
+  pointer-events: none;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+.search-box:focus-within span {
+  color: #ffffff;
+
+  transform: scale(1.15);
+}
+
+
+/* =========================================================
+   CUSTOM DROPDOWNS
+   CATEGORY + STATUS
+========================================================= */
+
+.custom-dropdown {
+  position: relative;
+
+  min-width: 170px;
+
+  flex-shrink: 0;
+}
+
+
+/* =========================================================
+   DROPDOWN BUTTON
+========================================================= */
+
+.dropdown-button {
+  width: 100%;
+
+  height: 46px;
+
+  padding: 0 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  background: #0b0b0b;
+
+  color: #cccccc;
+
+  border: 1px solid #242424;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* HOVER */
+
+.dropdown-button:hover {
+  background: #151515;
+
+  color: #ffffff;
+
+  border-color: rgba(255, 255, 255, 0.35);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.45);
+}
+
+
+/* OPEN */
+
+.custom-dropdown.open .dropdown-button {
+  background: #151515;
+
+  color: #ffffff;
+
+  border-color: rgba(255, 255, 255, 0.7);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.05),
+    0 0 25px rgba(255, 255, 255, 0.08);
+}
+
+
+/* =========================================================
+   DROPDOWN ARROW
+========================================================= */
+
+.dropdown-arrow {
+  flex-shrink: 0;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+  color: #777;
+
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+
+.custom-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   DROPDOWN MENU
+========================================================= */
+
+.dropdown-menu {
+  position: absolute;
+
+  top: calc(100% + 8px);
+
+  left: 0;
+
+  width: 100%;
+
+  min-width: 170px;
+
+  padding: 6px;
+
+  background: rgba(13, 13, 13, 0.98);
+
+  border: 1px solid #2a2a2a;
+
+  border-radius: 13px;
+
+  backdrop-filter: blur(18px);
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(255, 255, 255, 0.025);
+
+  z-index: 999;
+
+  transform-origin: top center;
+
+  animation: dropdownOpen 0.25s ease forwards;
+}
+
+
+@keyframes dropdownOpen {
+  0% {
+    opacity: 0;
+
+    transform:
+      translateY(-10px)
+      scaleY(0.9);
+  }
+
+  100% {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scaleY(1);
+  }
+}
+
+
+/* =========================================================
+   DROPDOWN OPTIONS
+========================================================= */
+
+.dropdown-option {
+  position: relative;
+
+  padding: 11px 12px;
+
+  margin: 2px 0;
+
+  border-radius: 8px;
+
+  color: #999999;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  overflow: hidden;
+
+  animation:
+    optionAppear 0.3s ease both;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    padding-left 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+/* OPTION SLIDE ANIMATION */
+
+@keyframes optionAppear {
+  from {
+    opacity: 0;
+
+    transform: translateX(-12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateX(0);
+  }
+}
+
+
+/* =========================================================
+   OPTION HOVER
+========================================================= */
+
+.dropdown-option:hover {
+  background: #222222;
+
+  color: #ffffff;
+
+  transform: translateX(5px);
+
+  padding-left: 17px;
+
+  box-shadow:
+    inset 3px 0 0 #ffffff;
+}
+
+
+/* =========================================================
+   SELECTED OPTION
+========================================================= */
+
+.dropdown-option.selected {
+  background: #ffffff;
+
+  color: #000000;
+
+  font-weight: 600;
+
+  box-shadow:
+    0 3px 12px rgba(255, 255, 255, 0.08);
+}
+
+
+/* SELECTED HOVER */
+
+.dropdown-option.selected:hover {
+  background: #eeeeee;
+
+  color: #000000;
+
+  transform: translateX(5px);
+
+  padding-left: 17px;
+}
+
+
+/* =========================================================
+   DATE INPUT
+========================================================= */
+
+.event-filter-container input[type="date"] {
+  height: 46px;
+
+  padding: 0 13px;
+
+  flex-shrink: 0;
+
+  background: #0b0b0b;
+
+  color: #cccccc;
+
+  border: 1px solid #242424;
+
+  border-radius: 11px;
+
+  outline: none;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.event-filter-container input[type="date"]:hover {
+  background: #151515;
+
+  color: #ffffff;
+
+  border-color: rgba(255, 255, 255, 0.35);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+.event-filter-container input[type="date"]:focus {
+  background: #151515;
+
+  color: #ffffff;
+
+  border-color: rgba(255, 255, 255, 0.7);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.05),
+    0 0 20px rgba(255, 255, 255, 0.06);
+}
+
+
+.event-filter-container
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+
+  opacity: 0.65;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.event-filter-container
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+
+  transform: scale(1.15);
+}
+
+
+/* =========================================================
+   CLEAR BUTTON
+========================================================= */
+
+.clear-filter {
+  height: 46px;
+
+  padding: 0 20px;
+
+  flex-shrink: 0;
+
+  background: transparent;
+
+  color: #aaaaaa;
+
+  border: 1px solid #292929;
+
+  border-radius: 11px;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.clear-filter:hover {
+  background: #ffffff;
+
+  color: #000000;
+
+  border-color: #ffffff;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 25px rgba(255, 255, 255, 0.12);
+}
+
+
+.clear-filter:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================================================
+   EVENTS GRID
+========================================================= */
+
+.events-grid {
+  position: relative;
+
+  z-index: 1;
+
+  width: 100%;
+
+  max-width: 1300px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 25px;
+}
+
+
+/* =========================================================
+   EVENT CARD ENTRANCE
+========================================================= */
+
+.events-grid > * {
+  animation:
+    eventCardAppear
+    0.55s
+    ease
+    both;
+}
+
+
+.events-grid > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.events-grid > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.events-grid > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.events-grid > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.events-grid > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.events-grid > *:nth-child(6) {
+  animation-delay: 0.3s;
+}
+
+@keyframes eventCardAppear {
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(22px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.loading {
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #999999;
+
+  font-size: 15px;
+}
+
+
+.loading::after {
+  content: "";
+
+  width: 24px;
+
+  height: 24px;
+
+  margin-left: 12px;
+
+  border: 2px solid #333333;
+
+  border-top-color: #ffffff;
+
+  border-radius: 50%;
+
+  animation:
+    loadingSpin
+    0.7s
+    linear
+    infinite;
+}
+
+
+@keyframes loadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   NO EVENTS
+========================================================= */
+
+.no-events {
+  max-width: 550px;
+
+  margin: 70px auto;
+
+  padding: 50px 30px;
+
+  text-align: center;
+
+  background: rgba(15, 15, 15, 0.8);
+
+  border: 1px solid #222222;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4);
+
+  animation:
+    noEventsAppear
+    0.5s
+    ease
+    forwards;
+}
+
+
+.no-events h2 {
+  margin: 0 0 10px;
+
+  color: #ffffff;
+
+  font-size: 24px;
+}
+
+
+.no-events p {
+  margin: 0;
+
+  color: #777777;
+
+  font-size: 14px;
+}
+
+
+@keyframes noEventsAppear {
+  from {
+    opacity: 0;
+
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: scale(1);
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1050px) {
+
+  .event-filter-container {
+    flex-wrap: wrap;
+  }
+
+
+  .search-box {
+    flex-basis: 100%;
+  }
+
+
+  .custom-dropdown {
+    flex: 1;
+  }
+
+
+  .event-filter-container
+  input[type="date"] {
+    flex: 1;
+  }
+
+
+  .clear-filter {
+    flex: 0 0 auto;
+  }
+
+
+  .events-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 650px) {
+
+  .events-page {
+    padding:
+      22px
+      15px
+      40px;
+  }
+
+
+  .event-filter-container {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 10px;
+
+    padding: 13px;
+
+    border-radius: 15px;
+  }
+
+
+  .search-box {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .custom-dropdown {
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .dropdown-menu {
+    min-width: 100%;
+  }
+
+
+  .event-filter-container
+  input[type="date"] {
+    width: 100%;
+  }
+
+
+  .clear-filter {
+    width: 100%;
+  }
+
+
+  .events-grid {
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+  }
+}

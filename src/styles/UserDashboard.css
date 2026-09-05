@@ -1,0 +1,83 @@
+.navbar-background {
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+.nav-glow {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(45px);
+
+  opacity: 0.25;
+
+  animation:
+    navGlowMove 7s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* LEFT GLOW */
+
+.glow-left {
+
+  width: 180px;
+  height: 180px;
+
+  left: -80px;
+  top: -100px;
+
+  background: #7b20b5;
+}
+
+
+/* RIGHT GLOW */
+
+.glow-right {
+
+  width: 200px;
+  height: 200px;
+
+  right: -80px;
+  top: -100px;
+
+  background: #7024c7;
+
+  animation-delay: 2s;
+}
+
+
+@keyframes navGlowMove {
+
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: scale(0.9);
+    opacity: 0.25;
+  }
+
+}

@@ -1,0 +1,394 @@
+.signout-page {
+  width: 100%;
+  min-height: 100vh;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  /* BLACK BACKGROUND */
+  background: #000000;
+
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+
+/* =================================
+   BACKGROUND
+================================= */
+
+.signout-background {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =================================
+   STARS
+================================= */
+
+.signout-star {
+  position: absolute;
+
+  color: #8532bc;
+
+  font-size: 28px;
+
+  opacity: 0.45;
+
+  animation: starFloat 4s ease-in-out infinite;
+}
+
+
+/* Star positions */
+
+.signout-star.star1 {
+  top: 12%;
+  left: 15%;
+  font-size: 55px;
+}
+
+.signout-star.star2 {
+  top: 20%;
+  right: 18%;
+
+  font-size: 32px;
+
+  animation-delay: 0.5s;
+}
+
+.signout-star.star3 {
+  bottom: 20%;
+  left: 20%;
+
+  font-size: 43px;
+
+  animation-delay: 1s;
+}
+
+.signout-star.star4 {
+  bottom: 15%;
+  right: 15%;
+
+  font-size: 35px;
+
+  animation-delay: 1.5s;
+}
+
+.signout-star.star5 {
+  top: 45%;
+  left: 8%;
+
+  font-size: 43px;
+
+  animation-delay: 2s;
+}
+
+.signout-star.star6 {
+   bottom: 15%;
+  right: 15%;
+  font-size: 55px;
+   animation-delay: 1.5s;
+}
+
+/* =================================
+   ORANGE GLOWS
+================================= */
+
+.signout-glow {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(120px);
+
+  pointer-events: none;
+}
+
+
+/* Left glow */
+
+.signout-glow.glow-left {
+  width: 450px;
+  height: 450px;
+
+  left: -220px;
+  bottom: -160px;
+
+  background: #000000;
+
+  opacity: 0.18;
+}
+
+
+/* Right glow */
+
+.signout-glow.glow-right {
+  width: 500px;
+  height: 500px;
+
+  right: -220px;
+  top: -180px;
+
+  background: #000000;
+
+  opacity: 0.16;
+}
+
+
+/* =================================
+   SIGN OUT CARD
+================================= */
+
+.signout-card {
+  position: relative;
+
+  z-index: 5;
+
+  width: 90%;
+  max-width: 440px;
+
+  padding: 45px 40px;
+
+  text-align: center;
+
+  /* DARK CARD */
+
+  background: rgba(20, 20, 20, 0.94);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 26px;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.6);
+
+  backdrop-filter: blur(15px);
+}
+
+
+/* =================================
+   ICON
+================================= */
+
+.signout-icon {
+  width: 75px;
+    height: 75px;
+    margin: 0 auto 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgb(154 6 178 / 12%);
+    border: 1px solid rgb(181 8 230 / 20%);
+    color: #750b6c;
+    font-size: 36px;
+    font-weight: 700;
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.08);
+}
+
+
+/* =================================
+   TITLE
+================================= */
+
+.signout-card h1 {
+  margin: 0 0 14px;
+
+  font-family: "Sora", sans-serif;
+
+  font-size: 32px;
+
+  font-weight: 700;
+
+  color: #ffffff;
+}
+
+
+/* =================================
+   TEXT
+================================= */
+
+.signout-card p {
+  margin: 0;
+
+  font-size: 15px;
+
+  line-height: 1.6;
+
+  color: #b5b5b5;
+}
+
+.signout-small-text {
+  display: block;
+
+  margin-top: 6px;
+
+  font-size: 13px;
+
+  color: #737373;
+}
+
+
+/* =================================
+   BUTTONS
+================================= */
+
+.signout-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 32px;
+}
+
+
+/* Cancel */
+
+.cancel-button {
+  flex: 1;
+
+  padding: 14px 20px;
+
+  border: 1px solid #333333;
+
+  border-radius: 12px;
+
+  background: #171717;
+
+  color: #d4d4d4;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+  background: #222222;
+
+  border-color: #444444;
+}
+
+
+/* Confirm */
+
+.confirm-button {
+  flex: 1;
+
+  padding: 14px 20px;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #220638;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.confirm-button:hover {
+  background: #6d2d88;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 25px rgba(87, 14, 85, 0.3);
+}
+
+
+/* =================================
+   STAR ANIMATION
+================================= */
+
+@keyframes starFloat {
+
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-8px) rotate(10deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+  .signout-card {
+    width: 88%;
+
+    padding: 35px 25px;
+  }
+
+  .signout-card h1 {
+    font-size: 28px;
+  }
+
+  .signout-actions {
+    flex-direction: column;
+  }
+
+  .cancel-button,
+  .confirm-button {
+    width: 100%;
+  }
+
+  .signout-star.star1 {
+    left: 7%;
+  }
+
+  .signout-star.star2 {
+    right: 7%;
+  }
+
+  .signout-star.star3 {
+    left: 8%;
+  }
+
+  .signout-star.star4 {
+    right: 7%;
+  }
+
+  .signout-glow.glow-left {
+    width: 280px;
+    height: 280px;
+  }
+
+  .signout-glow.glow-right {
+    width: 300px;
+    height: 300px;
+  }
+
+}

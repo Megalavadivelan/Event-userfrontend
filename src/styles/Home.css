@@ -1,0 +1,94 @@
+body{
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #000000 0%,
+      #000000 40%,
+      #000000 75%,
+      #200122 100%
+    );
+}.navbar-background {
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+.nav-star {
+
+  position: absolute;
+
+  color:
+    rgba(235, 225, 255, 0.85);
+
+  text-shadow:
+    0 0 8px
+    rgba(255, 255, 255, 0.7);
+
+  animation:
+    navStarFloat 4s
+    ease-in-out
+    infinite;
+
+  z-index: 1;
+}
+
+
+
+.star1 {
+
+  top: 17%;
+    font-size: 86px;
+    left: 3%;
+}
+.star2 {
+
+  left: 27%;
+
+  top: 55%;
+
+  font-size: 8px;
+
+  animation-delay: 1s;
+}
+
+
+/* CENTER */
+
+.star3 {
+
+  left: 52%;
+
+  top: 18%;
+
+  font-size: 10px;
+
+  animation-delay: 2s;
+}
+
+
+/* RIGHT */
+
+.star4 {
+
+  right: 5%;
+    top: 60%;
+    font-size: 32px;
+    animation-delay: 1.5s;
+}
+/* FAR RIGHT */
+.star5 {
+  right: 7%;
+  top: 15%;
+  font-size: 8px;
+  animation-delay: 2.5s;
+}

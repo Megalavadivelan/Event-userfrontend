@@ -1,0 +1,846 @@
+/* =========================================
+   RESET
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+.navbar {
+
+  width: 100%;
+  height: 75px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 0 55px;
+
+  overflow: visible;
+
+  z-index: 1000;
+  border-bottom: 1px solid whitesmoke;
+
+  /* Same purple theme */
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #000000 0%,
+      #000000 40%,
+      #000000 75%,
+      #000000 100%
+    );
+
+  border-bottom:
+    1px solid
+    rgba(220, 205, 255, 0.15);
+
+  box-shadow:
+    0 5px 25px
+    rgba(0, 0, 0, 0.25);
+}
+
+
+/* =========================================
+   NAVBAR BACKGROUND
+========================================= */
+
+.navbar-background {
+
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  pointer-events: none;
+
+  z-index: 0;
+}
+
+
+/* =========================================
+   PURPLE GLOWS
+========================================= */
+
+.nav-glow {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(45px);
+
+  opacity: 0.25;
+
+  animation:
+    navGlowMove 7s
+    ease-in-out
+    infinite
+    alternate;
+}
+
+
+/* LEFT GLOW */
+
+.glow-left {
+
+  width: 180px;
+  height: 180px;
+
+  left: -80px;
+  top: -100px;
+
+  background: #7b20b5;
+}
+
+
+/* RIGHT GLOW */
+
+.glow-right {
+
+  width: 200px;
+  height: 200px;
+
+  right: -80px;
+  top: -100px;
+
+  background: #7024c7;
+
+  animation-delay: 2s;
+}
+
+
+@keyframes navGlowMove {
+
+  0% {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 0.35;
+  }
+
+  100% {
+    transform: scale(0.9);
+    opacity: 0.25;
+  }
+
+}
+
+
+/* =========================================
+   NAVBAR SPARKLES
+========================================= */
+
+.nav-star {
+
+  position: absolute;
+
+  color:
+    rgba(235, 225, 255, 0.85);
+
+  text-shadow:
+    0 0 8px
+    rgba(255, 255, 255, 0.7);
+
+  animation:
+    navStarFloat 4s
+    ease-in-out
+    infinite;
+
+  z-index: 1;
+}
+
+
+/* TOP LEFT */
+
+.star-1 {
+
+  left: 8%;
+
+  top: 12%;
+
+  font-size: 13px;
+}
+
+
+/* LEFT CENTER */
+
+.star-2 {
+
+  left: 27%;
+
+  top: 55%;
+
+  font-size: 8px;
+
+  animation-delay: 1s;
+}
+
+
+/* CENTER */
+
+.star-3 {
+
+  left: 52%;
+
+  top: 18%;
+
+  font-size: 10px;
+
+  animation-delay: 2s;
+}
+
+
+/* RIGHT */
+
+.star-4 {
+
+  right: 20%;
+
+  top: 60%;
+
+  font-size: 12px;
+
+  animation-delay: 1.5s;
+}
+
+
+/* FAR RIGHT */
+
+.star-5 {
+
+  right: 7%;
+
+  top: 15%;
+
+  font-size: 8px;
+
+  animation-delay: 2.5s;
+}
+
+
+@keyframes navStarFloat {
+
+  0% {
+
+    transform:
+      scale(0.7)
+      rotate(0deg);
+
+    opacity: 0.3;
+  }
+
+  50% {
+
+    transform:
+      scale(1.3)
+      rotate(20deg);
+
+    opacity: 1;
+  }
+
+  100% {
+
+    transform:
+      scale(0.7)
+      rotate(0deg);
+
+    opacity: 0.3;
+  }
+
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.navbar-logo {
+
+  position: relative;
+
+  z-index: 5;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  cursor: pointer;
+
+  user-select: none;
+}
+
+
+/* LOGO STAR */
+
+.logo-star {
+
+  color: #684e9d;
+
+  font-size: 25px;
+
+  text-shadow:
+    0 0 10px
+    rgba(0, 0, 0, 0.8);
+
+  animation:
+    logoSparkle 3s
+    ease-in-out
+    infinite;
+}
+
+
+/* LOGO TEXT */
+
+.logo-text {
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 27px;
+
+  font-weight: bold;
+
+  letter-spacing: 1px;
+
+  color: white;
+
+  text-shadow:
+    0 0 12px
+    rgba(190, 130, 255, 0.4);
+}
+
+
+@keyframes logoSparkle {
+
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2) rotate(15deg);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+
+}
+
+
+/* =========================================
+   NAVIGATION LINKS CONTAINER
+========================================= */
+
+.navbar-links {
+
+  position: relative;
+
+  z-index: 10;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 32px;
+
+  height: 100%;
+}
+
+
+/* =========================================
+   NORMAL NAV LINKS
+========================================= */
+
+.nav-link {
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  height: 100%;
+
+  color:
+    rgba(255, 255, 255, 0.9);
+
+  text-decoration: none;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 17px;
+
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+
+/* UNDERLINE EFFECT */
+
+.nav-link::after {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  bottom: 18px;
+
+  width: 0;
+
+  height: 2px;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #000000,
+      #5f5365
+    );
+
+  box-shadow:
+    0 0 8px
+    rgba(0, 0, 0, 0.7);
+
+  transition:
+    width 0.3s ease;
+}
+
+
+/* HOVER */
+
+.nav-link:hover {
+
+  color: white;
+
+  transform:
+    translateY(-1px);
+}
+
+
+.nav-link:hover::after {
+
+  width: 100%;
+}
+
+
+/* =========================================
+   EVENTS DROPDOWN
+========================================= */
+
+.events-dropdown {
+
+  position: relative;
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+}
+
+
+/* EVENTS BUTTON */
+
+.events-button {
+
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  border: none;
+
+  background: transparent;
+
+  color:
+    rgba(255, 255, 255, 0.9);
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 17px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.3s ease;
+}
+
+
+.events-button:hover {
+
+  color: white;
+}
+
+
+/* =========================================
+   DROPDOWN ARROW
+========================================= */
+
+.dropdown-arrow {
+
+  font-size: 13px;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.dropdown-arrow.arrow-up {
+
+  transform:
+    rotate(180deg);
+}
+
+
+/* =========================================
+   EVENTS DROPDOWN MENU
+========================================= */
+
+.events-menu {
+
+  position: absolute;
+
+  top: 67px;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  width: 155px;
+
+  padding: 8px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(25, 13, 55, 0.97);
+
+  border:
+    1px solid
+    rgba(220, 190, 255, 0.2);
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.45),
+
+    0 0 25px
+    rgba(150, 70, 220, 0.2);
+
+  backdrop-filter:
+    blur(12px);
+
+  animation:
+    dropdownOpen 0.25s ease;
+}
+
+
+/* DROPDOWN ANIMATION */
+
+@keyframes dropdownOpen {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateX(-50%)
+      translateY(-8px);
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateX(-50%)
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================
+   DROPDOWN ITEMS
+========================================= */
+
+.dropdown-item {
+
+  display: block;
+
+  padding: 11px 14px;
+
+  border-radius: 8px;
+
+  color:
+    rgba(255, 255, 255, 0.9);
+
+  text-decoration: none;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 16px;
+
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    padding-left 0.25s ease;
+}
+
+
+.dropdown-item:hover {
+
+  color: white;
+
+  padding-left: 19px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(173, 30, 173, 0.55),
+      rgba(112, 36, 199, 0.35)
+    );
+
+  box-shadow:
+    0 0 12px
+    rgba(190, 70, 230, 0.15);
+}
+
+
+/* =========================================
+   SIGN OUT BUTTON
+========================================= */
+
+.signout-button {
+
+  position: relative;
+
+  padding:
+    9px 18px;
+
+  border:
+    1px solid
+    rgba(220, 190, 255, 0.35);
+
+  border-radius: 9px;
+
+  background:
+    rgba(0, 0, 0, 0.85);
+
+  color: white;
+
+  font-family:
+    "Times New Roman",
+    Times,
+    serif;
+
+  font-size: 16px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition:
+    all 0.3s ease;
+}
+
+
+/* SIGN OUT HOVER */
+
+.signout-button:hover {
+
+  background:
+    #393838;
+  color: white;
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 5px 20px
+    rgba(0, 0, 0, 0.4);
+}
+
+
+/* SIGN OUT ACTIVE */
+
+.signout-button:active {
+
+  transform:
+    translateY(0)
+    scale(0.97);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+  .navbar {
+
+    padding:
+      0 30px;
+  }
+
+  .navbar-links {
+
+    gap: 20px;
+  }
+
+  .nav-link,
+  .events-button {
+
+    font-size: 15px;
+  }
+
+  .logo-text {
+
+    font-size: 23px;
+  }
+
+}
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 800px) {
+
+  .navbar {
+
+    height: auto;
+
+    min-height: 70px;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    padding:
+      15px 25px;
+  }
+
+  .navbar-links {
+
+    height: auto;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 20px;
+  }
+
+  .nav-link {
+
+    height: 35px;
+  }
+
+  .nav-link::after {
+
+    bottom: 0;
+  }
+
+  .events-dropdown {
+
+    height: 35px;
+  }
+
+  .events-button {
+
+    height: 35px;
+  }
+
+  .events-menu {
+
+    top: 40px;
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 550px) {
+
+  .navbar {
+
+    padding:
+      15px;
+  }
+
+  .navbar-links {
+
+    gap: 12px 18px;
+  }
+
+  .nav-link,
+  .events-button {
+
+    font-size: 14px;
+  }
+
+  .signout-button {
+
+    padding:
+      7px 12px;
+
+    font-size: 14px;
+  }
+
+  .logo-text {
+
+    font-size: 22px;
+  }
+
+  .logo-star {
+
+    font-size: 20px;
+  }
+
+}
