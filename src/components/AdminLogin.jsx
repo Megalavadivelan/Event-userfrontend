@@ -80,7 +80,7 @@ function AdminLogin() {
 
     try {
       const response = await axios.post(
-        "http://localhost:2005/admin/login",
+        "https://user-api-iota-six.vercel.app/admin/login",
         {
           email: email.trim(),
           password: password,

@@ -9,7 +9,7 @@ import "../styles/Profile.css";
 
 
 const API_URL =
-  "http://localhost:2005";
+  "https://user-api-iota-six.vercel.app/";
 
 
 const Profile = () => {

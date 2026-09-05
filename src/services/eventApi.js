@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:2005/events";
+const API_URL = "https://user-api-iota-six.vercel.app/events";
 
 export const getAllEvents = async () => {
 
