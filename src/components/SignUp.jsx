@@ -106,7 +106,7 @@ function Signup() {
     try {
 
       const response = await axios.post(
-        "http://localhost:5000/signup/create",
+        "https://user-api-iota-six.vercel.app/signup/create",
         {
           name: name.trim(),
           email: email.trim(),
