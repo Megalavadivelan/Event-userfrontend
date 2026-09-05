@@ -19,7 +19,7 @@ function App() {
     <Routes >
 
       {/* Pages WITHOUT Navbar */}
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/roleselection" element={<RoleSelection />} />
       <Route path="/adminlogin" element={<AdminLogin />} />
