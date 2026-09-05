@@ -106,7 +106,7 @@ function Signup() {
     try {
 
       const response = await axios.post(
-        "http://localhost:2005/signup/create",
+        "http://localhost:5000/signup/create",
         {
           name: name.trim(),
           email: email.trim(),

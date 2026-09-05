@@ -16,10 +16,10 @@ import Gallery from "./components/Gallery.jsx";
 
 function App() {
   return (
-    <Routes>
+    <Routes >
 
       {/* Pages WITHOUT Navbar */}
-      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/roleselection" element={<RoleSelection />} />
       <Route path="/adminlogin" element={<AdminLogin />} />
