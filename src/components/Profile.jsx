@@ -134,7 +134,7 @@ const Profile = () => {
 
         const response =
           await axios.get(
-            `${API_URL}/bookings/my-bookings`,
+            `${API_URL}bookings/my-bookings`,
             {
               headers: {
                 Authorization:
