@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/Contact.css";
 
-const API_URL = "https://user-api-iota-six.vercel.app/";
+const API_URL = "https://user-api-iota-six.vercel.app";
 
 const Contact = () => {
   const [formData, setFormData] = useState({

@@ -23,7 +23,7 @@ const [categoryOpen, setCategoryOpen] = useState(false);
     try {
 
       const response = await fetch(
-        "http://localhost:9000/events/getevents"
+        "https://event-admin-one.vercel.app/events/getevents"
       );
 
       const data = await response.json();

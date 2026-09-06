@@ -19,7 +19,7 @@ const EventDetails = () => {
     try {
 
       const response = await fetch(
-        "http://localhost:9000/events/get/${id}"
+        "https://event-admin-one.vercel.app/events/get/${id}"
       );
 
       const data = await response.json();

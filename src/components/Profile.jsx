@@ -9,7 +9,7 @@ import "../styles/Profile.css";
 
 
 const API_URL =
-  "https://user-api-iota-six.vercel.app/";
+  "https://user-api-iota-six.vercel.app";
 
 
 const Profile = () => {
@@ -74,7 +74,7 @@ const Profile = () => {
 
         const response =
           await axios.get(
-            `${API_URL}/profile/me`,
+            `${API_URL}profile/me`,
             {
               headers: {
                 Authorization:
@@ -227,7 +227,7 @@ const Profile = () => {
         const response =
           await axios.put(
 
-            `${API_URL}/profile/update`,
+            `${API_URL}profile/update`,
 
             {
               name:
@@ -393,7 +393,7 @@ const Profile = () => {
         const response =
           await axios.post(
 
-            `${API_URL}/profile/upload-dp`,
+            `${API_URL}profile/upload-dp`,
 
             data,
 
@@ -501,7 +501,7 @@ const Profile = () => {
 
         await axios.delete(
 
-          `${API_URL}/profile/delete-dp`,
+          `${API_URL}profile/delete-dp`,
 
           {
             headers: {
