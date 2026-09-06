@@ -8,6 +8,7 @@ import AdminLogin from "./components/AdminLogin.jsx";
 import UserDashboard from "./components/UserDashboard.jsx";
 import Home from "./components/Home.jsx";
 import SignOut from "./components/SignOut.jsx";
+import OrganizeEvent from "./components/OrganizeEvents.jsx";
 import Profile from "./components/Profile.jsx";
 import Events from "./components/Events.jsx";
 import EventDetails from "./components/EventDetails.jsx";
@@ -38,6 +39,10 @@ function App() {
         <Route
           path="/profile"
           element={<Profile />}
+        />
+        <Route
+          path="organizereq"
+          element={<OrganizeEvent />}
         />
 
         <Route

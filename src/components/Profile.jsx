@@ -1,1191 +1,415 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
-
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import "../styles/Profile.css";
 
+const API_URL = "https://user-api-iota-six.vercel.app";
 
-const API_URL =
-  "https://user-api-iota-six.vercel.app";
+function Profile() {
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    contact: "",
+    bio: "",
+    location: "",
+    profileImage: "",
+  });
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [fetchLoading, setFetchLoading] = useState(true);
 
-const Profile = () => {
-
-  const [profile, setProfile] =
-    useState(null);
-
-  const [formData, setFormData] =
-    useState({
-      name: "",
-      phone: "",
-    });
-
-  const [bookingStats, setBookingStats] =
-    useState({
-      totalBooked: 0,
-      upcoming: 0,
-      completed: 0,
-    });
-
-  const [bookings, setBookings] =
-    useState([]);
-
-  const [editing, setEditing] =
-    useState(false);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [saving, setSaving] =
-    useState(false);
-
-  const [uploading, setUploading] =
-    useState(false);
-
-  const [message, setMessage] =
-    useState("");
-
-  const [error, setError] =
-    useState("");
-
-
-  const token =
-    localStorage.getItem(
-      "token"
-    );
-
-
-  // ========================================
-  // FETCH PROFILE
-  // ========================================
-
-  const fetchProfile =
-    async () => {
-
-      try {
-
-        setLoading(true);
-
-        setError("");
-
-
-        const response =
-          await axios.get(
-            `${API_URL}profile/me`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-
-        const user =
-          response.data.user;
-
-
-        setProfile(user);
-
-
-        setFormData({
-          name:
-            user.name || "",
-
-          phone:
-            user.phone || "",
-        });
-
-
-      } catch (err) {
-
-        console.error(
-          "PROFILE ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-
-        setError(
-          err.response?.data
-            ?.message ||
-          "Unable to load profile"
-        );
-
-      } finally {
-
-        setLoading(false);
-
-      }
-    };
-
-
-  // ========================================
-  // FETCH BOOKINGS
-  // ========================================
-
-  const fetchBookings =
-    async () => {
-
-      try {
-
-        const response =
-          await axios.get(
-            `${API_URL}bookings/my-bookings`,
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-          );
-
-
-        setBookingStats(
-          response.data.stats
-        );
-
-
-        setBookings(
-          response.data.bookings
-        );
-
-
-      } catch (err) {
-
-        console.error(
-          "BOOKINGS ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-      }
-    };
-
-
-  // ========================================
-  // LOAD
-  // ========================================
+  // Change this according to your login localStorage
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-
-    if (!token) {
-
-      setError(
-        "Please login to view profile"
-      );
-
-      setLoading(false);
-
-      return;
-    }
-
-
     fetchProfile();
-
-    fetchBookings();
-
   }, []);
 
+  const fetchProfile = async () => {
+    try {
+      setFetchLoading(true);
 
-  // ========================================
-  // INPUT CHANGE
-  // ========================================
+      const response = await axios.get(
+        `${API_URL}/profile/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  const handleChange =
-    (e) => {
+      if (response.data.success) {
+        const userData = response.data.data;
 
-      setFormData({
-        ...formData,
-
-        [e.target.name]:
-          e.target.value,
-      });
-
-    };
-
-
-  // ========================================
-  // SAVE PROFILE
-  // ========================================
-
-  const handleSave =
-    async () => {
-
-      try {
-
-        setSaving(true);
-
-        setMessage("");
-
-        setError("");
-
-
-        const response =
-          await axios.put(
-
-            `${API_URL}profile/update`,
-
-            {
-              name:
-                formData.name,
-
-              phone:
-                formData.phone,
-            },
-
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-
-          );
-
-
-        const updatedUser =
-          response.data.user;
-
-
-        setProfile(
-          updatedUser
-        );
-
-
-        setFormData({
-          name:
-            updatedUser.name || "",
-
-          phone:
-            updatedUser.phone || "",
+        setProfile({
+          name: userData.name || "",
+          email: userData.email || "",
+          contact: userData.contact || "",
+          bio: userData.bio || "",
+          location: userData.location || "",
+          profileImage: userData.profileImage || "",
         });
 
+        setPreviewImage(userData.profileImage || "");
+      }
+    } catch (error) {
+      console.error(
+        "PROFILE FETCH ERROR:",
+        error.response?.data || error.message
+      );
+    } finally {
+      setFetchLoading(false);
+    }
+  };
 
-        // Update localStorage
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-        const oldUser =
-          JSON.parse(
-            localStorage.getItem(
-              "user"
-            ) || "{}"
+    setProfile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    setSelectedImage(file);
+
+    const imagePreview = URL.createObjectURL(file);
+
+    setPreviewImage(imagePreview);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+
+      formData.append("name", profile.name);
+      formData.append("email", profile.email);
+      formData.append("contact", profile.contact);
+      formData.append("bio", profile.bio);
+      formData.append("location", profile.location);
+
+      if (selectedImage) {
+        formData.append("profileImage", selectedImage);
+      }
+
+      const response = await axios.put(
+        `${API_URL}/profile/update`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.success) {
+        alert("Profile updated successfully!");
+
+        if (response.data.data?.profileImage) {
+          setPreviewImage(
+            response.data.data.profileImage
           );
+        }
 
-
-        localStorage.setItem(
-          "user",
-
-          JSON.stringify({
-            ...oldUser,
-            ...updatedUser,
-          })
-        );
-
-
-        setEditing(false);
-
-
-        setMessage(
-          "Profile updated successfully!"
-        );
-
-
-      } catch (err) {
-
-        console.error(
-          "UPDATE PROFILE ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-
-        setError(
-          err.response?.data
-            ?.message ||
-          "Failed to update profile"
-        );
-
-      } finally {
-
-        setSaving(false);
-
-      }
-    };
-
-
-  // ========================================
-  // UPLOAD PROFILE IMAGE
-  // ========================================
-
-  const handleImageUpload =
-    async (e) => {
-
-      const file =
-        e.target.files?.[0];
-
-
-      if (!file) {
-        return;
+        setSelectedImage(null);
       }
 
-
-      const allowedTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/webp",
-      ];
-
-
-      if (
-        !allowedTypes.includes(
-          file.type
-        )
-      ) {
-
-        setError(
-          "Only JPG, JPEG, PNG and WEBP images are allowed"
-        );
-
-        e.target.value = "";
-
-        return;
-      }
-
-
-      if (
-        file.size >
-        5 * 1024 * 1024
-      ) {
-
-        setError(
-          "Image must be below 5MB"
-        );
-
-        e.target.value = "";
-
-        return;
-      }
-
-
-      try {
-
-        setUploading(true);
-
-        setMessage("");
-
-        setError("");
-
-
-        const data =
-          new FormData();
-
-
-        data.append(
-          "profileImage",
-          file
-        );
-
-
-        const response =
-          await axios.post(
-
-            `${API_URL}profile/upload-dp`,
-
-            data,
-
-            {
-              headers: {
-                Authorization:
-                  `Bearer ${token}`,
-              },
-            }
-
-          );
-
-
-        const imagePath =
-          response.data.profileImage;
-
-
-        setProfile(
-          (prev) => ({
-            ...prev,
-
-            profileImage:
-              imagePath,
-          })
-        );
-
-
-        const oldUser =
-          JSON.parse(
-            localStorage.getItem(
-              "user"
-            ) || "{}"
-          );
-
-
-        localStorage.setItem(
-
-          "user",
-
-          JSON.stringify({
-            ...oldUser,
-
-            profileImage:
-              imagePath,
-          })
-
-        );
-
-
-        setMessage(
-          "Profile picture updated successfully!"
-        );
-
-
-        e.target.value = "";
-
-
-      } catch (err) {
-
-        console.error(
-          "IMAGE UPLOAD ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-
-        setError(
-          err.response?.data
-            ?.message ||
-          "Failed to upload profile picture"
-        );
-
-      } finally {
-
-        setUploading(false);
-
-      }
-    };
-
-
-  // ========================================
-  // DELETE PROFILE IMAGE
-  // ========================================
-
-  const handleDeleteImage =
-    async () => {
-
-      const confirmDelete =
-        window.confirm(
-          "Are you sure you want to remove your profile picture?"
-        );
-
-
-      if (!confirmDelete) {
-        return;
-      }
-
-
-      try {
-
-        setError("");
-
-        setMessage("");
-
-
-        await axios.delete(
-
-          `${API_URL}profile/delete-dp`,
-
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
-
-        );
-
-
-        setProfile(
-          (prev) => ({
-            ...prev,
-
-            profileImage: "",
-          })
-        );
-
-
-        const oldUser =
-          JSON.parse(
-            localStorage.getItem(
-              "user"
-            ) || "{}"
-          );
-
-
-        localStorage.setItem(
-
-          "user",
-
-          JSON.stringify({
-            ...oldUser,
-
-            profileImage: "",
-          })
-
-        );
-
-
-        setMessage(
-          "Profile picture removed successfully!"
-        );
-
-
-      } catch (err) {
-
-        console.error(
-          "DELETE IMAGE ERROR:",
-          err.response?.data ||
-            err.message
-        );
-
-
-        setError(
-          err.response?.data
-            ?.message ||
-          "Failed to remove profile picture"
-        );
-
-      }
-    };
-
-
-  // ========================================
-  // LOADING
-  // ========================================
-
-  if (loading) {
-
+    } catch (error) {
+      console.error(
+        "PROFILE UPDATE ERROR:",
+        error.response?.data || error.message
+      );
+
+      alert(
+        error.response?.data?.message ||
+        "Failed to update profile"
+      );
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getInitial = () => {
+    if (profile.name) {
+      return profile.name.charAt(0).toUpperCase();
+    }
+
+    return "U";
+  };
+
+  if (fetchLoading) {
     return (
-
       <div className="profile-loading">
-
-        <div className="profile-spinner">
-        </div>
-
-        <p>
-          Loading profile...
-        </p>
-
+        Loading Profile...
       </div>
-
     );
   }
-
-
-  // ========================================
-  // ERROR
-  // ========================================
-
-  if (!profile) {
-
-    return (
-
-      <div className="profile-error">
-
-        {error ||
-          "Profile not found"}
-
-      </div>
-
-    );
-  }
-
-
-  // ========================================
-  // IMAGE URL
-  // ========================================
-
-  const imageURL =
-    profile.profileImage
-      ? `${API_URL}${profile.profileImage}`
-      : null;
-
-
-  // ========================================
-  // MAIN UI
-  // ========================================
 
   return (
-
     <div className="profile-page">
 
       <div className="profile-container">
 
-
-        {/* COVER */}
-
-        <div className="profile-cover">
-        </div>
-
-
-        {/* PROFILE HEADER */}
+        {/* HEADER */}
 
         <div className="profile-header">
 
-
-          <div className="profile-photo-section">
-
-
-            {imageURL ? (
-
-              <img
-                src={imageURL}
-                alt="Profile"
-                className="profile-photo"
-              />
-
-            ) : (
-
-              <div className="profile-placeholder">
-
-                {profile.name
-                  ?.charAt(0)
-                  .toUpperCase()}
-
-              </div>
-
-            )}
-
-
-            <label
-              htmlFor="profileImage"
-              className="camera-button"
-              title="Change profile picture"
-            >
-              📷
-            </label>
-
-
-            <input
-              id="profileImage"
-              type="file"
-              accept="image/png,image/jpeg,image/jpg,image/webp"
-              onChange={
-                handleImageUpload
-              }
-              hidden
-            />
-
-          </div>
-
-
-          <div className="profile-heading">
+          <div>
+            <p className="profile-small-title">
+              MY ACCOUNT
+            </p>
 
             <h1>
-              {profile.name}
+              My <span>Profile</span>
             </h1>
 
             <p>
-              {profile.email}
+              Manage your personal information and event account.
             </p>
-
-            <span className="role-badge">
-              {profile.role ||
-                "user"}
-            </span>
-
-          </div>
-
-
-          <div className="profile-actions">
-
-            {profile.profileImage && (
-
-              <button
-                className="remove-photo-btn"
-                onClick={
-                  handleDeleteImage
-                }
-              >
-                Remove Photo
-              </button>
-
-            )}
-
           </div>
 
         </div>
 
 
-        {/* MESSAGES */}
-
-        {uploading && (
-
-          <div className="info-message">
-
-            Uploading profile picture...
-
-          </div>
-
-        )}
-
-
-       
-
-
-        {error && (
-
-          <div className="error-message">
-
-            {error}
-
-          </div>
-
-        )}
-
-
-        {/* PERSONAL INFORMATION */}
-
         <div className="profile-content">
 
-          <div className="content-header">
 
-            <div>
+          {/* LEFT SIDE PROFILE CARD */}
+
+          <div className="profile-sidebar">
+
+            <div className="profile-image-section">
+
+              <div className="profile-image-wrapper">
+
+                {previewImage ? (
+                  <img
+                    src={previewImage}
+                    alt="Profile"
+                    className="profile-image"
+                  />
+                ) : (
+                  <div className="profile-initial">
+                    {getInitial()}
+                  </div>
+                )}
+
+              </div>
+
+
+              <label
+                htmlFor="profileImage"
+                className="upload-image-btn"
+              >
+                Change Photo
+              </label>
+
+              <input
+                id="profileImage"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                hidden
+              />
+
+            </div>
+
+
+            <div className="profile-user-info">
 
               <h2>
-                Personal Information
+                {profile.name || "User Name"}
               </h2>
 
               <p>
-                Manage your account
-                information
+                {profile.email || "user@email.com"}
               </p>
 
             </div>
 
 
-            <button
-              className="edit-button"
-              onClick={() => {
+            {/* EVENT STATS */}
 
-                if (editing) {
+            <div className="profile-stats">
 
-                  setFormData({
-                    name:
-                      profile.name ||
-                      "",
+              <div className="stat-card">
 
-                    phone:
-                      profile.phone ||
-                      "",
-                  });
+                <span className="stat-number">
+                  0
+                </span>
 
-                }
+                <span className="stat-label">
+                  Events Booked
+                </span>
 
-                setEditing(
-                  !editing
-                );
-
-                setMessage("");
-
-                setError("");
-
-              }}
-            >
-
-              {editing
-                ? "Cancel"
-                : "✏ Edit Profile"}
-
-            </button>
-
-          </div>
+              </div>
 
 
-          <div className="profile-grid">
+              <div className="stat-card">
 
+                <span className="stat-number">
+                  0
+                </span>
 
-            {/* USER ID */}
+                <span className="stat-label">
+                  Upcoming Events
+                </span>
 
-            <div className="profile-field">
-
-              <label>
-                User ID
-              </label>
-
-              <input
-                value={
-                  profile._id ||
-                  ""
-                }
-                disabled
-              />
-
-            </div>
-
-
-            {/* EMAIL */}
-
-            <div className="profile-field">
-
-              <label>
-                Email Address
-              </label>
-
-              <input
-                value={
-                  profile.email ||
-                  ""
-                }
-                disabled
-              />
-
-            </div>
-
-
-            {/* NAME */}
-
-            <div className="profile-field">
-
-              <label>
-                Username
-              </label>
-
-              <input
-                name="name"
-                value={
-                  formData.name
-                }
-                onChange={
-                  handleChange
-                }
-                disabled={
-                  !editing
-                }
-              />
-
-            </div>
-
-
-            {/* ROLE */}
-
-            <div className="profile-field">
-
-              <label>
-                Account Type
-              </label>
-
-              <input
-                value={
-                  profile.role ||
-                  "user"
-                }
-                disabled
-              />
-
-            </div>
-
-
-            {/* PHONE */}
-
-            <div className="profile-field">
-
-              <label>
-                Phone Number
-              </label>
-
-              <input
-                name="phone"
-                value={
-                  formData.phone
-                }
-                onChange={
-                  handleChange
-                }
-                disabled={
-                  !editing
-                }
-                placeholder="+91 XXXXX XXXXX"
-              />
-
-            </div>
-
-
-            {/* MEMBER SINCE */}
-
-            <div className="profile-field">
-
-              <label>
-                Member Since
-              </label>
-
-              <input
-                value={
-                  profile.createdAt
-                    ? new Date(
-                        profile.createdAt
-                      ).toLocaleDateString()
-                    : "-"
-                }
-                disabled
-              />
+              </div>
 
             </div>
 
           </div>
 
 
-          {/* SAVE */}
+          {/* RIGHT SIDE FORM */}
 
-          {editing && (
+          <div className="profile-form-card">
 
-            <div className="save-section">
+            <h2>
+              Personal Information
+            </h2>
+
+            <p className="form-description">
+              Update your profile details below.
+            </p>
+
+
+            <form onSubmit={handleSubmit}>
+
+
+              {/* NAME */}
+
+              <div className="profile-input-group">
+
+                <label>
+                  Full Name
+                </label>
+
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Enter your full name"
+                  value={profile.name}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+
+              {/* EMAIL */}
+
+              <div className="profile-input-group">
+
+                <label>
+                  Email Address
+                </label>
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Enter your email"
+                  value={profile.email}
+                  onChange={handleChange}
+                  required
+                />
+
+              </div>
+
+
+              {/* CONTACT */}
+
+              <div className="profile-input-group">
+
+                <label>
+                  Contact Number
+                </label>
+
+                <input
+                  type="tel"
+                  name="contact"
+                  placeholder="Enter your phone number"
+                  value={profile.contact}
+                  onChange={handleChange}
+                />
+
+              </div>
+
+
+              {/* LOCATION */}
+
+              <div className="profile-input-group">
+
+                <label>
+                  Location
+                </label>
+
+                <input
+                  type="text"
+                  name="location"
+                  placeholder="Example: Chennai, Tamil Nadu"
+                  value={profile.location}
+                  onChange={handleChange}
+                />
+
+              </div>
+
+
+              {/* BIO */}
+
+              <div className="profile-input-group">
+
+                <label>
+                  About Me
+                </label>
+
+                <textarea
+                  name="bio"
+                  placeholder="Tell us something about yourself..."
+                  value={profile.bio}
+                  onChange={handleChange}
+                  rows="5"
+                />
+
+              </div>
+
+
+              {/* SAVE */}
 
               <button
-                className="save-button"
-                onClick={
-                  handleSave
-                }
-                disabled={
-                  saving
-                }
+                type="submit"
+                className="save-profile-btn"
+                disabled={loading}
               >
 
-                {saving
-                  ? "Saving..."
+                {loading
+                  ? "Saving Profile..."
                   : "Save Changes"}
 
               </button>
 
-            </div>
-
-          )}
-
-        </div>
-
-
-        {/* ====================================
-            BOOKING SECTION
-        ==================================== */}
-
-        <div className="booking-section">
-
-
-          <div className="booking-section-header">
-
-            <div>
-
-              <h2>
-                My Event Bookings
-              </h2>
-
-              <p>
-                Track your event
-                registrations
-              </p>
-
-            </div>
-
-          </div>
-
-
-          {/* BOOKING STATS */}
-
-          <div className="booking-stats">
-
-
-            <div className="booking-stat-card">
-
-              <div className="booking-stat-icon">
-                🎟️
-              </div>
-
-              <div>
-
-                <span>
-                  Total Booked
-                </span>
-
-                <strong>
-                  {
-                    bookingStats.totalBooked
-                  }
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div className="booking-stat-card">
-
-              <div className="booking-stat-icon">
-                📅
-              </div>
-
-              <div>
-
-                <span>
-                  Upcoming
-                </span>
-
-                <strong>
-                  {
-                    bookingStats.upcoming
-                  }
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div className="booking-stat-card">
-
-              <div className="booking-stat-icon">
-                ✓
-              </div>
-
-              <div>
-
-                <span>
-                  Completed
-                </span>
-
-                <strong>
-                  {
-                    bookingStats.completed
-                  }
-                </strong>
-
-              </div>
-
-            </div>
-
-
-          </div>
-
-
-          {/* RECENT BOOKINGS */}
-
-          <div className="my-bookings">
-
-            <h3>
-              My Bookings
-            </h3>
-
-
-            {bookings.length === 0 ? (
-
-              <div className="no-bookings">
-
-                <div>
-                  🎟️
-                </div>
-
-                <h4>
-                  No bookings yet
-                </h4>
-
-                <p>
-                  Explore events and
-                  book your first event.
-                </p>
-
-              </div>
-
-            ) : (
-
-              bookings.map(
-                (booking) => (
-
-                  <div
-                    className="booking-card"
-                    key={
-                      booking._id
-                    }
-                  >
-
-                    <div className="booking-info">
-
-                      <h4>
-                        {
-                          booking.eventName
-                        }
-                      </h4>
-
-                      <p>
-                        📅{" "}
-                        {new Date(
-                          booking.eventDate
-                        ).toLocaleDateString()}
-                      </p>
-
-                      <p>
-                        📍{" "}
-                        {
-                          booking.location ||
-                          "Location not available"
-                        }
-                      </p>
-
-                      <p>
-                        🎟️{" "}
-                        {
-                          booking.tickets
-                        }{" "}
-                        Ticket
-                        {
-                          booking.tickets >
-                          1
-                            ? "s"
-                            : ""
-                        }
-                      </p>
-
-                    </div>
-
-
-                    <div className="booking-status">
-
-                      <span
-                        className={
-                          `status ${booking.status}`
-                        }
-                      >
-                        {
-                          booking.status
-                        }
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                )
-              )
-
-            )}
+            </form>
 
           </div>
 
         </div>
-
 
       </div>
 
     </div>
-
   );
-};
-
+}
 
 export default Profile;

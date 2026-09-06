@@ -4,6 +4,7 @@ import "../styles/UserDashboard.css"
 import Home from "../components/Home"
 import Events from "../components/Events"
 // import About from "../components/About.jsx";
+import OrganizeEvent from "../components/OrganizeEvents";
 
 import SignOut from "../components/SignOut";
 
@@ -16,6 +17,7 @@ const UserDashboard = () => {
       {/* <Navbar /> */}
       <Home />
       <Events />
+      <OrganizeEvent />
       {/* <About /> */}
 
       <SignOut />

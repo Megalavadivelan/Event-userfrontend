@@ -83,10 +83,10 @@ const Navbar = () => {
         {/* CONTACT */}
 
         <Link
-          to="/gallery"
+          to="/organizereq"
           className="nav-link"
         >
-          Gallery
+          Organize Events
         </Link>
 
 
@@ -137,6 +137,12 @@ const Navbar = () => {
                 className="dropdown-item"
               >
                 Contacts
+              </Link>
+              <Link
+                to="/gallery"
+                className="dropdown-item"
+              >
+                Gallery
               </Link>
 
               <Link
