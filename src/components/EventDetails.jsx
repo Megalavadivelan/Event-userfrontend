@@ -1,147 +1,229 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import "../styles/EventDetails.css";
 
 const EventDetails = () => {
 
-  const { id } = useParams();
-  const navigate = useNavigate();
+const { id } = useParams();
+const navigate = useNavigate();
 
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
+const [event, setEvent] = useState(null);
+const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchEvent();
-  }, [id]);
+useEffect(() => {
+fetchEvent();
+}, [id]);
 
-  const fetchEvent = async () => {
+// FETCH PARTICULAR EVENT
+const fetchEvent = async () => {
 
-    try {
 
-      const response = await fetch(
-        "https://event-admin-one.vercel.app/events/get/${id}"
-      );
+try {
 
-      const data = await response.json();
+  const response = await fetch(
+    `https://api-admin-rouge.vercel.app/events/get/${id}`
+  );
 
-      setEvent(data);
-
-    } catch (error) {
-
-      console.error("Error fetching event:", error);
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="details-loading">
-        Loading event...
-      </div>
-    );
+  if (!response.ok) {
+    throw new Error("Event not found");
   }
 
-  if (!event) {
-    return (
-      <div className="details-error">
-        Event not found.
-      </div>
-    );
-  }
+  const data = await response.json();
 
-  return (
-    <div className="event-details-page">
+  // Supports both:
+  // { event: {...} }
+  // OR
+  // {...}
+  const eventData = data.event || data;
 
-      <button
-        className="back-btn"
-        onClick={() => navigate("/events")}
-      >
-        ← Back to Events
-      </button>
+  setEvent(eventData);
 
-      <div className="event-details-card">
+} catch (error) {
 
-        {/* Image */}
+  console.error(
+    "Error fetching event:",
+    error
+  );
 
-        <div className="details-image">
+  setEvent(null);
 
-          <img
-            src={event.image}
-            alt={event.title}
-          />
+} finally {
 
-        </div>
+  setLoading(false);
 
-        {/* Content */}
+}
 
-        <div className="details-content">
 
-          <span
-            className={`details-status ${
-              event.status === "completed"
-                ? "completed"
-                : "upcoming"
-            }`}
-          >
-            {event.status}
-          </span>
+};
 
-          <span className="details-category">
-            {event.category}
-          </span>
+// LOADING
+if (loading) {
+return ( <div className="details-loading">
+Loading event... </div>
+);
+}
 
-          <h1>{event.title}</h1>
+// EVENT NOT FOUND
+if (!event) {
+return ( <div className="details-error">
+Event not found. </div>
+);
+}
 
-          <p className="details-description">
-            {event.description}
-          </p>
+return (
 
-          <div className="details-info">
 
-            <div>
-              <strong>📅 Date</strong>
-              <span>{event.date}</span>
-            </div>
+<div className="event-details-page">
 
-            <div>
-              <strong>⏰ Time</strong>
-              <span>{event.time}</span>
-            </div>
+  {/* BACK BUTTON */}
+  <button
+    className="back-btn"
+    onClick={() => navigate("/events")}
+  >
+    ← Back to Events
+  </button>
 
-            <div>
-              <strong>📍 Location</strong>
-              <span>{event.location}</span>
-            </div>
+  <div className="event-details-card">
 
-            <div>
-              <strong>💰 Price</strong>
-              <span>
-                {event.price
-                  ? `₹${event.price}`
-                  : "Free"}
-              </span>
-            </div>
+    {/* EVENT IMAGE */}
+    <div className="details-image">
 
-          </div>
-
-          {event.status !== "completed" && (
-
-            <button className="register-btn">
-              Register for Event
-            </button>
-
-          )}
-
-        </div>
-
-      </div>
+      <img
+        src={event.image}
+        alt={event.title}
+      />
 
     </div>
-  );
+
+
+    {/* EVENT CONTENT */}
+    <div className="details-content">
+
+      {/* STATUS */}
+      <span
+        className={`details-status ${
+          event.status === "completed"
+            ? "completed"
+            : "upcoming"
+        }`}
+      >
+
+        {event.status}
+
+      </span>
+
+
+      {/* CATEGORY */}
+      <span className="details-category">
+
+        {event.category}
+
+      </span>
+
+
+      {/* TITLE */}
+      <h1>
+
+        {event.title}
+
+      </h1>
+
+
+      {/* DESCRIPTION */}
+      <p className="details-description">
+
+        {event.description}
+
+      </p>
+
+
+      {/* EVENT INFORMATION */}
+      <div className="details-info">
+
+        {/* DATE */}
+        <div>
+
+          <strong>
+            📅 Date
+          </strong>
+
+          <span>
+            {event.date}
+          </span>
+
+        </div>
+
+
+        {/* TIME */}
+        <div>
+
+          <strong>
+            ⏰ Time
+          </strong>
+
+          <span>
+            {event.time}
+          </span>
+
+        </div>
+
+
+        {/* LOCATION */}
+        <div>
+
+          <strong>
+            📍 Location
+          </strong>
+
+          <span>
+            {event.location}
+          </span>
+
+        </div>
+
+
+        {/* PRICE */}
+        <div>
+
+          <strong>
+            💰 Price
+          </strong>
+
+          <span>
+
+            {event.price
+              ? `₹${event.price}`
+              : "Free"}
+
+          </span>
+
+        </div>
+
+      </div>
+
+
+      {/* REGISTER BUTTON */}
+
+      {event.status !== "completed" && (
+
+        <button className="register-btn">
+
+          Register for Event
+
+        </button>
+
+      )}
+
+    </div>
+
+  </div>
+
+</div>
+
+
+);
+
 };
 
 export default EventDetails;

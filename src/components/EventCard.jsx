@@ -1,61 +1,129 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+
 import "../styles/EventCard.css";
 
 const EventCard = ({ event }) => {
-  const navigate = useNavigate();
 
-  const isCompleted = event.status === "completed";
+const navigate = useNavigate();
 
-  return (
-    <div className="event-card">
+const isCompleted =
+event.status === "completed";
 
-      {/* Event Image */}
-      <div className="event-image-container">
+const handleViewEvent = () => {
 
-        <img
-          src={event.image}
-          alt={event.title}
-          className="event-image"
-        />
 
-        {/* Status */}
-        <span
-          className={`event-status ${
-            isCompleted ? "completed" : "upcoming"
-          }`}
-        >
-          {isCompleted ? "Completed" : "Upcoming"}
-        </span>
+if (!event._id) {
 
-      </div>
+  console.error(
+    "Event ID is missing"
+  );
 
-      {/* Event Content */}
-      <div className="event-content">
+  return;
 
-        <span className="event-category">
-          {event.category}
-        </span>
+}
 
-        <h2>{event.title}</h2>
+navigate(`/events/${event._id}`);
 
-        <div className="event-info">
-          <p>📅 {event.date}</p>
-          <p>⏰ {event.time}</p>
-          <p>📍 {event.location}</p>
-        </div>
 
-        <button
-          className="view-event-btn"
-          onClick={() => navigate(`/events/${event._id}`)}
-        >
-          View Event
-        </button>
+};
 
-      </div>
+return (
+
+
+<div className="event-card">
+
+  {/* EVENT IMAGE */}
+  <div className="event-image-container">
+
+    <img
+      src={
+        event.image ||
+        "https://via.placeholder.com/400x250?text=Event"
+      }
+      alt={event.title || "Event"}
+      className="event-image"
+    />
+
+
+    {/* EVENT STATUS */}
+
+    <span
+      className={`event-status ${
+        isCompleted
+          ? "completed"
+          : "upcoming"
+      }`}
+    >
+
+      {isCompleted
+        ? "Completed"
+        : "Upcoming"}
+
+    </span>
+
+  </div>
+
+
+  {/* EVENT CONTENT */}
+
+  <div className="event-content">
+
+    {/* CATEGORY */}
+
+    <span className="event-category">
+
+      {event.category || "General"}
+
+    </span>
+
+
+    {/* TITLE */}
+
+    <h2>
+
+      {event.title || "Untitled Event"}
+
+    </h2>
+
+
+    {/* EVENT INFO */}
+
+    <div className="event-info">
+
+      <p>
+        📅 {event.date || "Date not available"}
+      </p>
+
+      <p>
+        ⏰ {event.time || "Time not available"}
+      </p>
+
+      <p>
+        📍 {event.location || "Location not available"}
+      </p>
 
     </div>
-  );
+
+
+    {/* VIEW EVENT */}
+
+    <button
+      className="view-event-btn"
+      onClick={handleViewEvent}
+    >
+
+      View Event
+
+    </button>
+
+  </div>
+
+</div>
+
+
+);
+
 };
 
 export default EventCard;
