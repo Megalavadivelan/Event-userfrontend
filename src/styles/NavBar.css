@@ -14,26 +14,26 @@
 ========================================= */
 
 .navbar {
-
   width: 100%;
   height: 75px;
 
-  position: relative;
+  /* FIXED NAVBAR */
+  position: fixed;
+  top: 0;
+  left: 0;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   padding: 0 55px;
 
   overflow: visible;
 
+  /* Keep navbar above all page content */
   z-index: 1000;
-  border-bottom: 1px solid whitesmoke;
 
-  /* Same purple theme */
+  border-bottom: 1px solid whitesmoke;
 
   background:
     radial-gradient(
@@ -59,7 +59,6 @@
 ========================================= */
 
 .navbar-background {
-
   position: absolute;
 
   inset: 0;
@@ -80,7 +79,6 @@
 ========================================= */
 
 .nav-glow {
-
   position: absolute;
 
   border-radius: 50%;
@@ -100,7 +98,6 @@
 /* LEFT GLOW */
 
 .glow-left {
-
   width: 180px;
   height: 180px;
 
@@ -114,7 +111,6 @@
 /* RIGHT GLOW */
 
 .glow-right {
-
   width: 200px;
   height: 200px;
 
@@ -152,7 +148,6 @@
 ========================================= */
 
 .nav-star {
-
   position: absolute;
 
   color:
@@ -174,9 +169,7 @@
 /* TOP LEFT */
 
 .star-1 {
-
   left: 8%;
-
   top: 12%;
 
   font-size: 13px;
@@ -186,9 +179,7 @@
 /* LEFT CENTER */
 
 .star-2 {
-
   left: 27%;
-
   top: 55%;
 
   font-size: 8px;
@@ -200,9 +191,7 @@
 /* CENTER */
 
 .star-3 {
-
   left: 52%;
-
   top: 18%;
 
   font-size: 10px;
@@ -214,9 +203,7 @@
 /* RIGHT */
 
 .star-4 {
-
   right: 20%;
-
   top: 60%;
 
   font-size: 12px;
@@ -228,9 +215,7 @@
 /* FAR RIGHT */
 
 .star-5 {
-
   right: 7%;
-
   top: 15%;
 
   font-size: 8px;
@@ -242,7 +227,6 @@
 @keyframes navStarFloat {
 
   0% {
-
     transform:
       scale(0.7)
       rotate(0deg);
@@ -251,7 +235,6 @@
   }
 
   50% {
-
     transform:
       scale(1.3)
       rotate(20deg);
@@ -260,7 +243,6 @@
   }
 
   100% {
-
     transform:
       scale(0.7)
       rotate(0deg);
@@ -276,7 +258,6 @@
 ========================================= */
 
 .navbar-logo {
-
   position: relative;
 
   z-index: 5;
@@ -296,7 +277,6 @@
 /* LOGO STAR */
 
 .logo-star {
-
   color: #684e9d;
 
   font-size: 25px;
@@ -315,7 +295,6 @@
 /* LOGO TEXT */
 
 .logo-text {
-
   font-family:
     "Times New Roman",
     Times,
@@ -342,7 +321,9 @@
   }
 
   50% {
-    transform: scale(1.2) rotate(15deg);
+    transform:
+      scale(1.2)
+      rotate(15deg);
   }
 
   100% {
@@ -357,7 +338,6 @@
 ========================================= */
 
 .navbar-links {
-
   position: relative;
 
   z-index: 10;
@@ -377,7 +357,6 @@
 ========================================= */
 
 .nav-link {
-
   position: relative;
 
   display: flex;
@@ -407,7 +386,6 @@
 /* UNDERLINE EFFECT */
 
 .nav-link::after {
-
   content: "";
 
   position: absolute;
@@ -441,7 +419,6 @@
 /* HOVER */
 
 .nav-link:hover {
-
   color: white;
 
   transform:
@@ -450,7 +427,6 @@
 
 
 .nav-link:hover::after {
-
   width: 100%;
 }
 
@@ -460,7 +436,6 @@
 ========================================= */
 
 .events-dropdown {
-
   position: relative;
 
   height: 100%;
@@ -474,7 +449,6 @@
 /* EVENTS BUTTON */
 
 .events-button {
-
   height: 100%;
 
   display: flex;
@@ -505,7 +479,6 @@
 
 
 .events-button:hover {
-
   color: white;
 }
 
@@ -515,7 +488,6 @@
 ========================================= */
 
 .dropdown-arrow {
-
   font-size: 13px;
 
   transition:
@@ -524,7 +496,6 @@
 
 
 .dropdown-arrow.arrow-up {
-
   transform:
     rotate(180deg);
 }
@@ -535,7 +506,6 @@
 ========================================= */
 
 .events-menu {
-
   position: absolute;
 
   top: 67px;
@@ -578,7 +548,6 @@
 @keyframes dropdownOpen {
 
   from {
-
     opacity: 0;
 
     transform:
@@ -587,7 +556,6 @@
   }
 
   to {
-
     opacity: 1;
 
     transform:
@@ -603,7 +571,6 @@
 ========================================= */
 
 .dropdown-item {
-
   display: block;
 
   padding: 11px 14px;
@@ -630,7 +597,6 @@
 
 
 .dropdown-item:hover {
-
   color: white;
 
   padding-left: 19px;
@@ -653,7 +619,6 @@
 ========================================= */
 
 .signout-button {
-
   position: relative;
 
   padding:
@@ -689,10 +654,11 @@
 /* SIGN OUT HOVER */
 
 .signout-button:hover {
-
   background:
     #393838;
+
   color: white;
+
   transform:
     translateY(-2px);
 
@@ -705,11 +671,27 @@
 /* SIGN OUT ACTIVE */
 
 .signout-button:active {
-
   transform:
     translateY(0)
     scale(0.97);
 }
+
+
+/* =========================================
+   DESKTOP SCROLL PROTECTION
+========================================= */
+
+/*
+   Since navbar is fixed, page content should
+   start below the 75px navbar.
+
+   Add this class to your main page wrapper
+   if needed:
+
+   .page-content {
+     padding-top: 75px;
+   }
+*/
 
 
 /* =========================================
@@ -719,24 +701,20 @@
 @media (max-width: 1000px) {
 
   .navbar {
-
     padding:
       0 30px;
   }
 
   .navbar-links {
-
     gap: 20px;
   }
 
   .nav-link,
   .events-button {
-
     font-size: 15px;
   }
 
   .logo-text {
-
     font-size: 23px;
   }
 
@@ -750,7 +728,6 @@
 @media (max-width: 800px) {
 
   .navbar {
-
     height: auto;
 
     min-height: 70px;
@@ -764,7 +741,6 @@
   }
 
   .navbar-links {
-
     height: auto;
 
     flex-wrap: wrap;
@@ -775,27 +751,22 @@
   }
 
   .nav-link {
-
     height: 35px;
   }
 
   .nav-link::after {
-
     bottom: 0;
   }
 
   .events-dropdown {
-
     height: 35px;
   }
 
   .events-button {
-
     height: 35px;
   }
 
   .events-menu {
-
     top: 40px;
   }
 
@@ -809,24 +780,21 @@
 @media (max-width: 550px) {
 
   .navbar {
-
     padding:
       15px;
   }
 
   .navbar-links {
-
-    gap: 12px 18px;
+    gap:
+      12px 18px;
   }
 
   .nav-link,
   .events-button {
-
     font-size: 14px;
   }
 
   .signout-button {
-
     padding:
       7px 12px;
 
@@ -834,12 +802,10 @@
   }
 
   .logo-text {
-
     font-size: 22px;
   }
 
   .logo-star {
-
     font-size: 20px;
   }
 

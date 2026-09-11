@@ -1,302 +1,304 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/Events.css";
+
+const EVENTS_API =
+  "https://api-admin-rouge.vercel.app/events/getevents";
 
 const Events = () => {
   const navigate = useNavigate();
 
-  // =====================================================
-  // SAMPLE EVENTS
-  // Later this will come from your backend API
-  // =====================================================
 
-  const sampleEvents = [
-    {
-      _id: "event001",
-      eventName: "Tech Innovation Summit 2026",
-      category: "Technology",
-      description:
-        "A technology summit featuring Artificial Intelligence, Cloud Computing, Cybersecurity and modern software development.",
-      date: "25 September 2026",
-      time: "10:00 AM - 4:00 PM",
-      venue: "Chennai Trade Centre",
-      location: "Chennai",
-      price: 499,
-      totalSeats: 500,
-      availableSeats: 235,
-      organizerName: "Tech Community India",
-      organizerEmail: "tech@example.com",
-      organizerPhone: "9876543210",
-      poster:
-        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1000&q=80",
-    },
-
-    {
-      _id: "event002",
-      eventName: "Music & Cultural Night",
-      category: "Music",
-      description:
-        "An exciting evening filled with live music, cultural performances, food and entertainment.",
-      date: "28 September 2026",
-      time: "6:00 PM - 10:00 PM",
-      venue: "YMCA Grounds",
-      location: "Coimbatore",
-      price: 299,
-      totalSeats: 1000,
-      availableSeats: 680,
-      organizerName: "Cultural Events India",
-      organizerEmail: "culture@example.com",
-      organizerPhone: "9876543211",
-      poster:
-        "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1000&q=80",
-    },
-
-    {
-      _id: "event003",
-      eventName: "AI & Machine Learning Workshop",
-      category: "Workshop",
-      description:
-        "A hands-on workshop covering Artificial Intelligence, Machine Learning, Python and real-world AI applications.",
-      date: "3 October 2026",
-      time: "9:30 AM - 3:30 PM",
-      venue: "KCT Innovation Centre",
-      location: "Coimbatore",
-      price: 799,
-      totalSeats: 200,
-      availableSeats: 74,
-      organizerName: "AI Developers Club",
-      organizerEmail: "ai@example.com",
-      organizerPhone: "9876543212",
-      poster:
-        "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
-    },
-
-    {
-      _id: "event004",
-      eventName: "Startup & Entrepreneurship Meet",
-      category: "Business",
-      description:
-        "Meet entrepreneurs, startup founders and business professionals. Learn about startups, funding and business growth.",
-      date: "10 October 2026",
-      time: "10:00 AM - 5:00 PM",
-      venue: "Hotel Grand Chennai",
-      location: "Chennai",
-      price: 999,
-      totalSeats: 300,
-      availableSeats: 120,
-      organizerName: "Startup Tamil Nadu",
-      organizerEmail: "startup@example.com",
-      organizerPhone: "9876543213",
-      poster:
-        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1000&q=80",
-    },
-
-    {
-      _id: "event005",
-      eventName: "Free Coding Bootcamp",
-      category: "Education",
-      description:
-        "A free coding bootcamp for students covering programming fundamentals, web development and problem solving.",
-      date: "15 October 2026",
-      time: "9:00 AM - 4:00 PM",
-      venue: "Government Engineering College",
-      location: "Salem",
-      price: 0,
-      totalSeats: 250,
-      availableSeats: 145,
-      organizerName: "Code Community",
-      organizerEmail: "coding@example.com",
-      organizerPhone: "9876543214",
-      poster:
-        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
-    },
-
-    {
-      _id: "event006",
-      eventName: "Photography & Creative Arts Exhibition",
-      category: "Arts",
-      description:
-        "Explore photography, digital art, paintings and creative works from talented artists.",
-      date: "20 October 2026",
-      time: "11:00 AM - 7:00 PM",
-      venue: "Art Gallery",
-      location: "Bangalore",
-      price: 199,
-      totalSeats: 400,
-      availableSeats: 310,
-      organizerName: "Creative Arts Society",
-      organizerEmail: "arts@example.com",
-      organizerPhone: "9876543215",
-      poster:
-        "https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=1000&q=80",
-    },
-  ];
-
-  // =====================================================
-  // STATES
-  // =====================================================
+  const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
 
   const [search, setSearch] = useState("");
-
   const [category, setCategory] = useState("All");
 
-  const [location, setLocation] = useState("All");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [priceFilter, setPriceFilter] = useState("All");
 
-  // =====================================================
-  // CATEGORY OPTIONS
-  // =====================================================
+  const categories = [
+  "All",
+  "Music",
+  "Technology",
+  "Sports",
+  "Workshop",
+  "Conference",
+  "Cultural",
+  "Business",
+];
+  // ===================================================
+  // FETCH EVENTS
+  // ===================================================
 
-  const categories = useMemo(() => {
-    return [
-      "All",
-      ...new Set(
-        sampleEvents
-          .map((event) => event.category)
-          .filter(Boolean)
-      ),
-    ];
-  }, []);
+  const fetchEvents = async () => {
+    try {
+      setLoading(true);
+      setError("");
 
-  // =====================================================
-  // LOCATION OPTIONS
-  // =====================================================
+      const response = await axios.get(EVENTS_API);
 
-  const locations = useMemo(() => {
-    return [
-      "All",
-      ...new Set(
-        sampleEvents
-          .map((event) => event.location)
-          .filter(Boolean)
-      ),
-    ];
-  }, []);
+      console.log("EVENT API RESPONSE:", response.data);
 
-  // =====================================================
-  // FILTER EVENTS
-  // =====================================================
+      // API may return:
+      // { events: [...] }
+      // OR
+      // [...]
 
-  const filteredEvents = useMemo(() => {
-    return sampleEvents.filter((event) => {
-      const searchText = search.toLowerCase().trim();
+      let eventData = [];
 
-      const matchesSearch =
-        searchText === "" ||
-        event.eventName
-          .toLowerCase()
-          .includes(searchText) ||
-        event.category
-          .toLowerCase()
-          .includes(searchText) ||
-        event.location
-          .toLowerCase()
-          .includes(searchText);
-
-      const matchesCategory =
-        category === "All" ||
-        event.category === category;
-
-      const matchesLocation =
-        location === "All" ||
-        event.location === location;
-
-      let matchesPrice = true;
-
-      const eventPrice = Number(event.price);
-
-      if (priceFilter === "Free") {
-        matchesPrice = eventPrice === 0;
+      if (Array.isArray(response.data)) {
+        eventData = response.data;
+      } else if (Array.isArray(response.data.events)) {
+        eventData = response.data.events;
+      } else if (Array.isArray(response.data.data)) {
+        eventData = response.data.data;
       }
 
-      if (priceFilter === "Under500") {
-        matchesPrice = eventPrice < 500;
-      }
-
-      if (priceFilter === "500to1000") {
-        matchesPrice =
-          eventPrice >= 500 &&
-          eventPrice <= 1000;
-      }
-
-      if (priceFilter === "Above1000") {
-        matchesPrice = eventPrice > 1000;
-      }
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesLocation &&
-        matchesPrice
+      setEvents(eventData);
+      setFilteredEvents(eventData);
+    } catch (error) {
+      console.error(
+        "Failed to fetch events:",
+        error
       );
-    });
-  }, [
-    search,
-    category,
-    location,
-    priceFilter,
-  ]);
 
-  // =====================================================
-  // CLEAR FILTERS
-  // =====================================================
-
-  const clearFilters = () => {
-    setSearch("");
-    setCategory("All");
-    setLocation("All");
-    setPriceFilter("All");
+      setError(
+        "Unable to load events. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // =====================================================
+  // ===================================================
+  // FETCH WHEN PAGE LOADS
+  // ===================================================
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  // ===================================================
+  // GET CATEGORIES
+  // ===================================================
+<div className="category-container">
+
+  <span className="category-label">
+    Category:
+  </span>
+
+  <select
+    value={category}
+    onChange={(e) =>
+      setCategory(e.target.value)
+    }
+  >
+    {categories.map((item) => (
+      <option
+        key={item}
+        value={item}
+      >
+        {item}
+      </option>
+    ))}
+  </select>
+
+</div>
+
+  // ===================================================
+  // SEARCH + FILTER
+  // ===================================================
+
+  useEffect(() => {
+    let result = [...events];
+
+    // SEARCH
+    if (search.trim() !== "") {
+      const searchText =
+        search.toLowerCase();
+
+      result = result.filter((event) => {
+        const eventName = (
+          event.eventName ||
+          event.name ||
+          event.title ||
+          ""
+        ).toLowerCase();
+
+        const description = (
+          event.description ||
+          event.details ||
+          ""
+        ).toLowerCase();
+
+        const location = (
+          event.location ||
+          event.venue ||
+          ""
+        ).toLowerCase();
+
+        const eventCategory = (
+          event.category ||
+          event.eventCategory ||
+          ""
+        ).toLowerCase();
+
+        return (
+          eventName.includes(searchText) ||
+          description.includes(searchText) ||
+          location.includes(searchText) ||
+          eventCategory.includes(searchText)
+        );
+      });
+    }
+
+    // CATEGORY FILTER
+    if (category !== "All") {
+      result = result.filter((event) => {
+        const eventCategory =
+          event.category ||
+          event.eventCategory ||
+          "";
+
+        return (
+          eventCategory.toLowerCase() ===
+          category.toLowerCase()
+        );
+      });
+    }
+
+    setFilteredEvents(result);
+  }, [search, category, events]);
+
+  // ===================================================
   // OPEN EVENT DETAILS
-  // =====================================================
+  // ===================================================
 
-  const openEvent = (id) => {
-    navigate(`/event-details/${id}`);
+  const handleEventClick = (event) => {
+    const eventId =
+      event._id ||
+      event.id;
+
+    if (!eventId) {
+      console.error(
+        "Event ID not found:",
+        event
+      );
+      return;
+    }
+
+    navigate(
+      `/eventdetails/${eventId}`
+    );
   };
 
-  // =====================================================
-  // CHECK FILTER STATUS
-  // =====================================================
+  // ===================================================
+  // FORMAT DATE
+  // ===================================================
 
-  const isFiltered =
-    search ||
-    category !== "All" ||
-    location !== "All" ||
-    priceFilter !== "All";
+  const formatDate = (date) => {
+    if (!date) {
+      return "Date not available";
+    }
 
-  // =====================================================
-  // UI
-  // =====================================================
+    try {
+      return new Date(date).toLocaleDateString(
+        "en-IN",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        }
+      );
+    } catch {
+      return date;
+    }
+  };
+
+  // ===================================================
+  // IMAGE URL
+  // ===================================================
+
+  const getImageUrl = (event) => {
+    const image =
+      event.poster ||
+      event.image ||
+      event.imageUrl ||
+      event.eventImage;
+
+    if (!image) {
+      return null;
+    }
+
+    // Already a complete URL
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+    // If your friend's API returns a relative
+    // upload path, use his backend domain.
+    return `https://api-admin-rouge.vercel.app/${image.replace(
+      /^\/+/,
+      ""
+    )}`;
+  };
+
+  // ===================================================
+  // LOADING
+  // ===================================================
+
+  if (loading) {
+    return (
+      <div className="events-page">
+        <div className="sparkle sparkle-1"></div>
+        <div className="sparkle sparkle-2"></div>
+        <div className="sparkle sparkle-3"></div>
+
+        <div className="events-loading">
+          <div className="loading-spinner"></div>
+
+          <p>Loading events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // ===================================================
+  // PAGE
+  // ===================================================
 
   return (
     <div className="events-page">
 
+      {/* LIMITED BACKGROUND SPARKLES */}
+      <div className="sparkle sparkle-1"></div>
+      <div className="sparkle sparkle-2"></div>
+      <div className="sparkle sparkle-3"></div>
+      <div className="sparkle sparkle-4"></div>
+      <div className="sparkle sparkle-5"></div>
+
       {/* =================================================
-          TOOLBAR
+          TOP ROW
       ================================================= */}
 
-      <div className="events-toolbar">
+      <div className="events-top-row">
 
         {/* TITLE */}
 
-        <div className="events-heading">
-
-          <p className="events-label">
-            DISCOVER
-          </p>
-
-          <h1>
-            Events
-          </h1>
-
-        </div>
+        <h1 className="events-title">
+          Events
+        </h1>
 
         {/* SEARCH */}
 
-        <div className="events-search">
+        <div className="search-container">
 
           <span className="search-icon">
             🔍
@@ -311,21 +313,15 @@ const Events = () => {
             }
           />
 
-          {search && (
-            <button
-              className="clear-search"
-              onClick={() => setSearch("")}
-              aria-label="Clear search"
-            >
-              ×
-            </button>
-          )}
-
         </div>
 
-        {/* CATEGORY */}
+        {/* CATEGORY FILTER */}
 
-        <div className="filter-group">
+        <div className="category-container">
+
+          <span className="category-label">
+            Category:
+          </span>
 
           <select
             value={category}
@@ -333,278 +329,233 @@ const Events = () => {
               setCategory(e.target.value)
             }
           >
-
             {categories.map((item) => (
               <option
                 key={item}
                 value={item}
               >
-                {item === "All"
-                  ? "All Categories"
-                  : item}
+                {item}
               </option>
             ))}
-
           </select>
 
         </div>
 
-        {/* LOCATION */}
+      </div>
 
-        <div className="filter-group">
+      {/* =================================================
+          ERROR
+      ================================================= */}
 
-          <select
-            value={location}
-            onChange={(e) =>
-              setLocation(e.target.value)
-            }
-          >
+      {error && (
+        <div className="events-error">
+          <p>{error}</p>
 
-            {locations.map((item) => (
-              <option
-                key={item}
-                value={item}
-              >
-                {item === "All"
-                  ? "All Locations"
-                  : item}
-              </option>
-            ))}
-
-          </select>
-
-        </div>
-
-        {/* PRICE */}
-
-        <div className="filter-group">
-
-          <select
-            value={priceFilter}
-            onChange={(e) =>
-              setPriceFilter(e.target.value)
-            }
-          >
-
-            <option value="All">
-              All Prices
-            </option>
-
-            <option value="Free">
-              Free
-            </option>
-
-            <option value="Under500">
-              Under ₹500
-            </option>
-
-            <option value="500to1000">
-              ₹500 - ₹1000
-            </option>
-
-            <option value="Above1000">
-              Above ₹1000
-            </option>
-
-          </select>
-
-        </div>
-
-        {/* CLEAR */}
-
-        {isFiltered && (
           <button
-            className="clear-filters"
-            onClick={clearFilters}
+            onClick={fetchEvents}
           >
-            Clear
+            Try Again
           </button>
+        </div>
+      )}
+
+      {/* =================================================
+          EVENT COUNT
+      ================================================= */}
+
+      {!error && (
+        <div className="event-count">
+          {filteredEvents.length}{" "}
+          {filteredEvents.length === 1
+            ? "Event"
+            : "Events"}{" "}
+          Available
+        </div>
+      )}
+
+      {/* =================================================
+          NO EVENTS
+      ================================================= */}
+
+      {!error &&
+        filteredEvents.length === 0 && (
+          <div className="no-events">
+
+            <div className="no-events-icon">
+              ✨
+            </div>
+
+            <h2>
+              No Events Found
+            </h2>
+
+            <p>
+              Try changing your search
+              or category filter.
+            </p>
+
+          </div>
         )}
 
-      </div>
-
       {/* =================================================
-          RESULTS
+          EVENT CARDS
       ================================================= */}
 
-      <div className="results-text">
+      <div className="events-grid">
 
-        Showing{" "}
+        {filteredEvents.map(
+          (event, index) => {
 
-        <strong>
-          {filteredEvents.length}
-        </strong>{" "}
+            const imageUrl =
+              getImageUrl(event);
 
-        {filteredEvents.length === 1
-          ? "event"
-          : "events"}
+            const eventName =
+              event.eventName ||
+              event.name ||
+              event.title ||
+              "Untitled Event";
 
-      </div>
+            const eventCategory =
+              event.category ||
+              event.eventCategory ||
+              "Event";
 
-      {/* =================================================
-          EVENT GRID
-      ================================================= */}
+            const eventLocation =
+              event.location ||
+              event.venue ||
+              "Location not available";
 
-      {filteredEvents.length > 0 ? (
+            const eventDate =
+              event.date ||
+              event.eventDate;
 
-        <div className="events-grid">
+            const eventPrice =
+              event.price ??
+              event.ticketPrice ??
+              event.amount;
 
-          {filteredEvents.map((event) => (
+            return (
+              <div
+                className="event-card"
+                key={
+                  event._id ||
+                  event.id ||
+                  index
+                }
+                onClick={() =>
+                  handleEventClick(event)
+                }
+              >
 
-            <div
-              className="event-card"
-              key={event._id}
-              onClick={() =>
-                openEvent(event._id)
-              }
-            >
+                {/* EVENT IMAGE */}
 
-              {/* POSTER */}
+                <div className="event-image-container">
 
-              <div className="event-poster">
+                  {imageUrl ? (
+                    <img
+                      src={imageUrl}
+                      alt={eventName}
+                      className="event-image"
+                    />
+                  ) : (
+                    <div className="event-image-placeholder">
+                      <span>✨</span>
+                      <p>
+                        Event
+                      </p>
+                    </div>
+                  )}
 
-                <img
-                  src={event.poster}
-                  alt={event.eventName}
-                />
+                  {/* CATEGORY */}
 
-                <span className="category-badge">
-                  {event.category}
-                </span>
-
-                {/* SPARKLE */}
-
-                <span className="image-sparkle sparkle-one">
-                  ✦
-                </span>
-
-                <span className="image-sparkle sparkle-two">
-                  ✧
-                </span>
-
-              </div>
-
-              {/* CONTENT */}
-
-              <div className="event-card-content">
-
-                <h2>
-                  {event.eventName}
-                </h2>
-
-                {/* DATE */}
-
-                <div className="event-info-row">
-
-                  <span>
-                    📅
-                  </span>
-
-                  <span>
-                    {event.date}
+                  <span className="event-category">
+                    {eventCategory}
                   </span>
 
                 </div>
 
-                {/* LOCATION */}
+                {/* CARD CONTENT */}
 
-                <div className="event-info-row">
+                <div className="event-card-content">
 
-                  <span>
-                    📍
-                  </span>
+                  <h2>
+                    {eventName}
+                  </h2>
 
-                  <span>
-                    {event.location}
-                  </span>
+                  <p className="event-description">
+                    {event.description ||
+                      event.details ||
+                      "No description available."}
+                  </p>
 
-                </div>
+                  {/* DATE */}
 
-                {/* TIME */}
+                  <div className="event-info">
+                    <span>
+                      📅
+                    </span>
 
-                <div className="event-info-row">
+                    <span>
+                      {formatDate(
+                        eventDate
+                      )}
+                    </span>
+                  </div>
 
-                  <span>
-                    🕐
-                  </span>
+                  {/* LOCATION */}
 
-                  <span>
-                    {event.time}
-                  </span>
+                  <div className="event-info">
+                    <span>
+                      📍
+                    </span>
 
-                </div>
+                    <span>
+                      {eventLocation}
+                    </span>
+                  </div>
 
-                {/* FOOTER */}
+                  {/* PRICE */}
 
-                <div className="event-card-footer">
+                  <div className="event-bottom">
 
-                  <div className="price-area">
+                    <div className="event-price">
 
-                    <small>
-                      Ticket Price
-                    </small>
+                      {eventPrice !==
+                        undefined &&
+                      eventPrice !==
+                        null ? (
+                        <>
+                          ₹
+                          {eventPrice}
+                        </>
+                      ) : (
+                        "Free"
+                      )}
 
-                    <strong>
-                      {event.price === 0
-                        ? "FREE"
-                        : `₹${event.price}`}
-                    </strong>
+                    </div>
+
+                    <button
+                      className="view-event-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEventClick(
+                          event
+                        );
+                      }}
+                    >
+                      View Details →
+                    </button>
 
                   </div>
 
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      openEvent(event._id);
-                    }}
-                  >
-                    View Details
-
-                    <span>
-                      →
-                    </span>
-
-                  </button>
-
                 </div>
 
               </div>
+            );
+          }
+        )}
 
-            </div>
-
-          ))}
-
-        </div>
-
-      ) : (
-
-        /* =================================================
-           NO RESULTS
-        ================================================= */
-
-        <div className="no-events">
-
-          <div className="no-events-icon">
-            ✦
-          </div>
-
-          <h2>
-            No Events Found
-          </h2>
-
-          <p>
-            Try changing your search or filters.
-          </p>
-
-          <button
-            onClick={clearFilters}
-          >
-            Clear Filters
-          </button>
-
-        </div>
-
-      )}
+      </div>
 
     </div>
   );
