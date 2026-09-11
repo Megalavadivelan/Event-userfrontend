@@ -1,129 +1,129 @@
 import React from "react";
+
 import { useNavigate } from "react-router-dom";
 
 import "../styles/EventCard.css";
 
 const EventCard = ({ event }) => {
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  // =====================================================
+  // STATUS
+  // =====================================================
 
-const isCompleted =
-event.status === "completed";
+  const eventStatus =
+    event.status || "Upcoming";
 
-const handleViewEvent = () => {
+  const isCompleted =
+    eventStatus.toLowerCase() === "completed";
 
+  const isOngoing =
+    eventStatus.toLowerCase() === "ongoing";
 
-if (!event._id) {
+  // =====================================================
+  // VIEW EVENT
+  // =====================================================
 
-  console.error(
-    "Event ID is missing"
-  );
+  const handleViewEvent = () => {
+    if (!event._id) {
+      console.error(
+        "Event ID is missing"
+      );
 
-  return;
+      return;
+    }
 
-}
+    navigate(`/events/${event._id}`);
+  };
 
-navigate(`/events/${event._id}`);
+  return (
+    <div className="event-card">
 
+      {/* EVENT IMAGE */}
 
-};
+      <div className="event-image-container">
 
-return (
+        <img
+          src={
+            event.image ||
+            "https://via.placeholder.com/400x250?text=Event"
+          }
+          alt={event.name || "Event"}
+          className="event-image"
+        />
 
+        {/* EVENT STATUS */}
 
-<div className="event-card">
+        <span
+          className={`event-status ${
+            eventStatus
+              .toLowerCase()
+              .replace(/\s+/g, "-")
+          }`}
+        >
+          {eventStatus}
+        </span>
 
-  {/* EVENT IMAGE */}
-  <div className="event-image-container">
+      </div>
 
-    <img
-      src={
-        event.image ||
-        "https://via.placeholder.com/400x250?text=Event"
-      }
-      alt={event.title || "Event"}
-      className="event-image"
-    />
+      {/* EVENT CONTENT */}
 
+      <div className="event-content">
 
-    {/* EVENT STATUS */}
+        {/* ORGANIZER */}
 
-    <span
-      className={`event-status ${
-        isCompleted
-          ? "completed"
-          : "upcoming"
-      }`}
-    >
+        <span className="event-category">
+          Organized by {event.organizer || "Unknown"}
+        </span>
 
-      {isCompleted
-        ? "Completed"
-        : "Upcoming"}
+        {/* EVENT NAME */}
 
-    </span>
+        <h2>
+          {event.name || "Untitled Event"}
+        </h2>
 
-  </div>
+        {/* EVENT DESCRIPTION */}
 
+        <p className="event-description">
+          {event.description ||
+            "No description available."}
+        </p>
 
-  {/* EVENT CONTENT */}
+        {/* EVENT INFO */}
 
-  <div className="event-content">
+        <div className="event-info">
 
-    {/* CATEGORY */}
+          <p>
+            📅 {event.date || "Date not available"}
+          </p>
 
-    <span className="event-category">
+          <p>
+            ⏰ {event.time || "Time not available"}
+          </p>
 
-      {event.category || "General"}
+          <p>
+            📍 {event.location || "Location not available"}
+          </p>
 
-    </span>
+          <p>
+            🎟 {event.tickets || 0} Tickets
+          </p>
 
+        </div>
 
-    {/* TITLE */}
+        {/* VIEW EVENT */}
 
-    <h2>
+        <button
+          className="view-event-btn"
+          onClick={handleViewEvent}
+        >
+          View Event
+        </button>
 
-      {event.title || "Untitled Event"}
-
-    </h2>
-
-
-    {/* EVENT INFO */}
-
-    <div className="event-info">
-
-      <p>
-        📅 {event.date || "Date not available"}
-      </p>
-
-      <p>
-        ⏰ {event.time || "Time not available"}
-      </p>
-
-      <p>
-        📍 {event.location || "Location not available"}
-      </p>
+      </div>
 
     </div>
-
-
-    {/* VIEW EVENT */}
-
-    <button
-      className="view-event-btn"
-      onClick={handleViewEvent}
-    >
-
-      View Event
-
-    </button>
-
-  </div>
-
-</div>
-
-
-);
-
+  );
 };
 
 export default EventCard;
