@@ -1,311 +1,613 @@
-import React, { useEffect, useState } from "react";
-import EventCard from "../components/EventCard.jsx";
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Events.css";
 
 const Events = () => {
-const [events, setEvents] = useState([]);
-const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-const [search, setSearch] = useState("");
-const [category, setCategory] = useState("all");
-const [status, setStatus] = useState("all");
-const [date, setDate] = useState("");
+  // =====================================================
+  // SAMPLE EVENTS
+  // Later this will come from your backend API
+  // =====================================================
 
-const [statusOpen, setStatusOpen] = useState(false);
-const [categoryOpen, setCategoryOpen] = useState(false);
+  const sampleEvents = [
+    {
+      _id: "event001",
+      eventName: "Tech Innovation Summit 2026",
+      category: "Technology",
+      description:
+        "A technology summit featuring Artificial Intelligence, Cloud Computing, Cybersecurity and modern software development.",
+      date: "25 September 2026",
+      time: "10:00 AM - 4:00 PM",
+      venue: "Chennai Trade Centre",
+      location: "Chennai",
+      price: 499,
+      totalSeats: 500,
+      availableSeats: 235,
+      organizerName: "Tech Community India",
+      organizerEmail: "tech@example.com",
+      organizerPhone: "9876543210",
+      poster:
+        "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1000&q=80",
+    },
 
-useEffect(() => {
-fetchEvents();
-}, []);
+    {
+      _id: "event002",
+      eventName: "Music & Cultural Night",
+      category: "Music",
+      description:
+        "An exciting evening filled with live music, cultural performances, food and entertainment.",
+      date: "28 September 2026",
+      time: "6:00 PM - 10:00 PM",
+      venue: "YMCA Grounds",
+      location: "Coimbatore",
+      price: 299,
+      totalSeats: 1000,
+      availableSeats: 680,
+      organizerName: "Cultural Events India",
+      organizerEmail: "culture@example.com",
+      organizerPhone: "9876543211",
+      poster:
+        "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1000&q=80",
+    },
 
-// FETCH ALL EVENTS
-const fetchEvents = async () => {
-try {
-const response = await fetch(
-"https://api-admin-rouge.vercel.app/events/getevents"
-);
+    {
+      _id: "event003",
+      eventName: "AI & Machine Learning Workshop",
+      category: "Workshop",
+      description:
+        "A hands-on workshop covering Artificial Intelligence, Machine Learning, Python and real-world AI applications.",
+      date: "3 October 2026",
+      time: "9:30 AM - 3:30 PM",
+      venue: "KCT Innovation Centre",
+      location: "Coimbatore",
+      price: 799,
+      totalSeats: 200,
+      availableSeats: 74,
+      organizerName: "AI Developers Club",
+      organizerEmail: "ai@example.com",
+      organizerPhone: "9876543212",
+      poster:
+        "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=80",
+    },
 
+    {
+      _id: "event004",
+      eventName: "Startup & Entrepreneurship Meet",
+      category: "Business",
+      description:
+        "Meet entrepreneurs, startup founders and business professionals. Learn about startups, funding and business growth.",
+      date: "10 October 2026",
+      time: "10:00 AM - 5:00 PM",
+      venue: "Hotel Grand Chennai",
+      location: "Chennai",
+      price: 999,
+      totalSeats: 300,
+      availableSeats: 120,
+      organizerName: "Startup Tamil Nadu",
+      organizerEmail: "startup@example.com",
+      organizerPhone: "9876543213",
+      poster:
+        "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=1000&q=80",
+    },
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch events");
-  }
+    {
+      _id: "event005",
+      eventName: "Free Coding Bootcamp",
+      category: "Education",
+      description:
+        "A free coding bootcamp for students covering programming fundamentals, web development and problem solving.",
+      date: "15 October 2026",
+      time: "9:00 AM - 4:00 PM",
+      venue: "Government Engineering College",
+      location: "Salem",
+      price: 0,
+      totalSeats: 250,
+      availableSeats: 145,
+      organizerName: "Code Community",
+      organizerEmail: "coding@example.com",
+      organizerPhone: "9876543214",
+      poster:
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80",
+    },
 
-  const data = await response.json();
+    {
+      _id: "event006",
+      eventName: "Photography & Creative Arts Exhibition",
+      category: "Arts",
+      description:
+        "Explore photography, digital art, paintings and creative works from talented artists.",
+      date: "20 October 2026",
+      time: "11:00 AM - 7:00 PM",
+      venue: "Art Gallery",
+      location: "Bangalore",
+      price: 199,
+      totalSeats: 400,
+      availableSeats: 310,
+      organizerName: "Creative Arts Society",
+      organizerEmail: "arts@example.com",
+      organizerPhone: "9876543215",
+      poster:
+        "https://images.unsplash.com/photo-1561214115-f2f134cc4912?auto=format&fit=crop&w=1000&q=80",
+    },
+  ];
 
-  // Supports both:
-  // { events: [...] }
-  // OR
-  // [...]
-  const eventsData = Array.isArray(data)
-    ? data
-    : data.events || [];
+  // =====================================================
+  // STATES
+  // =====================================================
 
-  setEvents(eventsData);
+  const [search, setSearch] = useState("");
 
-} catch (error) {
-  console.error("Error fetching events:", error);
-  setEvents([]);
-} finally {
-  setLoading(false);
-}
+  const [category, setCategory] = useState("All");
 
+  const [location, setLocation] = useState("All");
 
-};
+  const [priceFilter, setPriceFilter] = useState("All");
 
-// FILTER EVENTS
-const filteredEvents = events.filter((event) => {
+  // =====================================================
+  // CATEGORY OPTIONS
+  // =====================================================
 
+  const categories = useMemo(() => {
+    return [
+      "All",
+      ...new Set(
+        sampleEvents
+          .map((event) => event.category)
+          .filter(Boolean)
+      ),
+    ];
+  }, []);
 
-const matchesSearch =
-  event.title
-    ?.toLowerCase()
-    .includes(search.toLowerCase()) ||
+  // =====================================================
+  // LOCATION OPTIONS
+  // =====================================================
 
-  event.location
-    ?.toLowerCase()
-    .includes(search.toLowerCase());
+  const locations = useMemo(() => {
+    return [
+      "All",
+      ...new Set(
+        sampleEvents
+          .map((event) => event.location)
+          .filter(Boolean)
+      ),
+    ];
+  }, []);
 
-const matchesCategory =
-  category === "all" ||
-  event.category === category;
+  // =====================================================
+  // FILTER EVENTS
+  // =====================================================
 
-const matchesStatus =
-  status === "all" ||
-  event.status === status;
+  const filteredEvents = useMemo(() => {
+    return sampleEvents.filter((event) => {
+      const searchText = search.toLowerCase().trim();
 
-const matchesDate =
-  date === "" ||
-  event.date === date;
+      const matchesSearch =
+        searchText === "" ||
+        event.eventName
+          .toLowerCase()
+          .includes(searchText) ||
+        event.category
+          .toLowerCase()
+          .includes(searchText) ||
+        event.location
+          .toLowerCase()
+          .includes(searchText);
 
-return (
-  matchesSearch &&
-  matchesCategory &&
-  matchesStatus &&
-  matchesDate
-);
+      const matchesCategory =
+        category === "All" ||
+        event.category === category;
 
+      const matchesLocation =
+        location === "All" ||
+        event.location === location;
 
-});
+      let matchesPrice = true;
 
-// GET UNIQUE CATEGORIES
-const categories = [
-...new Set(
-events
-.map((event) => event.category)
-.filter(Boolean)
-)
-];
+      const eventPrice = Number(event.price);
 
-return ( <div className="events-page">
+      if (priceFilter === "Free") {
+        matchesPrice = eventPrice === 0;
+      }
 
+      if (priceFilter === "Under500") {
+        matchesPrice = eventPrice < 500;
+      }
 
-  {/* SEARCH + FILTERS */}
-  <div className="event-filter-container">
+      if (priceFilter === "500to1000") {
+        matchesPrice =
+          eventPrice >= 500 &&
+          eventPrice <= 1000;
+      }
 
-    {/* SEARCH */}
-    <div className="search-box">
-      <input
-        type="text"
-        placeholder="Search events, location..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      if (priceFilter === "Above1000") {
+        matchesPrice = eventPrice > 1000;
+      }
 
-      <span>🔍</span>
-    </div>
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesLocation &&
+        matchesPrice
+      );
+    });
+  }, [
+    search,
+    category,
+    location,
+    priceFilter,
+  ]);
 
-    {/* CATEGORY */}
-    <div
-      className={`custom-dropdown ${
-        categoryOpen ? "open" : ""
-      }`}
-    >
-      <button
-        className="dropdown-button"
-        onClick={() => setCategoryOpen(!categoryOpen)}
-      >
-        <span>
-          {category === "all"
-            ? "All Categories"
-            : category}
-        </span>
+  // =====================================================
+  // CLEAR FILTERS
+  // =====================================================
 
-        <span className="dropdown-arrow">
-          ⌄
-        </span>
-      </button>
+  const clearFilters = () => {
+    setSearch("");
+    setCategory("All");
+    setLocation("All");
+    setPriceFilter("All");
+  };
 
-      {categoryOpen && (
-        <div className="dropdown-menu">
+  // =====================================================
+  // OPEN EVENT DETAILS
+  // =====================================================
 
-          {/* ALL CATEGORIES */}
-          <div
-            className={`dropdown-option ${
-              category === "all"
-                ? "selected"
-                : ""
-            }`}
-            onClick={() => {
-              setCategory("all");
-              setCategoryOpen(false);
-            }}
-          >
-            All Categories
-          </div>
+  const openEvent = (id) => {
+    navigate(`/event-details/${id}`);
+  };
 
-          {/* DYNAMIC CATEGORIES */}
-          {categories.map((cat, index) => (
-            <div
-              key={cat}
-              className={`dropdown-option ${
-                category === cat
-                  ? "selected"
-                  : ""
-              }`}
-              style={{
-                animationDelay: `${
-                  (index + 2) * 0.05
-                }s`
-              }}
-              onClick={() => {
-                setCategory(cat);
-                setCategoryOpen(false);
-              }}
+  // =====================================================
+  // CHECK FILTER STATUS
+  // =====================================================
+
+  const isFiltered =
+    search ||
+    category !== "All" ||
+    location !== "All" ||
+    priceFilter !== "All";
+
+  // =====================================================
+  // UI
+  // =====================================================
+
+  return (
+    <div className="events-page">
+
+      {/* =================================================
+          TOOLBAR
+      ================================================= */}
+
+      <div className="events-toolbar">
+
+        {/* TITLE */}
+
+        <div className="events-heading">
+
+          <p className="events-label">
+            DISCOVER
+          </p>
+
+          <h1>
+            Events
+          </h1>
+
+        </div>
+
+        {/* SEARCH */}
+
+        <div className="events-search">
+
+          <span className="search-icon">
+            🔍
+          </span>
+
+          <input
+            type="text"
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
+          />
+
+          {search && (
+            <button
+              className="clear-search"
+              onClick={() => setSearch("")}
+              aria-label="Clear search"
             >
-              {cat}
+              ×
+            </button>
+          )}
+
+        </div>
+
+        {/* CATEGORY */}
+
+        <div className="filter-group">
+
+          <select
+            value={category}
+            onChange={(e) =>
+              setCategory(e.target.value)
+            }
+          >
+
+            {categories.map((item) => (
+              <option
+                key={item}
+                value={item}
+              >
+                {item === "All"
+                  ? "All Categories"
+                  : item}
+              </option>
+            ))}
+
+          </select>
+
+        </div>
+
+        {/* LOCATION */}
+
+        <div className="filter-group">
+
+          <select
+            value={location}
+            onChange={(e) =>
+              setLocation(e.target.value)
+            }
+          >
+
+            {locations.map((item) => (
+              <option
+                key={item}
+                value={item}
+              >
+                {item === "All"
+                  ? "All Locations"
+                  : item}
+              </option>
+            ))}
+
+          </select>
+
+        </div>
+
+        {/* PRICE */}
+
+        <div className="filter-group">
+
+          <select
+            value={priceFilter}
+            onChange={(e) =>
+              setPriceFilter(e.target.value)
+            }
+          >
+
+            <option value="All">
+              All Prices
+            </option>
+
+            <option value="Free">
+              Free
+            </option>
+
+            <option value="Under500">
+              Under ₹500
+            </option>
+
+            <option value="500to1000">
+              ₹500 - ₹1000
+            </option>
+
+            <option value="Above1000">
+              Above ₹1000
+            </option>
+
+          </select>
+
+        </div>
+
+        {/* CLEAR */}
+
+        {isFiltered && (
+          <button
+            className="clear-filters"
+            onClick={clearFilters}
+          >
+            Clear
+          </button>
+        )}
+
+      </div>
+
+      {/* =================================================
+          RESULTS
+      ================================================= */}
+
+      <div className="results-text">
+
+        Showing{" "}
+
+        <strong>
+          {filteredEvents.length}
+        </strong>{" "}
+
+        {filteredEvents.length === 1
+          ? "event"
+          : "events"}
+
+      </div>
+
+      {/* =================================================
+          EVENT GRID
+      ================================================= */}
+
+      {filteredEvents.length > 0 ? (
+
+        <div className="events-grid">
+
+          {filteredEvents.map((event) => (
+
+            <div
+              className="event-card"
+              key={event._id}
+              onClick={() =>
+                openEvent(event._id)
+              }
+            >
+
+              {/* POSTER */}
+
+              <div className="event-poster">
+
+                <img
+                  src={event.poster}
+                  alt={event.eventName}
+                />
+
+                <span className="category-badge">
+                  {event.category}
+                </span>
+
+                {/* SPARKLE */}
+
+                <span className="image-sparkle sparkle-one">
+                  ✦
+                </span>
+
+                <span className="image-sparkle sparkle-two">
+                  ✧
+                </span>
+
+              </div>
+
+              {/* CONTENT */}
+
+              <div className="event-card-content">
+
+                <h2>
+                  {event.eventName}
+                </h2>
+
+                {/* DATE */}
+
+                <div className="event-info-row">
+
+                  <span>
+                    📅
+                  </span>
+
+                  <span>
+                    {event.date}
+                  </span>
+
+                </div>
+
+                {/* LOCATION */}
+
+                <div className="event-info-row">
+
+                  <span>
+                    📍
+                  </span>
+
+                  <span>
+                    {event.location}
+                  </span>
+
+                </div>
+
+                {/* TIME */}
+
+                <div className="event-info-row">
+
+                  <span>
+                    🕐
+                  </span>
+
+                  <span>
+                    {event.time}
+                  </span>
+
+                </div>
+
+                {/* FOOTER */}
+
+                <div className="event-card-footer">
+
+                  <div className="price-area">
+
+                    <small>
+                      Ticket Price
+                    </small>
+
+                    <strong>
+                      {event.price === 0
+                        ? "FREE"
+                        : `₹${event.price}`}
+                    </strong>
+
+                  </div>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEvent(event._id);
+                    }}
+                  >
+                    View Details
+
+                    <span>
+                      →
+                    </span>
+
+                  </button>
+
+                </div>
+
+              </div>
+
             </div>
+
           ))}
 
         </div>
-      )}
-    </div>
 
-    {/* STATUS */}
-    <div
-      className={`custom-dropdown ${
-        statusOpen ? "open" : ""
-      }`}
-    >
-      <button
-        className="dropdown-button"
-        onClick={() => setStatusOpen(!statusOpen)}
-      >
-        <span>
-          {status === "all"
-            ? "All Events"
-            : status === "upcoming"
-            ? "Upcoming"
-            : "Completed"}
-        </span>
+      ) : (
 
-        <span className="dropdown-arrow">
-          ⌄
-        </span>
-      </button>
+        /* =================================================
+           NO RESULTS
+        ================================================= */
 
-      {statusOpen && (
-        <div className="dropdown-menu">
+        <div className="no-events">
 
-          <div
-            className={`dropdown-option ${
-              status === "all"
-                ? "selected"
-                : ""
-            }`}
-            onClick={() => {
-              setStatus("all");
-              setStatusOpen(false);
-            }}
-          >
-            All Events
+          <div className="no-events-icon">
+            ✦
           </div>
 
-          <div
-            className={`dropdown-option ${
-              status === "upcoming"
-                ? "selected"
-                : ""
-            }`}
-            onClick={() => {
-              setStatus("upcoming");
-              setStatusOpen(false);
-            }}
-          >
-            Upcoming
-          </div>
+          <h2>
+            No Events Found
+          </h2>
 
-          <div
-            className={`dropdown-option ${
-              status === "completed"
-                ? "selected"
-                : ""
-            }`}
-            onClick={() => {
-              setStatus("completed");
-              setStatusOpen(false);
-            }}
+          <p>
+            Try changing your search or filters.
+          </p>
+
+          <button
+            onClick={clearFilters}
           >
-            Completed
-          </div>
+            Clear Filters
+          </button>
 
         </div>
+
       )}
+
     </div>
-
-    {/* DATE */}
-    <input
-      type="date"
-      value={date}
-      onChange={(e) => setDate(e.target.value)}
-    />
-
-    {/* CLEAR */}
-    <button
-      className="clear-filter"
-      onClick={() => {
-        setSearch("");
-        setCategory("all");
-        setStatus("all");
-        setDate("");
-      }}
-    >
-      Clear
-    </button>
-
-  </div>
-
-  {/* EVENTS */}
-  {loading ? (
-
-    <div className="loading">
-      Loading events...
-    </div>
-
-  ) : filteredEvents.length === 0 ? (
-
-    <div className="no-events">
-      <h2>No Events Found</h2>
-      <p>
-        Try changing your search or filters.
-      </p>
-    </div>
-
-  ) : (
-
-    <div className="events-grid">
-      {filteredEvents.map((event) => (
-        <EventCard
-          key={event._id}
-          event={event}
-        />
-      ))}
-    </div>
-
-  )}
-
-</div>
-
-);
+  );
 };
 
 export default Events;

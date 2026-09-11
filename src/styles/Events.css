@@ -1,574 +1,487 @@
 /* =========================================================
-   EVENTS PAGE - PREMIUM BLACK THEME
+   EVENTS PAGE
+   BLACK + PURPLE SPARKLE THEME
 ========================================================= */
 
 .events-page {
+  position: relative;
+
+  width: 100%;
   min-height: 100vh;
 
-  padding: 32px 6% 60px;
+  max-width: 1500px;
 
-  position: relative;
+  margin: 0 auto;
+
+  padding: 28px 32px 60px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
 
   background:
     radial-gradient(
-      circle at 10% 0%,
-      rgba(255, 255, 255, 0.06),
-      transparent 27%
-    ),
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(255, 255, 255, 0.035),
+      circle at 15% 15%,
+      rgba(90, 35, 150, 0.18),
       transparent 25%
     ),
-    #050505;
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(75, 25, 125, 0.15),
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(55, 20, 100, 0.12),
+      transparent 35%
+    ),
+    #050507;
 
   color: #ffffff;
-
-  overflow: hidden;
 }
 
-
 /* =========================================================
-   BACKGROUND GLOW
+   LIMITED BACKGROUND SPARKLES
 ========================================================= */
 
 .events-page::before {
   content: "";
 
   position: absolute;
-
-  width: 450px;
-  height: 450px;
-
-  top: -250px;
-  right: -150px;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.025);
-
-  filter: blur(80px);
+  inset: 0;
 
   pointer-events: none;
+  z-index: 0;
+
+  /* Only a few sparkles */
+  background-image:
+    radial-gradient(
+      circle at 12% 18%,
+      rgba(255, 255, 255, 0.85) 0 1.2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 78% 14%,
+      rgba(151, 91, 255, 0.8) 0 1.3px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 91% 62%,
+      rgba(255, 255, 255, 0.7) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 24% 78%,
+      rgba(115, 65, 190, 0.75) 0 1.2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 55% 42%,
+      rgba(210, 190, 255, 0.65) 0 1px,
+      transparent 2px
+    );
+
+  background-repeat: no-repeat;
+
+  opacity: 0.65;
+
+  animation: limitedSparkleMove 14s ease-in-out infinite;
 }
+
 
 .events-page::after {
   content: "";
 
   position: absolute;
-
-  width: 400px;
-  height: 400px;
-
-  bottom: -220px;
-  left: -180px;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.02);
-
-  filter: blur(80px);
+  inset: 0;
 
   pointer-events: none;
+  z-index: 0;
+
+  background:
+    radial-gradient(
+      circle at 42% 12%,
+      rgba(255, 255, 255, 0.65) 0 1px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 68% 82%,
+      rgba(125, 70, 205, 0.7) 0 1.2px,
+      transparent 2px
+    ),
+    radial-gradient(
+      circle at 8% 55%,
+      rgba(190, 160, 255, 0.6) 0 1px,
+      transparent 2px
+    );
+
+  background-repeat: no-repeat;
+
+  opacity: 0.45;
+
+  animation:
+    limitedSparkleReverse 18s ease-in-out infinite;
 }
 
 
 /* =========================================================
-   FILTER CONTAINER
+   SUBTLE SPARKLE MOVEMENT
 ========================================================= */
 
-.event-filter-container {
+@keyframes limitedSparkleMove {
+
+  0% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(12px, 18px, 0);
+  }
+
+  100% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+}
+
+
+@keyframes limitedSparkleReverse {
+
+  0% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform:
+      translate3d(-15px, 12px, 0);
+  }
+
+  100% {
+    transform:
+      translate3d(0, 0, 0);
+  }
+
+}
+
+
+/* =========================================================
+   ALL CONTENT ABOVE SPARKLES
+========================================================= */
+
+.events-page > * {
   position: relative;
 
-  z-index: 10;
+  z-index: 2;
+}
 
+
+/* =========================================================
+   SINGLE ROW TOOLBAR
+========================================================= */
+
+.events-toolbar {
   width: 100%;
-  max-width: 1300px;
-
-  margin: 0 auto 38px;
-
-  padding: 16px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 12px;
+  gap: 60px;
 
-  background: rgba(17, 17, 17, 0.88);
+  margin-bottom: 20px;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  border-radius: 18px;
-
-  backdrop-filter: blur(20px);
-
-  box-shadow:
-    0 15px 45px rgba(0, 0, 0, 0.55),
-    inset 0 1px 0 rgba(255, 255, 255, 0.035);
-
-  animation: filterEntrance 0.55s ease forwards;
-}
-
-
-@keyframes filterEntrance {
-  from {
-    opacity: 0;
-
-    transform: translateY(-15px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform: translateY(0);
-  }
+  white-space: nowrap;
 }
 
 
 /* =========================================================
-   SEARCH BOX
+   EVENTS TITLE
 ========================================================= */
 
-.search-box {
+.events-heading {
+  flex-shrink: 0;
+
+  min-width: 90px;
+}
+
+
+.events-label {
+  margin: 0 0 4px;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+  color: #9b69ef;
+
+  animation:
+    labelGlow 3s ease-in-out infinite;
+}
+
+
+.events-heading h1 {
+  margin: 0;
+
+  font-size: 27px;
+
+  line-height: 1;
+
+  font-weight: 800;
+
+  color: #ffffff;
+
+  text-shadow:
+    0 0 12px
+    rgba(139, 79, 230, 0.4);
+
+  animation:
+    headingGlow 4s ease-in-out infinite;
+}
+
+
+@keyframes labelGlow {
+
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+
+  50% {
+    opacity: 1;
+
+    text-shadow:
+      0 0 14px
+      rgba(151, 91, 255, 0.9);
+  }
+
+}
+
+
+@keyframes headingGlow {
+
+  0%,
+  100% {
+    text-shadow:
+      0 0 8px
+      rgba(140, 78, 230, 0.2);
+  }
+
+  50% {
+    text-shadow:
+      0 0 22px
+      rgba(140, 78, 230, 0.55);
+  }
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.events-search {
   position: relative;
 
   flex: 1;
 
-  min-width: 230px;
+  min-width: 200px;
 
-  display: flex;
-
-  align-items: center;
+  max-width: 450px;
 }
 
 
-.search-box input {
-  width: 100%;
+.events-search input {
+  width: 112%;
 
-  height: 46px;
+  height: 45px;
 
-  padding: 0 45px 0 15px;
+  box-sizing: border-box;
 
-  background: #0b0b0b;
+  padding:
+    0 42px;
 
-  color: #ffffff;
+  border:
+    1px solid
+    rgba(125, 69, 200, 0.45);
 
-  border: 1px solid #242424;
-
-  border-radius: 11px;
+  border-radius: 10px;
 
   outline: none;
 
-  font-size: 14px;
+  background:
+    rgba(13, 10, 18, 0.94);
+
+  color: #ffffff;
+
+  font-size: 12px;
 
   transition:
     border-color 0.3s ease,
-    background 0.3s ease,
     box-shadow 0.3s ease,
-    transform 0.3s ease;
+    background 0.3s ease;
 }
 
 
-.search-box input::placeholder {
-  color: #666;
+.events-search input::placeholder {
+  color: #706a78;
 }
 
 
-.search-box input:hover {
-  background: #101010;
-
-  border-color: #3a3a3a;
+.events-search input:hover {
+  border-color:
+    rgba(157, 91, 244, 0.7);
 }
 
 
-.search-box input:focus {
-  background: #111111;
+.events-search input:focus {
+  border-color:
+    #955cff;
 
-  border-color: rgba(255, 255, 255, 0.65);
-
-  transform: translateY(-1px);
+  background:
+    rgba(18, 13, 25, 0.98);
 
   box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.05),
-    0 0 25px rgba(255, 255, 255, 0.06);
+    0 0 0 2px
+      rgba(128, 64, 210, 0.1),
+    0 0 24px
+      rgba(122, 58, 210, 0.28);
 }
 
 
-.search-box span {
+.search-icon {
   position: absolute;
 
-  right: 15px;
+  left: 14px;
 
-  color: #777;
+  top: 11px;
 
-  font-size: 16px;
+  z-index: 3;
 
-  pointer-events: none;
+  font-size: 17px;
 
-  transition:
-    color 0.3s ease,
-    transform 0.3s ease;
+  color: #a97aff;
+
+  filter:
+    drop-shadow(
+      0 0 6px
+      rgba(148, 86, 255, 0.8)
+    );
 }
 
 
-.search-box:focus-within span {
+.clear-search {
+  position: absolute;
+
+  right: 8px;
+
+  top: 8px;
+
+  width: 29px;
+
+  height: 29px;
+
+  padding: 0;
+
+  border: none;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #817b89;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  transition:
+    0.25s ease;
+}
+
+
+.clear-search:hover {
   color: #ffffff;
 
-  transform: scale(1.15);
+  background:
+    rgba(135, 67, 210, 0.18);
 }
 
 
 /* =========================================================
-   CUSTOM DROPDOWNS
-   CATEGORY + STATUS
+   FILTER GROUP
 ========================================================= */
 
-.custom-dropdown {
-  position: relative;
-
-  min-width: 170px;
-
+.filter-group {
   flex-shrink: 0;
 }
 
 
-/* =========================================================
-   DROPDOWN BUTTON
-========================================================= */
+.filter-group select {
+  width: 141%;
 
-.dropdown-button {
-  width: 100%;
+  height: 45px;
 
-  height: 46px;
+  min-width: 130px;
 
-  padding: 0 14px;
+  padding:
+    0 30px 0 12px;
 
-  display: flex;
+  border:
+    1px solid
+    rgba(125, 69, 200, 0.4);
 
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 10px;
-
-  background: #0b0b0b;
-
-  color: #cccccc;
-
-  border: 1px solid #242424;
-
-  border-radius: 11px;
+  border-radius: 10px;
 
   outline: none;
 
-  cursor: pointer;
+  background:
+    #0d0a12;
 
-  font-size: 14px;
+  color: #d9d3e2;
 
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.25s ease,
-    box-shadow 0.3s ease;
-}
-
-
-/* HOVER */
-
-.dropdown-button:hover {
-  background: #151515;
-
-  color: #ffffff;
-
-  border-color: rgba(255, 255, 255, 0.35);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 8px 22px rgba(0, 0, 0, 0.45);
-}
-
-
-/* OPEN */
-
-.custom-dropdown.open .dropdown-button {
-  background: #151515;
-
-  color: #ffffff;
-
-  border-color: rgba(255, 255, 255, 0.7);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.05),
-    0 0 25px rgba(255, 255, 255, 0.08);
-}
-
-
-/* =========================================================
-   DROPDOWN ARROW
-========================================================= */
-
-.dropdown-arrow {
-  flex-shrink: 0;
-
-  font-size: 18px;
-
-  line-height: 1;
-
-  color: #777;
-
-  transition:
-    transform 0.3s ease,
-    color 0.3s ease;
-}
-
-
-.custom-dropdown.open .dropdown-arrow {
-  transform: rotate(180deg);
-
-  color: #ffffff;
-}
-
-
-/* =========================================================
-   DROPDOWN MENU
-========================================================= */
-
-.dropdown-menu {
-  position: absolute;
-
-  top: calc(100% + 8px);
-
-  left: 0;
-
-  width: 100%;
-
-  min-width: 170px;
-
-  padding: 6px;
-
-  background: rgba(13, 13, 13, 0.98);
-
-  border: 1px solid #2a2a2a;
-
-  border-radius: 13px;
-
-  backdrop-filter: blur(18px);
-
-  box-shadow:
-    0 18px 45px rgba(0, 0, 0, 0.75),
-    0 0 25px rgba(255, 255, 255, 0.025);
-
-  z-index: 999;
-
-  transform-origin: top center;
-
-  animation: dropdownOpen 0.25s ease forwards;
-}
-
-
-@keyframes dropdownOpen {
-  0% {
-    opacity: 0;
-
-    transform:
-      translateY(-10px)
-      scaleY(0.9);
-  }
-
-  100% {
-    opacity: 1;
-
-    transform:
-      translateY(0)
-      scaleY(1);
-  }
-}
-
-
-/* =========================================================
-   DROPDOWN OPTIONS
-========================================================= */
-
-.dropdown-option {
-  position: relative;
-
-  padding: 11px 12px;
-
-  margin: 2px 0;
-
-  border-radius: 8px;
-
-  color: #999999;
+  font-size: 11px;
 
   cursor: pointer;
 
-  font-size: 14px;
-
-  overflow: hidden;
-
-  animation:
-    optionAppear 0.3s ease both;
-
   transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease,
-    padding-left 0.25s ease,
-    box-shadow 0.25s ease;
+    0.3s ease;
 }
 
 
-/* OPTION SLIDE ANIMATION */
-
-@keyframes optionAppear {
-  from {
-    opacity: 0;
-
-    transform: translateX(-12px);
-  }
-
-  to {
-    opacity: 1;
-
-    transform: translateX(0);
-  }
-}
-
-
-/* =========================================================
-   OPTION HOVER
-========================================================= */
-
-.dropdown-option:hover {
-  background: #222222;
-
-  color: #ffffff;
-
-  transform: translateX(5px);
-
-  padding-left: 17px;
+.filter-group select:hover {
+  border-color:
+    #9255ed;
 
   box-shadow:
-    inset 3px 0 0 #ffffff;
+    0 0 16px
+    rgba(125, 62, 210, 0.2);
 }
 
 
-/* =========================================================
-   SELECTED OPTION
-========================================================= */
-
-.dropdown-option.selected {
-  background: #ffffff;
-
-  color: #000000;
-
-  font-weight: 600;
+.filter-group select:focus {
+  border-color:
+    #a267ff;
 
   box-shadow:
-    0 3px 12px rgba(255, 255, 255, 0.08);
+    0 0 0 2px
+      rgba(137, 73, 220, 0.1),
+    0 0 15px
+      rgba(125, 58, 210, 0.18);
 }
 
 
-/* SELECTED HOVER */
+.filter-group select option {
+  background:
+    #0b0810;
 
-.dropdown-option.selected:hover {
-  background: #eeeeee;
-
-  color: #000000;
-
-  transform: translateX(5px);
-
-  padding-left: 17px;
-}
-
-
-/* =========================================================
-   DATE INPUT
-========================================================= */
-
-.event-filter-container input[type="date"] {
-  height: 46px;
-
-  padding: 0 13px;
-
-  flex-shrink: 0;
-
-  background: #0b0b0b;
-
-  color: #cccccc;
-
-  border: 1px solid #242424;
-
-  border-radius: 11px;
-
-  outline: none;
-
-  cursor: pointer;
-
-  font-size: 14px;
-
-  transition:
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease,
-    transform 0.25s ease,
-    box-shadow 0.3s ease;
-}
-
-
-.event-filter-container input[type="date"]:hover {
-  background: #151515;
-
-  color: #ffffff;
-
-  border-color: rgba(255, 255, 255, 0.35);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-
-.event-filter-container input[type="date"]:focus {
-  background: #151515;
-
-  color: #ffffff;
-
-  border-color: rgba(255, 255, 255, 0.7);
-
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.05),
-    0 0 20px rgba(255, 255, 255, 0.06);
-}
-
-
-.event-filter-container
-input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-
-  opacity: 0.65;
-
-  cursor: pointer;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
-}
-
-
-.event-filter-container
-input[type="date"]::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-
-  transform: scale(1.15);
+  color:
+    #ffffff;
 }
 
 
@@ -576,50 +489,76 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
    CLEAR BUTTON
 ========================================================= */
 
-.clear-filter {
-  height: 46px;
-
-  padding: 0 20px;
-
+.clear-filters {
   flex-shrink: 0;
 
-  background: transparent;
+  height: 45px;
 
-  color: #aaaaaa;
+  padding:
+    0 14px;
 
-  border: 1px solid #292929;
+  border:
+    1px solid
+    rgba(160, 89, 250, 0.45);
 
-  border-radius: 11px;
+  border-radius: 10px;
+
+  background:
+    rgba(94, 42, 160, 0.15);
+
+  color:
+    #c6a4ff;
+
+  font-size: 11px;
+
+  font-weight: 600;
 
   cursor: pointer;
 
-  font-size: 14px;
-
   transition:
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    transform 0.25s ease,
-    box-shadow 0.3s ease;
+    0.3s ease;
 }
 
 
-.clear-filter:hover {
-  background: #ffffff;
+.clear-filters:hover {
+  background:
+    rgba(112, 51, 190, 0.28);
 
-  color: #000000;
+  border-color:
+    #a66aff;
 
-  border-color: #ffffff;
-
-  transform: translateY(-2px);
+  color:
+    #ffffff;
 
   box-shadow:
-    0 8px 25px rgba(255, 255, 255, 0.12);
+    0 0 18px
+    rgba(133, 63, 220, 0.3);
 }
 
 
-.clear-filter:active {
-  transform: scale(0.95);
+/* =========================================================
+   RESULT COUNT
+========================================================= */
+
+.results-text {
+  margin:
+    0 0 17px;
+
+  color:
+    #706b77;
+
+  font-size:
+    12px;
+}
+
+
+.results-text strong {
+  color:
+    #b993ff;
+
+  text-shadow:
+    0 0 10px
+    rgba(151, 87, 255, 0.5);
 }
 
 
@@ -628,69 +567,93 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 ========================================================= */
 
 .events-grid {
-  position: relative;
-
-  z-index: 1;
-
-  width: 100%;
-
-  max-width: 1300px;
-
-  margin: 0 auto;
-
   display: grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(
+      auto-fill,
+      minmax(270px, 1fr)
+    );
 
-  gap: 25px;
+  gap: 20px;
 }
 
 
 /* =========================================================
-   EVENT CARD ENTRANCE
+   EVENT CARD
 ========================================================= */
 
-.events-grid > * {
+.event-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(118, 63, 190, 0.3);
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(19, 15, 25, 0.97),
+      rgba(7, 6, 10, 0.98)
+    );
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 25px
+    rgba(0, 0, 0, 0.35);
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+
   animation:
-    eventCardAppear
-    0.55s
-    ease
-    both;
+    cardEntrance 0.65s ease backwards;
 }
 
 
-.events-grid > *:nth-child(1) {
+/* =========================================================
+   CARD STAGGER
+========================================================= */
+
+.event-card:nth-child(1) {
   animation-delay: 0.05s;
 }
 
-.events-grid > *:nth-child(2) {
-  animation-delay: 0.1s;
+.event-card:nth-child(2) {
+  animation-delay: 0.12s;
 }
 
-.events-grid > *:nth-child(3) {
-  animation-delay: 0.15s;
+.event-card:nth-child(3) {
+  animation-delay: 0.19s;
 }
 
-.events-grid > *:nth-child(4) {
-  animation-delay: 0.2s;
+.event-card:nth-child(4) {
+  animation-delay: 0.26s;
 }
 
-.events-grid > *:nth-child(5) {
-  animation-delay: 0.25s;
+.event-card:nth-child(5) {
+  animation-delay: 0.33s;
 }
 
-.events-grid > *:nth-child(6) {
-  animation-delay: 0.3s;
+.event-card:nth-child(6) {
+  animation-delay: 0.40s;
 }
 
-@keyframes eventCardAppear {
+
+@keyframes cardEntrance {
+
   from {
     opacity: 0;
 
     transform:
-      translateY(22px)
-      scale(0.98);
+      translateY(25px)
+      scale(0.96);
   }
 
   to {
@@ -700,55 +663,516 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
       translateY(0)
       scale(1);
   }
+
 }
 
 
 /* =========================================================
-   LOADING
+   CARD HOVER
 ========================================================= */
 
-.loading {
-  min-height: 300px;
+.event-card:hover {
+  transform:
+    translateY(-7px);
 
-  display: flex;
+  border-color:
+    rgba(160, 91, 255, 0.85);
 
-  align-items: center;
-
-  justify-content: center;
-
-  color: #999999;
-
-  font-size: 15px;
+  box-shadow:
+    0 18px 45px
+      rgba(0, 0, 0, 0.6),
+    0 0 30px
+      rgba(108, 48, 185, 0.24);
 }
 
 
-.loading::after {
+/* =========================================================
+   CARD PURPLE GLOW LINE
+========================================================= */
+
+.event-card::before {
   content: "";
 
-  width: 24px;
+  position: absolute;
 
-  height: 24px;
+  left: -100%;
 
-  margin-left: 12px;
+  top: 0;
 
-  border: 2px solid #333333;
+  width: 70%;
 
-  border-top-color: #ffffff;
+  height: 1px;
 
-  border-radius: 50%;
+  z-index: 10;
 
-  animation:
-    loadingSpin
-    0.7s
-    linear
-    infinite;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #b27aff,
+      transparent
+    );
+
+  opacity: 0;
+
+  transition:
+    opacity 0.3s ease;
 }
 
 
-@keyframes loadingSpin {
-  to {
-    transform: rotate(360deg);
+.event-card:hover::before {
+  opacity: 1;
+
+  animation:
+    cardBorderMove 1.8s linear infinite;
+}
+
+
+@keyframes cardBorderMove {
+
+  from {
+    left: -70%;
   }
+
+  to {
+    left: 130%;
+  }
+
+}
+
+
+/* =========================================================
+   POSTER
+========================================================= */
+
+.event-poster {
+  position: relative;
+
+  height: 195px;
+
+  overflow: hidden;
+
+  background:
+    #111;
+}
+
+
+.event-poster img {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: cover;
+
+  opacity: 0.86;
+
+  transition:
+    transform 0.65s ease,
+    opacity 0.4s ease;
+}
+
+
+.event-card:hover
+.event-poster img {
+  transform:
+    scale(1.08);
+
+  opacity: 1;
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+========================================================= */
+
+.event-poster::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(4, 3, 6, 0.78)
+    );
+}
+
+
+/* =========================================================
+   CATEGORY BADGE
+========================================================= */
+
+.category-badge {
+  position: absolute;
+
+  left: 12px;
+
+  top: 12px;
+
+  z-index: 4;
+
+  padding:
+    6px 10px;
+
+  border:
+    1px solid
+    rgba(194, 153, 255, 0.45);
+
+  border-radius: 20px;
+
+  background:
+    rgba(15, 9, 25, 0.8);
+
+  color:
+    #d4bdff;
+
+  font-size: 10px;
+
+  font-weight: 700;
+
+  backdrop-filter:
+    blur(8px);
+
+  box-shadow:
+    0 0 14px
+    rgba(119, 57, 200, 0.2);
+}
+
+
+/* =========================================================
+   LITTLE SPARKLES ON IMAGE
+========================================================= */
+
+.image-sparkle {
+  position: absolute;
+
+  z-index: 5;
+
+  color: #ffffff;
+
+  font-size: 13px;
+
+  opacity: 0;
+
+  text-shadow:
+    0 0 8px
+    #ffffff,
+    0 0 14px
+    #9c62ff;
+
+  transition:
+    opacity 0.3s ease;
+}
+
+
+.sparkle-one {
+  right: 18px;
+
+  top: 18px;
+
+  animation:
+    imageSparkleOne 2s ease-in-out infinite;
+}
+
+
+.sparkle-two {
+  right: 48px;
+
+  top: 45px;
+
+  color: #bd99ff;
+
+  animation:
+    imageSparkleTwo 2.5s ease-in-out infinite;
+}
+
+
+.event-card:hover
+.image-sparkle {
+  opacity: 1;
+}
+
+
+@keyframes imageSparkleOne {
+
+  0%,
+  100% {
+    transform:
+      scale(0.7)
+      rotate(0deg);
+
+    opacity: 0.3;
+  }
+
+  50% {
+    transform:
+      scale(1.4)
+      rotate(90deg);
+
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes imageSparkleTwo {
+
+  0%,
+  100% {
+    transform:
+      scale(0.7)
+      rotate(0deg);
+
+    opacity: 0.2;
+  }
+
+  50% {
+    transform:
+      scale(1.25)
+      rotate(-90deg);
+
+    opacity: 1;
+  }
+
+}
+
+
+/* =========================================================
+   CARD CONTENT
+========================================================= */
+
+.event-card-content {
+  position: relative;
+
+  z-index: 3;
+
+  padding:
+    17px;
+}
+
+
+.event-card-content h2 {
+  margin:
+    0 0 14px;
+
+  color:
+    #f5f2f8;
+
+  font-size:
+    18px;
+
+  line-height:
+    1.3;
+
+  display:
+    -webkit-box;
+
+  -webkit-line-clamp:
+    2;
+
+  -webkit-box-orient:
+    vertical;
+
+  overflow:
+    hidden;
+
+  transition:
+    color 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+
+.event-card:hover
+.event-card-content h2 {
+  color:
+    #c7a5ff;
+
+  text-shadow:
+    0 0 14px
+    rgba(150, 84, 255, 0.3);
+}
+
+
+/* =========================================================
+   EVENT INFO
+========================================================= */
+
+.event-info-row {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    9px;
+
+  margin-bottom:
+    9px;
+
+  color:
+    #918a98;
+
+  font-size:
+    12px;
+}
+
+
+.event-info-row span:first-child {
+  width:
+    21px;
+
+  text-align:
+    center;
+
+  font-size:
+    14px;
+
+  filter:
+    drop-shadow(
+      0 0 5px
+      rgba(154, 89, 255, 0.5)
+    );
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.event-card-footer {
+  display:
+    flex;
+
+  justify-content:
+    space-between;
+
+  align-items:
+    flex-end;
+
+  gap:
+    10px;
+
+  margin-top:
+    17px;
+
+  padding-top:
+    14px;
+
+  border-top:
+    1px solid
+    rgba(135, 79, 190, 0.14);
+}
+
+
+.price-area {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+}
+
+
+.price-area small {
+  color:
+    #68616f;
+
+  font-size:
+    10px;
+}
+
+
+.price-area strong {
+  margin-top:
+    3px;
+
+  color:
+    #ffffff;
+
+  font-size:
+    19px;
+
+  text-shadow:
+    0 0 12px
+    rgba(171, 112, 255, 0.28);
+}
+
+
+/* =========================================================
+   VIEW DETAILS BUTTON
+========================================================= */
+
+.event-card-footer button {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  padding:
+    9px 12px;
+
+  border:
+    1px solid
+    rgba(145, 79, 235, 0.45);
+
+  border-radius:
+    9px;
+
+  background:
+    rgba(104, 47, 174, 0.13);
+
+  color:
+    #c8a9ff;
+
+  font-size:
+    11px;
+
+  cursor:
+    pointer;
+
+  transition:
+    0.3s ease;
+}
+
+
+.event-card-footer button:hover {
+  background:
+    rgba(124, 59, 210, 0.3);
+
+  border-color:
+    #a267ff;
+
+  color:
+    #ffffff;
+
+  box-shadow:
+    0 0 18px
+    rgba(130, 62, 215, 0.3);
+}
+
+
+.event-card-footer button span {
+  font-size:
+    15px;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.event-card-footer button:hover span {
+  transform:
+    translateX(4px);
 }
 
 
@@ -757,163 +1181,358 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 ========================================================= */
 
 .no-events {
-  max-width: 550px;
+  display:
+    flex;
 
-  margin: 70px auto;
+  flex-direction:
+    column;
 
-  padding: 50px 30px;
+  align-items:
+    center;
 
-  text-align: center;
+  justify-content:
+    center;
 
-  background: rgba(15, 15, 15, 0.8);
+  min-height:
+    350px;
 
-  border: 1px solid #222222;
+  padding:
+    40px 20px;
 
-  border-radius: 18px;
+  border:
+    1px solid
+    rgba(123, 67, 195, 0.25);
+
+  border-radius:
+    16px;
+
+  background:
+    rgba(13, 9, 18, 0.7);
+
+  text-align:
+    center;
 
   box-shadow:
-    0 15px 40px rgba(0, 0, 0, 0.4);
+    inset 0 0 40px
+    rgba(95, 39, 150, 0.06);
+}
+
+
+.no-events-icon {
+  font-size:
+    45px;
+
+  color:
+    #c29aff;
+
+  text-shadow:
+    0 0 20px
+    rgba(151, 88, 255, 0.8);
 
   animation:
-    noEventsAppear
-    0.5s
-    ease
-    forwards;
+    noEventFloat 2s ease-in-out infinite;
+}
+
+
+@keyframes noEventFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(0deg);
+  }
+
+  50% {
+    transform:
+      translateY(-8px)
+      rotate(90deg);
+  }
+
 }
 
 
 .no-events h2 {
-  margin: 0 0 10px;
+  margin:
+    14px 0 6px;
 
-  color: #ffffff;
-
-  font-size: 24px;
+  color:
+    #ffffff;
 }
 
 
 .no-events p {
-  margin: 0;
+  margin:
+    0;
 
-  color: #777777;
+  color:
+    #77717f;
 
-  font-size: 14px;
+  font-size:
+    13px;
 }
 
 
-@keyframes noEventsAppear {
-  from {
-    opacity: 0;
+.no-events button {
+  margin-top:
+    18px;
 
-    transform: scale(0.95);
-  }
+  padding:
+    10px 18px;
 
-  to {
-    opacity: 1;
+  border:
+    1px solid
+    #7d46c2;
 
-    transform: scale(1);
-  }
+  border-radius:
+    9px;
+
+  background:
+    rgba(101, 46, 170, 0.18);
+
+  color:
+    #c9aaff;
+
+  cursor:
+    pointer;
+
+  transition:
+    0.3s ease;
+}
+
+
+.no-events button:hover {
+  border-color:
+    #a66aff;
+
+  background:
+    rgba(117, 52, 200, 0.3);
+
+  box-shadow:
+    0 0 18px
+    rgba(135, 65, 220, 0.3);
 }
 
 
 /* =========================================================
-   TABLET
+   RESPONSIVE - TABLET
 ========================================================= */
 
-@media (max-width: 1050px) {
+@media (max-width: 1150px) {
 
-  .event-filter-container {
-    flex-wrap: wrap;
+  .events-toolbar {
+    gap:
+      8px;
   }
 
 
-  .search-box {
-    flex-basis: 100%;
+  .events-heading {
+    min-width:
+      75px;
   }
 
 
-  .custom-dropdown {
-    flex: 1;
+  .events-heading h1 {
+    font-size:
+      24px;
   }
 
 
-  .event-filter-container
-  input[type="date"] {
-    flex: 1;
+  .events-search {
+    min-width:
+      170px;
   }
 
 
-  .clear-filter {
-    flex: 0 0 auto;
+  .filter-group select {
+    min-width:
+      110px;
+
+    padding-left:
+      9px;
+
+    padding-right:
+      22px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - SMALL TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+  .events-page {
+    padding:
+      22px 18px 50px;
+  }
+
+
+  .events-toolbar {
+    flex-wrap:
+      wrap;
+
+    white-space:
+      normal;
+  }
+
+
+  .events-heading {
+    min-width:
+      auto;
+  }
+
+
+  .events-search {
+    flex:
+      1;
+
+    min-width:
+      220px;
+
+    max-width:
+      none;
+  }
+
+
+  .filter-group select {
+    min-width:
+      125px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .events-page {
+    padding:
+      20px 14px 40px;
+  }
+
+
+  .events-toolbar {
+    display:
+      grid;
+
+    grid-template-columns:
+      1fr 1fr;
+
+    gap:
+      9px;
+
+    width:
+      100%;
+  }
+
+
+  .events-heading {
+    grid-column:
+      1 / -1;
+
+    width:
+      100%;
+  }
+
+
+  .events-heading h1 {
+    font-size:
+      27px;
+  }
+
+
+  .events-search {
+    grid-column:
+      1 / -1;
+
+    width:
+      100%;
+
+    min-width:
+      0;
+  }
+
+
+  .filter-group {
+    width:
+      100%;
+  }
+
+
+  .filter-group select {
+    width:
+      100%;
+
+    min-width:
+      0;
+  }
+
+
+  .clear-filters {
+    width:
+      100%;
   }
 
 
   .events-grid {
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      1fr;
+
+    gap:
+      16px;
   }
+
+
+  .event-poster {
+    height:
+      220px;
+  }
+
 }
 
 
 /* =========================================================
-   MOBILE
+   VERY SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 650px) {
+@media (max-width: 400px) {
 
-  .events-page {
+  .events-toolbar {
+    grid-template-columns:
+      1fr;
+  }
+
+
+  .events-heading {
+    grid-column:
+      auto;
+  }
+
+
+  .events-search {
+    grid-column:
+      auto;
+  }
+
+
+  .event-card-footer {
+    align-items:
+      center;
+  }
+
+
+  .event-card-footer button {
     padding:
-      22px
-      15px
-      40px;
+      8px 9px;
+
+    font-size:
+      10px;
   }
 
-
-  .event-filter-container {
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 10px;
-
-    padding: 13px;
-
-    border-radius: 15px;
-  }
-
-
-  .search-box {
-    width: 100%;
-
-    min-width: 0;
-  }
-
-
-  .custom-dropdown {
-    width: 100%;
-
-    min-width: 0;
-  }
-
-
-  .dropdown-menu {
-    min-width: 100%;
-  }
-
-
-  .event-filter-container
-  input[type="date"] {
-    width: 100%;
-  }
-
-
-  .clear-filter {
-    width: 100%;
-  }
-
-
-  .events-grid {
-    grid-template-columns: 1fr;
-
-    gap: 18px;
-  }
 }
