@@ -1,0 +1,819 @@
+/* =====================================================
+   ABOUT PAGE
+===================================================== */
+
+.about-page {
+  min-height: calc(100vh - 75px);
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(130, 50, 210, 0.16),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 45%,
+      rgba(100, 40, 180, 0.12),
+      transparent 30%
+    ),
+    #050505;
+
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.about-container {
+  width: 100%;
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 70px 55px 80px;
+
+  position: relative;
+  z-index: 5;
+}
+
+
+/* =====================================================
+   GLOW
+===================================================== */
+
+.about-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.25;
+}
+
+.about-glow-one {
+  width: 300px;
+  height: 300px;
+  background: #7c35ad;
+  top: 5%;
+  left: -150px;
+  animation: glowMove 8s ease-in-out infinite;
+}
+
+.about-glow-two {
+  width: 350px;
+  height: 350px;
+  background: #5d2490;
+  right: -180px;
+  top: 45%;
+  animation: glowMoveTwo 10s ease-in-out infinite;
+}
+
+@keyframes glowMove {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(80px, 40px);
+  }
+}
+
+@keyframes glowMoveTwo {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-60px, -50px);
+  }
+}
+
+
+/* =====================================================
+   SPARKLES
+===================================================== */
+
+.about-sparkle {
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 7px #ffffff,
+    0 0 15px rgba(180, 90, 255, 0.9);
+
+  animation: sparkleAnimation 4s ease-in-out infinite;
+}
+
+.sparkle-a {
+  top: 16%;
+  left: 8%;
+}
+
+.sparkle-b {
+  top: 30%;
+  right: 9%;
+  animation-delay: 1s;
+}
+
+.sparkle-c {
+  top: 65%;
+  left: 13%;
+  animation-delay: 2s;
+}
+
+.sparkle-d {
+  top: 80%;
+  right: 15%;
+  animation-delay: 0.5s;
+}
+
+@keyframes sparkleAnimation {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.8) translateY(-8px);
+  }
+}
+
+
+/* =====================================================
+   ABOUT HERO
+===================================================== */
+
+.about-hero {
+  max-width: 900px;
+  margin: 0 auto;
+
+  text-align: center;
+
+  animation: heroAppear 0.8s ease;
+}
+
+@keyframes heroAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.about-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 16px;
+
+  border-radius: 30px;
+
+  border: 1px solid rgba(190, 100, 255, 0.45);
+
+  background: rgba(120, 50, 170, 0.12);
+
+  color: #d9a9ff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 1.5px;
+
+  box-shadow:
+    0 0 20px rgba(150, 60, 220, 0.12);
+}
+
+
+/* =====================================================
+   HERO TITLE
+===================================================== */
+
+.about-hero h1 {
+  margin: 25px 0 20px;
+
+  font-size: clamp(45px, 6vw, 78px);
+
+  line-height: 1.05;
+
+  letter-spacing: -2px;
+
+  font-weight: 800;
+}
+
+.about-hero h1 span {
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #c477ff,
+      #8c3ed1
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* =====================================================
+   HERO DESCRIPTION
+===================================================== */
+
+.about-hero > p {
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  color: rgba(255, 255, 255, 0.58);
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.about-buttons {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 14px;
+
+  margin-top: 32px;
+}
+
+.about-primary-btn,
+.about-secondary-btn {
+  height: 48px;
+
+  padding: 0 23px;
+
+  border-radius: 11px;
+
+  font-size: 14px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.about-primary-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid rgba(205, 130, 255, 0.8);
+
+  background:
+    linear-gradient(
+      135deg,
+      #8039ad,
+      #54206f
+    );
+
+  color: white;
+
+  box-shadow:
+    0 0 20px rgba(140, 60, 210, 0.22);
+}
+
+.about-primary-btn:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 30px rgba(160, 70, 240, 0.4);
+}
+
+.about-primary-btn span {
+  font-size: 18px;
+
+  transition: 0.3s ease;
+}
+
+.about-primary-btn:hover span {
+  transform: translateX(4px);
+}
+
+
+.about-secondary-btn {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  background: rgba(255, 255, 255, 0.04);
+
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.about-secondary-btn:hover {
+  border-color: rgba(190, 100, 255, 0.65);
+
+  background: rgba(150, 60, 220, 0.1);
+
+  transform: translateY(-3px);
+}
+
+
+/* =====================================================
+   WHY EVENTORA
+===================================================== */
+
+.why-eventora {
+  margin-top: 120px;
+}
+
+
+.section-heading span {
+  color: #c27aff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.section-heading h2 {
+  margin: 12px 0;
+
+  font-size: 38px;
+
+  line-height: 1.15;
+
+  letter-spacing: -1px;
+}
+
+.section-heading h2 strong {
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #bd72ff
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-heading p {
+  max-width: 620px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  line-height: 1.7;
+
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   ABOUT CARDS
+===================================================== */
+
+.about-cards {
+  margin-top: 35px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+.about-card {
+  position: relative;
+
+  min-height: 230px;
+
+  padding: 27px;
+
+  overflow: hidden;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(29, 20, 38, 0.95),
+      rgba(12, 10, 15, 0.98)
+    );
+
+  border: 1px solid rgba(155, 70, 220, 0.25);
+
+  transition: 0.35s ease;
+
+  animation: cardFloat 0.7s ease both;
+}
+
+.about-card:hover {
+  transform: translateY(-8px);
+
+  border-color: rgba(190, 100, 255, 0.65);
+
+  box-shadow:
+    0 15px 40px rgba(0, 0, 0, 0.4),
+    0 0 25px rgba(140, 50, 220, 0.16);
+}
+
+@keyframes cardFloat {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* =====================================================
+   CARD ICON
+===================================================== */
+
+.about-card-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: rgba(150, 60, 220, 0.12);
+
+  border: 1px solid rgba(175, 80, 245, 0.25);
+
+  font-size: 22px;
+
+  margin-bottom: 18px;
+}
+
+.about-card h3 {
+  margin: 0 0 10px;
+
+  font-size: 18px;
+}
+
+.about-card p {
+  margin: 0;
+
+  max-width: 290px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 13px;
+
+  line-height: 1.7;
+}
+
+.card-number {
+  position: absolute;
+
+  right: 22px;
+  bottom: 15px;
+
+  font-size: 48px;
+
+  font-weight: 800;
+
+  color: rgba(180, 90, 255, 0.06);
+}
+
+
+/* =====================================================
+   EVENT CATEGORIES
+===================================================== */
+
+.event-categories {
+  margin-top: 120px;
+}
+
+.center-heading {
+  text-align: center;
+}
+
+.center-heading p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =====================================================
+   CATEGORY LIST
+===================================================== */
+
+.category-list {
+  margin-top: 35px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(6, 1fr);
+
+  gap: 14px;
+}
+
+.category-item {
+  padding: 20px 10px;
+
+  text-align: center;
+
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.025);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: 0.3s ease;
+}
+
+.category-item:hover {
+  transform: translateY(-5px);
+
+  border-color: rgba(180, 90, 255, 0.55);
+
+  background: rgba(140, 50, 210, 0.08);
+
+  box-shadow:
+    0 0 20px rgba(150, 60, 220, 0.12);
+}
+
+.category-item span {
+  display: block;
+
+  font-size: 27px;
+
+  margin-bottom: 8px;
+}
+
+.category-item h3 {
+  margin: 0;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+/* =====================================================
+   CTA
+===================================================== */
+
+.about-cta {
+  position: relative;
+
+  margin-top: 120px;
+
+  min-height: 330px;
+
+  padding: 55px;
+
+  overflow: hidden;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      120deg,
+      rgba(45, 20, 60, 0.95),
+      rgba(15, 10, 20, 0.98)
+    );
+
+  border: 1px solid rgba(170, 80, 240, 0.3);
+
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.cta-content {
+  position: relative;
+
+  z-index: 3;
+}
+
+.cta-content > span {
+  color: #c37bff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+.cta-content h2 {
+  margin: 12px 0;
+
+  font-size: 43px;
+
+  line-height: 1.1;
+}
+
+.cta-content h2 strong {
+  color: #c77cff;
+}
+
+.cta-content p {
+  color: rgba(255, 255, 255, 0.5);
+
+  font-size: 14px;
+
+  margin-bottom: 25px;
+}
+
+.cta-button {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
+  border: 1px solid rgba(200, 110, 255, 0.7);
+
+  background: #7130a0;
+
+  color: white;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 0 25px rgba(160, 70, 240, 0.35);
+}
+
+.cta-button span {
+  transition: 0.3s ease;
+}
+
+.cta-button:hover span {
+  transform: translateX(4px);
+}
+
+
+/* =====================================================
+   CTA ORBS
+===================================================== */
+
+.cta-orb {
+  position: absolute;
+
+  border-radius: 50%;
+
+  filter: blur(2px);
+
+  pointer-events: none;
+}
+
+.orb-one {
+  width: 300px;
+  height: 300px;
+
+  right: -80px;
+  top: -100px;
+
+  border: 1px solid rgba(190, 90, 255, 0.2);
+
+  box-shadow:
+    0 0 80px rgba(150, 60, 220, 0.2);
+
+  animation: orbRotate 8s linear infinite;
+}
+
+.orb-two {
+  width: 180px;
+  height: 180px;
+
+  right: 70px;
+  bottom: -100px;
+
+  border: 1px solid rgba(210, 130, 255, 0.18);
+}
+
+@keyframes orbRotate {
+
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1000px) {
+
+  .about-container {
+    padding: 60px 35px;
+  }
+
+  .about-cards {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .category-list {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .about-container {
+    padding: 45px 20px;
+  }
+
+  .about-hero h1 {
+    font-size: 43px;
+
+    letter-spacing: -1.5px;
+  }
+
+  .about-buttons {
+    flex-direction: column;
+  }
+
+  .about-primary-btn,
+  .about-secondary-btn {
+    width: 100%;
+
+    justify-content: center;
+  }
+
+  .section-heading h2 {
+    font-size: 30px;
+  }
+
+  .about-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .category-list {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .about-cta {
+    padding: 35px 25px;
+  }
+
+  .cta-content h2 {
+    font-size: 32px;
+  }
+
+}

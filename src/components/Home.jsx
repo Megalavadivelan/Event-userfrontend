@@ -1,6 +1,7 @@
 import React from "react";
 import Hero from "../components/Hero"
 import "../styles/Home.css"
+import HomeHighlights from "./HomeHighlights.jsx";
 import Navbar from "./NavBar";
 
 function Home() {
@@ -20,6 +21,7 @@ function Home() {
       </div>
       {/* <Navbar /> */}
       <Hero />
+      <HomeHighlights />
     </>
   );
 }

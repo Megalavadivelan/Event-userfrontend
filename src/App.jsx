@@ -15,6 +15,8 @@ import Events from "./components/Events.jsx";
 import EventDetails from "./components/EventDetails.jsx";
 import Contact from "./components/Contact";
 import Gallery from "./components/Gallery.jsx";
+import MyBookings from "./components/MyBookings.jsx";
+import About from "./components/About.jsx"
 
 function App() {
   return (
@@ -95,6 +97,14 @@ function App() {
         <Route
           path="/gallery"
           element={<Gallery />}
+        />
+        <Route
+          path="/mybookings"
+          element={<MyBookings />}
+        />
+        <Route
+          path="/about"
+          element={<About />}
         />
 
       </Route>

@@ -3,6 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import "../styles/EventDetails.css";
 
+const EVENTS_API =
+  "https://api-admin-rouge.vercel.app/events/getevents";
+
 const EventDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -12,7 +15,7 @@ const EventDetails = () => {
   const [error, setError] = useState("");
 
   // ===================================================
-  // FETCH SINGLE EVENT FROM FRIEND'S API
+  // FETCH SINGLE EVENT
   // ===================================================
 
   useEffect(() => {
@@ -21,13 +24,6 @@ const EventDetails = () => {
         setLoading(true);
         setError("");
 
-        // IMPORTANT:
-        // Friend's single event API
-        const EVENTS_API = `https://api-admin-rouge.vercel.app/events/get/${id}`;
-
-        console.log("EVENT ID:", id);
-        console.log("EVENT DETAILS API:", EVENTS_API);
-
         const response = await axios.get(EVENTS_API);
 
         console.log(
@@ -35,84 +31,47 @@ const EventDetails = () => {
           response.data
         );
 
-        // ===================================================
-        // HANDLE API RESPONSE
-        // ===================================================
+        let eventData = [];
 
-        let selectedEvent = null;
-
-        /*
-          Expected response:
-
-          {
-            success: true,
-            data: {
-              _id: "...",
-              name: "...",
-              organizer: "...",
-              date: "...",
-              time: "...",
-              location: "...",
-              description: "...",
-              category: "...",
-              tickets: 400,
-              ticketPrice: 500,
-              image: "..."
-            }
-          }
-        */
-
-        if (
-          response.data &&
-          response.data.success &&
-          response.data.data
-        ) {
-          selectedEvent = response.data.data;
+        // API returns array
+        if (Array.isArray(response.data)) {
+          eventData = response.data;
         }
 
-        // If API directly returns the event object
-        else if (
-          response.data &&
-          !Array.isArray(response.data) &&
-          response.data._id
-        ) {
-          selectedEvent = response.data;
+        // API returns { data: [] }
+        else if (Array.isArray(response.data?.data)) {
+          eventData = response.data.data;
         }
 
-        // If API returns an array
-        else if (Array.isArray(response.data)) {
-          selectedEvent = response.data.find(
-            (item) =>
-              String(item._id || item.id) === String(id)
-          );
+        // API returns { events: [] }
+        else if (Array.isArray(response.data?.events)) {
+          eventData = response.data.events;
         }
 
-        // ===================================================
-        // EVENT NOT FOUND
-        // ===================================================
+        console.log("ALL EVENTS:", eventData);
 
-        if (!selectedEvent) {
-          setError("Event not found.");
-          setEvent(null);
-          return;
-        }
+        // Find selected event using URL ID
+        const selectedEvent = eventData.find(
+          (item) =>
+            String(item._id || item.id) === String(id)
+        );
 
         console.log(
           "SELECTED EVENT:",
           selectedEvent
         );
 
-        setEvent(selectedEvent);
+        if (!selectedEvent) {
+          setEvent(null);
+          setError("Event not found.");
+          return;
+        }
 
-      } catch (error) {
+        setEvent(selectedEvent);
+      } catch (err) {
         console.error(
           "Failed to fetch event:",
-          error
-        );
-
-        console.error(
-          "API ERROR RESPONSE:",
-          error.response?.data
+          err
         );
 
         setError(
@@ -123,12 +82,7 @@ const EventDetails = () => {
       }
     };
 
-    if (id) {
-      fetchEvent();
-    } else {
-      setError("Event ID is missing.");
-      setLoading(false);
-    }
+    fetchEvent();
   }, [id]);
 
   // ===================================================
@@ -156,13 +110,11 @@ const EventDetails = () => {
   };
 
   // ===================================================
-  // IMAGE
+  // IMAGE URL
   // ===================================================
 
   const getImageUrl = () => {
-    if (!event) {
-      return null;
-    }
+    if (!event) return null;
 
     const image =
       event.image ||
@@ -187,7 +139,7 @@ const EventDetails = () => {
       return image;
     }
 
-    // Relative upload path
+    // Relative image path
     return `https://api-admin-rouge.vercel.app/${image.replace(
       /^\/+/,
       ""
@@ -215,7 +167,6 @@ const EventDetails = () => {
           </p>
 
         </div>
-
       </div>
     );
   }
@@ -227,6 +178,9 @@ const EventDetails = () => {
   if (error || !event) {
     return (
       <div className="event-details-page">
+
+        <div className="details-sparkle sparkle-one"></div>
+        <div className="details-sparkle sparkle-two"></div>
 
         <div className="details-error">
 
@@ -245,13 +199,14 @@ const EventDetails = () => {
 
           <button
             className="back-events-btn"
-            onClick={() => navigate("/events")}
+            onClick={() =>
+              navigate("/events")
+            }
           >
             ← Back to Events
           </button>
 
         </div>
-
       </div>
     );
   }
@@ -306,18 +261,18 @@ const EventDetails = () => {
   return (
     <div className="event-details-page">
 
-      {/* =================================================
+      {/* =========================================
           BACKGROUND SPARKLES
-      ================================================= */}
+      ========================================= */}
 
       <div className="details-sparkle sparkle-one"></div>
       <div className="details-sparkle sparkle-two"></div>
       <div className="details-sparkle sparkle-three"></div>
       <div className="details-sparkle sparkle-four"></div>
 
-      {/* =================================================
+      {/* =========================================
           MAIN CONTAINER
-      ================================================= */}
+      ========================================= */}
 
       <div className="details-container">
 
@@ -325,20 +280,22 @@ const EventDetails = () => {
 
         <button
           className="back-button"
-          onClick={() => navigate("/events")}
+          onClick={() =>
+            navigate("/events")
+          }
         >
           ← Back to Events
         </button>
 
-        {/* =================================================
-            EVENT DETAILS CARD
-        ================================================= */}
+        {/* =========================================
+            EVENT CARD
+        ========================================= */}
 
         <div className="event-details-card">
 
-          {/* =================================================
+          {/* =======================================
               IMAGE
-          ================================================= */}
+          ======================================= */}
 
           <div className="event-details-image-section">
 
@@ -380,13 +337,13 @@ const EventDetails = () => {
 
           </div>
 
-          {/* =================================================
-              EVENT CONTENT
-          ================================================= */}
+          {/* =======================================
+              CONTENT
+          ======================================= */}
 
           <div className="event-details-content">
 
-            {/* TITLE */}
+            {/* EVENT TITLE */}
 
             <h1>
               {eventName}
@@ -428,9 +385,9 @@ const EventDetails = () => {
 
             </div>
 
-            {/* =================================================
+            {/* ===================================
                 EVENT INFORMATION
-            ================================================= */}
+            =================================== */}
 
             <div className="event-information">
 
@@ -528,9 +485,9 @@ const EventDetails = () => {
 
             </div>
 
-            {/* =================================================
-                PRICE + BOOK
-            ================================================= */}
+            {/* ===================================
+                BOOKING SECTION
+            =================================== */}
 
             <div className="booking-section">
 
@@ -558,11 +515,9 @@ const EventDetails = () => {
                 }}
               >
                 Book Tickets
-
                 <span>
                   →
                 </span>
-
               </button>
 
             </div>

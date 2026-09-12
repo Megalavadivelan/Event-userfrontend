@@ -1,415 +1,687 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/Profile.css";
 
-const API_URL = "https://user-api-iota-six.vercel.app";
+const Profile = () => {
+  const navigate = useNavigate();
 
-function Profile() {
-  const [profile, setProfile] = useState({
+  const [user, setUser] = useState(null);
+
+  const [profileImage, setProfileImage] = useState("");
+  const [activeSection, setActiveSection] = useState("personal");
+
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
-    contact: "",
-    bio: "",
+    phone: "",
     location: "",
-    profileImage: "",
+    bio: "",
   });
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [previewImage, setPreviewImage] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [fetchLoading, setFetchLoading] = useState(true);
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "dark"
+  );
 
-  // Change this according to your login localStorage
-  const token = localStorage.getItem("token");
+  const [message, setMessage] = useState("");
+
+  // =====================================================
+  // LOAD USER DATA
+  // =====================================================
 
   useEffect(() => {
-    fetchProfile();
-  }, []);
+    const storedUser = localStorage.getItem("user");
 
-  const fetchProfile = async () => {
-    try {
-      setFetchLoading(true);
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
 
-      const response = await axios.get(
-        `${API_URL}/profile/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        setUser(parsedUser);
 
-      if (response.data.success) {
-        const userData = response.data.data;
-
-        setProfile({
-          name: userData.name || "",
-          email: userData.email || "",
-          contact: userData.contact || "",
-          bio: userData.bio || "",
-          location: userData.location || "",
-          profileImage: userData.profileImage || "",
+        setFormData({
+          name:
+            parsedUser.name ||
+            parsedUser.username ||
+            "",
+          email: parsedUser.email || "",
+          phone: parsedUser.phone || "",
+          location: parsedUser.location || "",
+          bio: parsedUser.bio || "",
         });
 
-        setPreviewImage(userData.profileImage || "");
+        setProfileImage(
+          parsedUser.profileImage ||
+          parsedUser.image ||
+          ""
+        );
+      } catch (error) {
+        console.error(
+          "Failed to read user data:",
+          error
+        );
       }
-    } catch (error) {
-      console.error(
-        "PROFILE FETCH ERROR:",
-        error.response?.data || error.message
-      );
-    } finally {
-      setFetchLoading(false);
     }
-  };
+  }, []);
+
+  // =====================================================
+  // THEME
+  // =====================================================
+
+  useEffect(() => {
+    document.body.classList.remove(
+      "light-theme",
+      "dark-theme"
+    );
+
+    document.body.classList.add(
+      `${theme}-theme`
+    );
+
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  // =====================================================
+  // INPUT CHANGE
+  // =====================================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    setProfile((prev) => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
+
+  // =====================================================
+  // PROFILE IMAGE
+  // =====================================================
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
     if (!file) return;
 
-    setSelectedImage(file);
-
-    const imagePreview = URL.createObjectURL(file);
-
-    setPreviewImage(imagePreview);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      setLoading(true);
-
-      const formData = new FormData();
-
-      formData.append("name", profile.name);
-      formData.append("email", profile.email);
-      formData.append("contact", profile.contact);
-      formData.append("bio", profile.bio);
-      formData.append("location", profile.location);
-
-      if (selectedImage) {
-        formData.append("profileImage", selectedImage);
-      }
-
-      const response = await axios.put(
-        `${API_URL}/profile/update`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.data.success) {
-        alert("Profile updated successfully!");
-
-        if (response.data.data?.profileImage) {
-          setPreviewImage(
-            response.data.data.profileImage
-          );
-        }
-
-        setSelectedImage(null);
-      }
-
-    } catch (error) {
-      console.error(
-        "PROFILE UPDATE ERROR:",
-        error.response?.data || error.message
-      );
-
-      alert(
-        error.response?.data?.message ||
-        "Failed to update profile"
-      );
-
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getInitial = () => {
-    if (profile.name) {
-      return profile.name.charAt(0).toUpperCase();
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      return;
     }
 
-    return "U";
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setProfileImage(reader.result);
+    };
+
+    reader.readAsDataURL(file);
   };
 
-  if (fetchLoading) {
-    return (
-      <div className="profile-loading">
-        Loading Profile...
-      </div>
+  // =====================================================
+  // SAVE PROFILE
+  // =====================================================
+
+  const handleSave = () => {
+    const updatedUser = {
+      ...user,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      location: formData.location,
+      bio: formData.bio,
+      profileImage: profileImage,
+    };
+
+    localStorage.setItem(
+      "user",
+      JSON.stringify(updatedUser)
     );
-  }
+
+    setUser(updatedUser);
+
+    setMessage("Profile updated successfully!");
+
+    setTimeout(() => {
+      setMessage("");
+    }, 2500);
+  };
+
+  // =====================================================
+  // INITIALS
+  // =====================================================
+
+  const getInitials = () => {
+    if (!formData.name) return "U";
+
+    return formData.name
+      .split(" ")
+      .map((word) => word.charAt(0))
+      .join("")
+      .substring(0, 2)
+      .toUpperCase();
+  };
+
+  // =====================================================
+  // LOGOUT
+  // =====================================================
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
 
   return (
     <div className="profile-page">
 
-      <div className="profile-container">
+      {/* BACKGROUND SPARKLES */}
 
-        {/* HEADER */}
+      <div className="profile-sparkle sparkle-one"></div>
+      <div className="profile-sparkle sparkle-two"></div>
+      <div className="profile-sparkle sparkle-three"></div>
+      <div className="profile-sparkle sparkle-four"></div>
+      <div className="profile-sparkle sparkle-five"></div>
 
-        <div className="profile-header">
+      {/* =================================================
+          PROFILE HEADER
+      ================================================= */}
 
-          <div>
-            <p className="profile-small-title">
-              MY ACCOUNT
-            </p>
+      <div className="profile-header">
+        <div>
+          <p className="profile-small-title">
+            ACCOUNT
+          </p>
 
-            <h1>
-              My <span>Profile</span>
-            </h1>
+          <h1>
+            My Profile
+          </h1>
 
-            <p>
-              Manage your personal information and event account.
-            </p>
+          <p className="profile-subtitle">
+            Manage your Eventora account and preferences
+          </p>
+        </div>
+      </div>
+
+      {/* =================================================
+          MAIN PROFILE LAYOUT
+      ================================================= */}
+
+      <div className="profile-layout">
+
+        {/* =================================================
+            LEFT PROFILE CARD
+        ================================================= */}
+
+        <div className="profile-card">
+
+          <div className="profile-image-wrapper">
+
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="profile-image"
+              />
+            ) : (
+              <div className="profile-initials">
+                {getInitials()}
+              </div>
+            )}
+
+            <label
+              htmlFor="profile-image-upload"
+              className="image-upload-button"
+            >
+              📷
+            </label>
+
+            <input
+              id="profile-image-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              hidden
+            />
+
           </div>
+
+          <h2>
+            {formData.name || "User"}
+          </h2>
+
+          <p className="profile-email">
+            {formData.email || "Email not available"}
+          </p>
+
+          <div className="profile-divider"></div>
+
+          <div className="profile-account-status">
+            <span className="status-dot"></span>
+
+            <span>
+              Active Account
+            </span>
+          </div>
+
+          <button
+            className="logout-profile-button"
+            onClick={handleLogout}
+          >
+            Sign Out
+          </button>
 
         </div>
 
+        {/* =================================================
+            RIGHT SIDE
+        ================================================= */}
 
         <div className="profile-content">
 
+          {/* =================================================
+              SIDE MENU
+          ================================================= */}
 
-          {/* LEFT SIDE PROFILE CARD */}
+          <div className="profile-menu">
 
-          <div className="profile-sidebar">
+            <button
+              className={
+                activeSection === "personal"
+                  ? "profile-menu-item active"
+                  : "profile-menu-item"
+              }
+              onClick={() =>
+                setActiveSection("personal")
+              }
+            >
+              <span className="menu-icon">
+                👤
+              </span>
 
-            <div className="profile-image-section">
+              <span>
+                Personal Information
+              </span>
 
-              <div className="profile-image-wrapper">
+              <span className="menu-arrow">
+                →
+              </span>
+            </button>
 
-                {previewImage ? (
-                  <img
-                    src={previewImage}
-                    alt="Profile"
-                    className="profile-image"
+            <button
+              className="profile-menu-item"
+              onClick={() =>
+                navigate("/bookings/my-bookings")
+              }
+            >
+              <span className="menu-icon">
+                🎟️
+              </span>
+
+              <span>
+                My Bookings
+              </span>
+
+              <span className="menu-arrow">
+                →
+              </span>
+            </button>
+
+            <button
+              className={
+                activeSection === "theme"
+                  ? "profile-menu-item active"
+                  : "profile-menu-item"
+              }
+              onClick={() =>
+                setActiveSection("theme")
+              }
+            >
+              <span className="menu-icon">
+                🎨
+              </span>
+
+              <span>
+                Theme
+              </span>
+
+              <span className="menu-arrow">
+                →
+              </span>
+            </button>
+
+            <button
+              className={
+                activeSection === "account"
+                  ? "profile-menu-item active"
+                  : "profile-menu-item"
+              }
+              onClick={() =>
+                setActiveSection("account")
+              }
+            >
+              <span className="menu-icon">
+                ⚙️
+              </span>
+
+              <span>
+                Account Settings
+              </span>
+
+              <span className="menu-arrow">
+                →
+              </span>
+            </button>
+
+          </div>
+
+          {/* =================================================
+              PERSONAL INFORMATION
+          ================================================= */}
+
+          {activeSection === "personal" && (
+            <div className="profile-section-card">
+
+              <div className="section-heading">
+                <div>
+                  <h2>
+                    Personal Information
+                  </h2>
+
+                  <p>
+                    Update your personal details
+                  </p>
+                </div>
+
+                <span className="section-icon">
+                  👤
+                </span>
+              </div>
+
+              <div className="profile-form">
+
+                {/* NAME */}
+
+                <div className="form-group">
+                  <label>
+                    Full Name
+                  </label>
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Enter your name"
                   />
-                ) : (
-                  <div className="profile-initial">
-                    {getInitial()}
-                  </div>
+                </div>
+
+                {/* EMAIL */}
+
+                <div className="form-group">
+                  <label>
+                    Email Address
+                  </label>
+
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                {/* PHONE */}
+
+                <div className="form-group">
+                  <label>
+                    Phone Number
+                  </label>
+
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+
+                {/* LOCATION */}
+
+                <div className="form-group">
+                  <label>
+                    Location
+                  </label>
+
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    placeholder="Enter your location"
+                  />
+                </div>
+
+                {/* BIO */}
+
+                <div className="form-group full-width">
+                  <label>
+                    About Me
+                  </label>
+
+                  <textarea
+                    name="bio"
+                    value={formData.bio}
+                    onChange={handleChange}
+                    placeholder="Tell something about yourself..."
+                    rows="4"
+                  />
+                </div>
+
+              </div>
+
+              <div className="save-section">
+
+                {message && (
+                  <span className="success-message">
+                    ✓ {message}
+                  </span>
                 )}
 
-              </div>
-
-
-              <label
-                htmlFor="profileImage"
-                className="upload-image-btn"
-              >
-                Change Photo
-              </label>
-
-              <input
-                id="profileImage"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                hidden
-              />
-
-            </div>
-
-
-            <div className="profile-user-info">
-
-              <h2>
-                {profile.name || "User Name"}
-              </h2>
-
-              <p>
-                {profile.email || "user@email.com"}
-              </p>
-
-            </div>
-
-
-            {/* EVENT STATS */}
-
-            <div className="profile-stats">
-
-              <div className="stat-card">
-
-                <span className="stat-number">
-                  0
-                </span>
-
-                <span className="stat-label">
-                  Events Booked
-                </span>
-
-              </div>
-
-
-              <div className="stat-card">
-
-                <span className="stat-number">
-                  0
-                </span>
-
-                <span className="stat-label">
-                  Upcoming Events
-                </span>
+                <button
+                  className="save-profile-button"
+                  onClick={handleSave}
+                >
+                  Save Changes
+                  <span>→</span>
+                </button>
 
               </div>
 
             </div>
+          )}
 
-          </div>
+          {/* =================================================
+              THEME
+          ================================================= */}
 
+          {activeSection === "theme" && (
+            <div className="profile-section-card">
 
-          {/* RIGHT SIDE FORM */}
+              <div className="section-heading">
+                <div>
+                  <h2>
+                    Appearance
+                  </h2>
 
-          <div className="profile-form-card">
+                  <p>
+                    Choose how Eventora looks for you
+                  </p>
+                </div>
 
-            <h2>
-              Personal Information
-            </h2>
+                <span className="section-icon">
+                  🎨
+                </span>
+              </div>
 
-            <p className="form-description">
-              Update your profile details below.
-            </p>
+              <div className="theme-options">
 
+                <button
+                  className={
+                    theme === "dark"
+                      ? "theme-option selected"
+                      : "theme-option"
+                  }
+                  onClick={() =>
+                    setTheme("dark")
+                  }
+                >
+                  <div className="theme-preview dark-preview">
+                    <span>🌙</span>
+                  </div>
 
-            <form onSubmit={handleSubmit}>
+                  <div>
+                    <h3>
+                      Dark
+                    </h3>
 
+                    <p>
+                      Purple glow dark interface
+                    </p>
+                  </div>
 
-              {/* NAME */}
+                  {theme === "dark" && (
+                    <span className="theme-check">
+                      ✓
+                    </span>
+                  )}
+                </button>
 
-              <div className="profile-input-group">
+                <button
+                  className={
+                    theme === "light"
+                      ? "theme-option selected"
+                      : "theme-option"
+                  }
+                  onClick={() =>
+                    setTheme("light")
+                  }
+                >
+                  <div className="theme-preview light-preview">
+                    <span>☀️</span>
+                  </div>
 
-                <label>
-                  Full Name
-                </label>
+                  <div>
+                    <h3>
+                      Light
+                    </h3>
 
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Enter your full name"
-                  value={profile.name}
-                  onChange={handleChange}
-                  required
-                />
+                    <p>
+                      Clean bright interface
+                    </p>
+                  </div>
+
+                  {theme === "light" && (
+                    <span className="theme-check">
+                      ✓
+                    </span>
+                  )}
+                </button>
 
               </div>
 
+            </div>
+          )}
 
-              {/* EMAIL */}
+          {/* =================================================
+              ACCOUNT SETTINGS
+          ================================================= */}
 
-              <div className="profile-input-group">
+          {activeSection === "account" && (
+            <div className="profile-section-card">
 
-                <label>
-                  Email Address
-                </label>
+              <div className="section-heading">
+                <div>
+                  <h2>
+                    Account Settings
+                  </h2>
 
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="Enter your email"
-                  value={profile.email}
-                  onChange={handleChange}
-                  required
-                />
+                  <p>
+                    Manage your Eventora account
+                  </p>
+                </div>
+
+                <span className="section-icon">
+                  ⚙️
+                </span>
+              </div>
+
+              <div className="account-settings">
+
+                <div className="setting-row">
+                  <div>
+                    <h3>
+                      Account Status
+                    </h3>
+
+                    <p>
+                      Your account is currently active.
+                    </p>
+                  </div>
+
+                  <span className="active-badge">
+                    Active
+                  </span>
+                </div>
+
+                <div className="setting-row">
+                  <div>
+                    <h3>
+                      My Bookings
+                    </h3>
+
+                    <p>
+                      View all events you have booked.
+                    </p>
+                  </div>
+
+                  <button
+                    className="small-action-button"
+                    onClick={() =>
+                      navigate("/bookings/my-bookings")
+                    }
+                  >
+                    View
+                  </button>
+                </div>
+
+                <div className="setting-row danger-row">
+                  <div>
+                    <h3>
+                      Sign Out
+                    </h3>
+
+                    <p>
+                      Sign out from your Eventora account.
+                    </p>
+                  </div>
+
+                  <button
+                    className="danger-button"
+                    onClick={handleLogout}
+                  >
+                    Sign Out
+                  </button>
+                </div>
 
               </div>
 
-
-              {/* CONTACT */}
-
-              <div className="profile-input-group">
-
-                <label>
-                  Contact Number
-                </label>
-
-                <input
-                  type="tel"
-                  name="contact"
-                  placeholder="Enter your phone number"
-                  value={profile.contact}
-                  onChange={handleChange}
-                />
-
-              </div>
-
-
-              {/* LOCATION */}
-
-              <div className="profile-input-group">
-
-                <label>
-                  Location
-                </label>
-
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Example: Chennai, Tamil Nadu"
-                  value={profile.location}
-                  onChange={handleChange}
-                />
-
-              </div>
-
-
-              {/* BIO */}
-
-              <div className="profile-input-group">
-
-                <label>
-                  About Me
-                </label>
-
-                <textarea
-                  name="bio"
-                  placeholder="Tell us something about yourself..."
-                  value={profile.bio}
-                  onChange={handleChange}
-                  rows="5"
-                />
-
-              </div>
-
-
-              {/* SAVE */}
-
-              <button
-                type="submit"
-                className="save-profile-btn"
-                disabled={loading}
-              >
-
-                {loading
-                  ? "Saving Profile..."
-                  : "Save Changes"}
-
-              </button>
-
-            </form>
-
-          </div>
+            </div>
+          )}
 
         </div>
 
       </div>
-
     </div>
   );
-}
+};
 
 export default Profile;

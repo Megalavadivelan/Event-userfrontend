@@ -1,0 +1,1178 @@
+/* =====================================================
+   HOME HIGHLIGHTS
+===================================================== */
+
+.home-highlights {
+  position: relative;
+  width: 100%;
+  padding: 80px 65px 100px;
+
+  background:
+    radial-gradient(
+      circle at 10% 15%,
+      rgba(120, 40, 180, 0.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 90% 45%,
+      rgba(130, 50, 200, 0.08),
+      transparent 30%
+    ),
+    #050505;
+
+  color: #ffffff;
+
+  overflow: hidden;
+}
+
+
+/* =====================================================
+   SPARKLES
+===================================================== */
+
+.home-sparkle {
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 7px #ffffff,
+    0 0 16px rgba(170, 80, 255, 0.9);
+
+  opacity: 0.5;
+
+  animation:
+    homeSparkleFloat 4s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+
+.home-sparkle-1 {
+  top: 8%;
+  left: 7%;
+}
+
+
+.home-sparkle-2 {
+  top: 28%;
+  right: 8%;
+  animation-delay: 1s;
+}
+
+
+.home-sparkle-3 {
+  top: 53%;
+  left: 13%;
+  animation-delay: 2s;
+}
+
+
+.home-sparkle-4 {
+  top: 72%;
+  right: 17%;
+  animation-delay: 0.6s;
+}
+
+
+.home-sparkle-5 {
+  bottom: 8%;
+  left: 45%;
+  animation-delay: 1.5s;
+}
+
+
+@keyframes homeSparkleFloat {
+
+  0%,
+  100% {
+    opacity: 0.25;
+    transform:
+      translateY(0)
+      scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform:
+      translateY(-12px)
+      scale(1.5);
+  }
+
+}
+
+
+/* =====================================================
+   SECTION
+===================================================== */
+
+.highlight-section {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 0 auto 90px;
+
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =====================================================
+   SECTION HEADING
+===================================================== */
+
+.section-heading-row {
+
+  display: flex;
+
+  align-items: flex-end;
+
+  justify-content: space-between;
+
+  gap: 30px;
+
+  margin-bottom: 28px;
+}
+
+
+.section-small-title {
+
+  display: block;
+
+  margin-bottom: 9px;
+
+  color: #bd79ff;
+
+  font-size: 11px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+.section-heading-row h2,
+.organizers-heading h2 {
+
+  margin: 0;
+
+  font-size: 35px;
+
+  line-height: 1.1;
+
+  font-weight: 750;
+
+  letter-spacing: -1px;
+}
+
+
+.section-heading-row h2 span,
+.organizers-heading h2 span {
+
+  background:
+    linear-gradient(
+      90deg,
+      #b76cff,
+      #e0b3ff
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+}
+
+
+.section-heading-row p,
+.organizers-heading p {
+
+  margin: 10px 0 0;
+
+  color:
+    rgba(255, 255, 255, 0.48);
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   VIEW ALL BUTTON
+===================================================== */
+
+.view-all-btn {
+
+  height: 44px;
+
+  padding: 0 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 10px;
+
+  border: 1px solid
+    rgba(180, 90, 255, 0.45);
+
+  background:
+    rgba(120, 45, 180, 0.10);
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s ease;
+}
+
+
+.view-all-btn:hover {
+
+  transform: translateY(-3px);
+
+  background:
+    rgba(130, 50, 190, 0.20);
+
+  border-color:
+    rgba(205, 130, 255, 0.85);
+
+  box-shadow:
+    0 0 20px
+    rgba(150, 60, 230, 0.20);
+}
+
+
+.view-all-btn span {
+
+  font-size: 17px;
+
+  transition:
+    transform 0.25s ease;
+}
+
+
+.view-all-btn:hover span {
+
+  transform:
+    translateX(4px);
+}
+
+
+/* =====================================================
+   GALLERY GRID
+===================================================== */
+
+.gallery-highlight-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+
+/* =====================================================
+   GALLERY CARD
+===================================================== */
+
+.gallery-highlight-card {
+
+  position: relative;
+
+  height: 270px;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  border: 1px solid
+    rgba(160, 75, 225, 0.30);
+
+  background:
+    #100c14;
+
+  box-shadow:
+    0 12px 35px
+    rgba(0, 0, 0, 0.35);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+
+  animation:
+    highlightCardAppear 0.6s ease both;
+}
+
+
+.gallery-highlight-card:hover {
+
+  transform:
+    translateY(-7px);
+
+  border-color:
+    rgba(190, 100, 255, 0.70);
+
+  box-shadow:
+    0 18px 40px
+    rgba(0, 0, 0, 0.5),
+    0 0 24px
+    rgba(140, 50, 220, 0.18);
+}
+
+
+.gallery-highlight-card img {
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+
+  transition:
+    transform 0.6s ease;
+}
+
+
+.gallery-highlight-card:hover img {
+
+  transform:
+    scale(1.08);
+}
+
+
+/* =====================================================
+   GALLERY OVERLAY
+===================================================== */
+
+.gallery-card-overlay {
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  padding: 35px 17px 17px;
+
+  background:
+    linear-gradient(
+      transparent,
+      rgba(5, 3, 8, 0.90)
+    );
+
+  transform:
+    translateY(5px);
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.gallery-highlight-card:hover
+.gallery-card-overlay {
+
+  transform:
+    translateY(0);
+}
+
+
+.gallery-card-overlay span {
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  color: #ffffff;
+}
+
+
+/* =====================================================
+   PLACEHOLDER
+===================================================== */
+
+.gallery-placeholder,
+.event-home-placeholder {
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 35px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17101e,
+      #09070b
+    );
+}
+
+
+/* =====================================================
+   EVENTS SECTION
+===================================================== */
+
+.events-highlight-section {
+
+  margin-top: 10px;
+}
+
+
+/* =====================================================
+   HOME EVENTS GRID
+===================================================== */
+
+.home-events-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* =====================================================
+   EVENT CARD
+===================================================== */
+
+.home-event-card {
+
+  min-width: 0;
+
+  overflow: hidden;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(28, 20, 35, 0.95),
+      rgba(11, 9, 14, 0.98)
+    );
+
+  border: 1px solid
+    rgba(150, 70, 220, 0.28);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+
+.home-event-card:hover {
+
+  transform:
+    translateY(-7px);
+
+  border-color:
+    rgba(190, 100, 255, 0.70);
+
+  box-shadow:
+    0 15px 38px
+    rgba(0, 0, 0, 0.5),
+    0 0 22px
+    rgba(140, 50, 220, 0.16);
+}
+
+
+/* =====================================================
+   EVENT IMAGE
+===================================================== */
+
+.home-event-image {
+
+  width: 100%;
+  height: 210px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    #100c14;
+}
+
+
+.home-event-image img {
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+
+  transition:
+    transform 0.5s ease;
+}
+
+
+.home-event-card:hover
+.home-event-image img {
+
+  transform:
+    scale(1.06);
+}
+
+
+/* =====================================================
+   EVENT CATEGORY
+===================================================== */
+
+.home-event-category {
+
+  position: absolute;
+
+  top: 12px;
+  left: 12px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  background:
+    rgba(8, 5, 11, 0.80);
+
+  border: 1px solid
+    rgba(190, 100, 255, 0.40);
+
+  backdrop-filter:
+    blur(8px);
+
+  color: #dfbaff;
+
+  font-size: 10px;
+
+  font-weight: 600;
+}
+
+
+/* =====================================================
+   EVENT CONTENT
+===================================================== */
+
+.home-event-content {
+
+  padding: 16px;
+}
+
+
+.home-event-content h3 {
+
+  margin: 0 0 13px;
+
+  font-size: 17px;
+
+  font-weight: 650;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   EVENT META
+===================================================== */
+
+.home-event-meta {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-bottom: 17px;
+}
+
+
+.home-event-meta span {
+
+  color:
+    rgba(255, 255, 255, 0.52);
+
+  font-size: 11px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =====================================================
+   EVENT BOTTOM
+===================================================== */
+
+.home-event-bottom {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 8px;
+}
+
+
+.home-event-bottom strong {
+
+  color: #d9a8ff;
+
+  font-size: 17px;
+}
+
+
+.home-event-bottom button {
+
+  padding: 8px 10px;
+
+  border-radius: 8px;
+
+  border: 1px solid
+    rgba(170, 80, 255, 0.40);
+
+  background:
+    rgba(110, 40, 160, 0.13);
+
+  color: #ffffff;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.25s ease;
+}
+
+
+.home-event-bottom button:hover {
+
+  background:
+    rgba(130, 50, 190, 0.25);
+
+  border-color:
+    rgba(195, 110, 255, 0.80);
+}
+
+
+/* =====================================================
+   ORGANIZERS
+===================================================== */
+
+.organizers-section {
+
+  width: 100%;
+
+  max-width: 1300px;
+
+  margin:
+    110px auto 0;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+
+.organizers-heading {
+
+  text-align: center;
+
+  margin-bottom: 40px;
+}
+
+
+.organizers-heading p {
+
+  max-width: 520px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+/* =====================================================
+   ORGANIZER CARDS
+===================================================== */
+
+.organizer-cards {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+.organizer-card {
+
+  position: relative;
+
+  padding: 28px;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(27, 19, 35, 0.95),
+      rgba(10, 8, 13, 0.98)
+    );
+
+  border: 1px solid
+    rgba(150, 70, 220, 0.28);
+
+  box-shadow:
+    0 12px 35px
+    rgba(0, 0, 0, 0.30);
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+
+.organizer-card:hover {
+
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(190, 100, 255, 0.65);
+
+  box-shadow:
+    0 18px 40px
+    rgba(0, 0, 0, 0.45),
+    0 0 22px
+    rgba(140, 50, 220, 0.14);
+}
+
+
+/* =====================================================
+   QUOTE
+===================================================== */
+
+.quote-icon {
+
+  font-size: 45px;
+
+  line-height: 0.8;
+
+  color: #b96cff;
+
+  opacity: 0.75;
+
+  margin-bottom: 14px;
+}
+
+
+.organizer-card p {
+
+  margin: 0;
+
+  min-height: 82px;
+
+  color:
+    rgba(255, 255, 255, 0.62);
+
+  font-size: 13px;
+
+  line-height: 1.75;
+}
+
+
+/* =====================================================
+   ORGANIZER USER
+===================================================== */
+
+.organizer-user {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  margin-top: 22px;
+
+  padding-top: 17px;
+
+  border-top: 1px solid
+    rgba(255, 255, 255, 0.07);
+}
+
+
+.organizer-avatar {
+
+  width: 39px;
+  height: 39px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #843bb5,
+      #4d1d68
+    );
+
+  border: 1px solid
+    rgba(195, 110, 255, 0.45);
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 0 14px
+    rgba(150, 60, 220, 0.18);
+}
+
+
+.organizer-user div:last-child {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.organizer-user strong {
+
+  font-size: 12px;
+
+  color: #ffffff;
+}
+
+
+.organizer-user span {
+
+  font-size: 10px;
+
+  color:
+    rgba(255, 255, 255, 0.40);
+}
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+.empty-highlight {
+
+  grid-column: 1 / -1;
+
+  min-height: 180px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 15px;
+
+  border: 1px dashed
+    rgba(170, 80, 255, 0.30);
+
+  background:
+    rgba(120, 50, 180, 0.05);
+}
+
+
+.empty-highlight span {
+
+  font-size: 28px;
+
+  margin-bottom: 8px;
+}
+
+
+.empty-highlight p {
+
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.45);
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   SKELETONS
+===================================================== */
+
+.gallery-skeleton {
+
+  height: 270px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #100c14 25%,
+      #1b1322 50%,
+      #100c14 75%
+    );
+
+  background-size:
+    200% 100%;
+
+  animation:
+    skeletonLoading 1.5s infinite;
+}
+
+
+.event-home-skeleton {
+
+  height: 380px;
+
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #100c14 25%,
+      #1b1322 50%,
+      #100c14 75%
+    );
+
+  background-size:
+    200% 100%;
+
+  animation:
+    skeletonLoading 1.5s infinite;
+}
+
+
+@keyframes skeletonLoading {
+
+  0% {
+    background-position:
+      200% 0;
+  }
+
+  100% {
+    background-position:
+      -200% 0;
+  }
+
+}
+
+
+/* =====================================================
+   CARD APPEAR
+===================================================== */
+
+@keyframes highlightCardAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(15px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 1150px) {
+
+  .home-highlights {
+
+    padding:
+      70px 40px 80px;
+  }
+
+
+  .gallery-highlight-grid,
+  .home-events-grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+
+  .organizer-cards {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+  .home-highlights {
+
+    padding:
+      60px 20px 70px;
+  }
+
+
+  .section-heading-row {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 18px;
+  }
+
+
+  .section-heading-row h2,
+  .organizers-heading h2 {
+
+    font-size: 28px;
+  }
+
+
+  .view-all-btn {
+
+    height: 42px;
+  }
+
+
+  .gallery-highlight-grid,
+  .home-events-grid,
+  .organizer-cards {
+
+    grid-template-columns: 1fr;
+
+  }
+
+
+  .gallery-highlight-card {
+
+    height: 240px;
+  }
+
+
+  .home-event-image {
+
+    height: 220px;
+  }
+
+
+  .organizers-section {
+
+    margin-top: 80px;
+  }
+
+
+  .organizer-card {
+
+    padding: 23px;
+  }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+  .home-highlights {
+
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+
+  .section-heading-row h2,
+  .organizers-heading h2 {
+
+    font-size: 25px;
+  }
+
+
+  .section-heading-row p,
+  .organizers-heading p {
+
+    font-size: 12px;
+  }
+
+
+  .home-event-content {
+
+    padding: 14px;
+  }
+
+}
