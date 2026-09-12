@@ -7,7 +7,7 @@ function RoleSelection() {
 
   // User button
   const handleUser = () => {
-    navigate("/user-dashboard");
+    navigate("/home");
   };
 
   // Admin button
