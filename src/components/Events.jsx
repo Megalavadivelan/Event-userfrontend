@@ -43,19 +43,20 @@ const Events = () => {
         JSON.stringify(response.data, null, 2)
       );
 
-      // Your API response:
-      // {
-      //   success: true,
-      //   data: [...]
-      // }
-
       let eventData = [];
 
+      // API returns array
       if (Array.isArray(response.data)) {
         eventData = response.data;
-      } else if (Array.isArray(response.data.data)) {
+      }
+
+      // API returns { data: [...] }
+      else if (Array.isArray(response.data.data)) {
         eventData = response.data.data;
-      } else if (Array.isArray(response.data.events)) {
+      }
+
+      // API returns { events: [...] }
+      else if (Array.isArray(response.data.events)) {
         eventData = response.data.events;
       }
 
@@ -66,7 +67,9 @@ const Events = () => {
     } catch (error) {
       console.error("Failed to fetch events:", error);
 
-      setError("Unable to load events. Please try again.");
+      setError(
+        "Unable to load events. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -158,31 +161,14 @@ const Events = () => {
     const eventId = event._id || event.id;
 
     if (!eventId) {
-      console.error("Event ID not found:", event);
+      console.error(
+        "Event ID not found:",
+        event
+      );
       return;
     }
 
     navigate(`/eventdetails/${eventId}`);
-  };
-
-  // ===================================================
-  // FORMAT DATE
-  // ===================================================
-
-  const formatDate = (date) => {
-    if (!date) {
-      return "Date not available";
-    }
-
-    try {
-      return new Date(date).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
-    } catch {
-      return date;
-    }
   };
 
   // ===================================================
@@ -200,17 +186,12 @@ const Events = () => {
       return null;
     }
 
-    // IMPORTANT:
-    // Admin API is returning Base64 image like:
-    // data:image/jpeg;base64,/9j/4AAQ...
-    //
-    // We must use it directly.
-
+    // Base64 image
     if (image.startsWith("data:image")) {
       return image;
     }
 
-    // Already a complete URL
+    // Complete URL
     if (
       image.startsWith("http://") ||
       image.startsWith("https://")
@@ -232,14 +213,24 @@ const Events = () => {
   if (loading) {
     return (
       <div className="events-page">
+
+        {/* Background animated glow */}
+        <div className="background-glow glow-one"></div>
+        <div className="background-glow glow-two"></div>
+
+        {/* Limited Sparkles */}
         <div className="sparkle sparkle-1"></div>
         <div className="sparkle sparkle-2"></div>
         <div className="sparkle sparkle-3"></div>
 
         <div className="events-loading">
           <div className="loading-spinner"></div>
-          <p>Loading events...</p>
+
+          <p>
+            Loading events...
+          </p>
         </div>
+
       </div>
     );
   }
@@ -251,13 +242,25 @@ const Events = () => {
   return (
     <div className="events-page">
 
-      {/* LIMITED BACKGROUND SPARKLES */}
+      {/* =================================================
+          BACKGROUND EFFECTS
+      ================================================= */}
+
+      <div className="background-glow glow-one"></div>
+      <div className="background-glow glow-two"></div>
+      <div className="background-glow glow-three"></div>
+
+      {/* Sparkles */}
 
       <div className="sparkle sparkle-1"></div>
       <div className="sparkle sparkle-2"></div>
       <div className="sparkle sparkle-3"></div>
       <div className="sparkle sparkle-4"></div>
       <div className="sparkle sparkle-5"></div>
+      <div className="sparkle sparkle-6"></div>
+      <div className="sparkle sparkle-7"></div>
+      <div className="sparkle sparkle-8"></div>
+
 
       {/* =================================================
           TOP ROW
@@ -271,9 +274,11 @@ const Events = () => {
           Events
         </h1>
 
+
         {/* SEARCH */}
 
         <div className="search-container">
+
           <span className="search-icon">
             🔍
           </span>
@@ -286,11 +291,14 @@ const Events = () => {
               setSearch(e.target.value)
             }
           />
+
         </div>
 
-        {/* CATEGORY FILTER */}
+
+        {/* CATEGORY */}
 
         <div className="category-container">
+
           <span className="category-label">
             Category:
           </span>
@@ -310,9 +318,11 @@ const Events = () => {
               </option>
             ))}
           </select>
+
         </div>
 
       </div>
+
 
       {/* =================================================
           ERROR
@@ -320,13 +330,18 @@ const Events = () => {
 
       {error && (
         <div className="events-error">
-          <p>{error}</p>
+
+          <p>
+            {error}
+          </p>
 
           <button onClick={fetchEvents}>
             Try Again
           </button>
+
         </div>
       )}
+
 
       {/* =================================================
           EVENT COUNT
@@ -334,13 +349,18 @@ const Events = () => {
 
       {!error && (
         <div className="event-count">
+
           {filteredEvents.length}{" "}
+
           {filteredEvents.length === 1
             ? "Event"
             : "Events"}{" "}
+
           Available
+
         </div>
       )}
+
 
       {/* =================================================
           NO EVENTS
@@ -366,8 +386,9 @@ const Events = () => {
           </div>
         )}
 
+
       {/* =================================================
-          EVENT CARDS
+          EVENTS GRID
       ================================================= */}
 
       <div className="events-grid">
@@ -378,34 +399,19 @@ const Events = () => {
             const imageUrl =
               getImageUrl(event);
 
-            // YOUR ADMIN API USES "name"
             const eventName =
               event.name ||
               event.eventName ||
               event.title ||
               "Untitled Event";
 
-            const eventCategory =
-              event.category ||
-              event.eventCategory ||
-              "Event";
-
-            const eventLocation =
-              event.location ||
-              event.venue ||
-              "Location not available";
-
-            const eventDate =
-              event.date ||
-              event.eventDate;
-
-            // YOUR ADMIN API USES "ticketPrice"
             const eventPrice =
               event.ticketPrice ??
               event.price ??
               event.amount;
 
             return (
+
               <div
                 className="event-card"
                 key={
@@ -418,87 +424,57 @@ const Events = () => {
                 }
               >
 
-                {/* EVENT IMAGE */}
+                {/* =================================================
+                    IMAGE
+                ================================================= */}
 
                 <div className="event-image-container">
 
                   {imageUrl ? (
+
                     <img
                       src={imageUrl}
                       alt={eventName}
                       className="event-image"
                     />
+
                   ) : (
+
                     <div className="event-image-placeholder">
-                      <span>✨</span>
+
+                      <span>
+                        ✨
+                      </span>
 
                       <p>
                         Event
                       </p>
+
                     </div>
+
                   )}
 
-                  {/* CATEGORY */}
+                  {/* Image overlay */}
 
-                  <span className="event-category">
-                    {eventCategory}
-                  </span>
+                  <div className="image-overlay"></div>
 
                 </div>
 
-                {/* CARD CONTENT */}
+
+                {/* =================================================
+                    CARD CONTENT
+                ================================================= */}
 
                 <div className="event-card-content">
 
-                  <h2>
+                  {/* EVENT NAME */}
+
+                  <h2 title={eventName}>
                     {eventName}
                   </h2>
 
-                  <p className="event-description">
-                    {event.description ||
-                      event.details ||
-                      "No description available."}
-                  </p>
 
-                  {/* DATE */}
-
-                  <div className="event-info">
-                    <span>
-                      📅
-                    </span>
-
-                    <span>
-                      {formatDate(eventDate)}
-                    </span>
-                  </div>
-
-                  {/* TIME */}
-
-                  {event.time && (
-                    <div className="event-info">
-                      <span>
-                        ⏰
-                      </span>
-
-                      <span>
-                        {event.time}
-                      </span>
-                    </div>
-                  )}
-
-                  {/* LOCATION */}
-
-                  <div className="event-info">
-                    <span>
-                      📍
-                    </span>
-
-                    <span>
-                      {eventLocation}
-                    </span>
-                  </div>
-
-                  {/* PRICE */}
+                  {/* PRICE + BUTTON */}
 
                   <div className="event-bottom">
 
@@ -515,15 +491,16 @@ const Events = () => {
 
                     </div>
 
+
                     <button
                       className="view-event-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-
                         handleEventClick(event);
                       }}
                     >
-                      View Details →
+                      View Details
+                      <span>→</span>
                     </button>
 
                   </div>
