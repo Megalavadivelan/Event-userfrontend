@@ -1,264 +1,914 @@
+/* =========================================================
+   EVENT DETAILS PAGE
+========================================================= */
+
 .event-details-page {
+  min-height: 100vh;
   width: 100%;
-  max-width: 1250px;
-  margin: 0 auto;
-  padding: 30px;
-  box-sizing: border-box;
-}
-
-/* ================= BACK ================= */
-
-.details-back {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 15px;
-  margin-bottom: 25px;
-  padding: 8px 0;
-}
-
-.details-back:hover {
-  color: #6c63ff;
-}
-
-/* ================= MAIN ================= */
-
-.event-details-container {
-  display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
-  gap: 45px;
-}
-
-/* ================= POSTER ================= */
-
-.details-poster {
-  width: 100%;
-  height: 570px;
-  border-radius: 20px;
+  padding: 110px 40px 60px;
+  position: relative;
   overflow: hidden;
-  background: #eee;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(100, 40, 180, 0.16),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(130, 50, 210, 0.12),
+      transparent 30%
+    ),
+    #050507;
+
+  color: #ffffff;
 }
 
-.details-poster img {
+
+/* =========================================================
+   CONTAINER
+========================================================= */
+
+.details-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-button {
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: #dddddd;
+
+  padding: 11px 20px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  border: 1px solid rgba(150, 80, 255, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  margin-bottom: 22px;
+}
+
+.back-button:hover {
+  transform: translateX(-4px);
+
+  background: rgba(130, 50, 220, 0.14);
+
+  border-color: rgba(170, 90, 255, 0.7);
+
+  box-shadow:
+    0 0 18px rgba(120, 40, 220, 0.25);
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.event-details-card {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 48% 52%;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(24, 18, 32, 0.98),
+      rgba(10, 10, 13, 0.98)
+    );
+
+  border: 1px solid rgba(150, 75, 255, 0.28);
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 25px 80px rgba(0, 0, 0, 0.55),
+    0 0 35px rgba(100, 40, 180, 0.08);
+}
+
+
+/* =========================================================
+   IMAGE SECTION
+========================================================= */
+
+.event-details-image-section {
+  min-height: 620px;
+  position: relative;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #17101e,
+      #09090c
+    );
+}
+
+.event-details-image {
   width: 100%;
   height: 100%;
+
+  min-height: 620px;
+
   object-fit: cover;
+
+  display: block;
+
+  transition: transform 0.6s ease;
 }
 
-/* ================= INFORMATION ================= */
-
-.details-information {
-  padding: 10px 0;
+.event-details-card:hover
+.event-details-image {
+  transform: scale(1.025);
 }
+
+
+/* IMAGE OVERLAY */
+
+.event-details-image-section::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.55),
+      transparent 45%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   IMAGE PLACEHOLDER
+========================================================= */
+
+.event-details-image-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 620px;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  color: #aaa;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(130, 60, 220, 0.18),
+      transparent 55%
+    );
+}
+
+.event-details-image-placeholder span {
+  font-size: 70px;
+
+  margin-bottom: 15px;
+
+  filter:
+    drop-shadow(
+      0 0 15px rgba(180, 100, 255, 0.6)
+    );
+}
+
+.event-details-image-placeholder p {
+  margin: 0;
+  color: #888;
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
 
 .details-category {
-  display: inline-block;
-  padding: 7px 13px;
-  border-radius: 20px;
-  background: #f0efff;
-  color: #5d55d9;
+  position: absolute;
+
+  top: 22px;
+  left: 22px;
+
+  z-index: 3;
+
+  padding: 8px 15px;
+
+  border-radius: 30px;
+
   font-size: 12px;
   font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  color: #ffffff;
+
+  background: rgba(80, 30, 130, 0.72);
+
+  border: 1px solid rgba(190, 120, 255, 0.55);
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 0 18px rgba(130, 50, 220, 0.25);
 }
 
-.details-information h1 {
-  margin: 18px 0 15px;
-  font-size: 40px;
-  line-height: 1.15;
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.details-status {
+  position: absolute;
+
+  top: 22px;
+  right: 22px;
+
+  z-index: 3;
+
+  padding: 8px 14px;
+
+  border-radius: 30px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #ffffff;
+
+  background: rgba(20, 20, 25, 0.78);
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  backdrop-filter: blur(10px);
 }
 
-.details-description {
-  color: #666;
-  line-height: 1.7;
+
+/* =========================================================
+   CONTENT
+========================================================= */
+
+.event-details-content {
+  padding: 45px 42px;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.event-details-content h1 {
+  margin: 0 0 22px;
+
+  font-size: clamp(32px, 4vw, 48px);
+
+  line-height: 1.08;
+
+  font-weight: 750;
+
+  letter-spacing: -1.2px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #cba7ff
+    );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+
+/* =========================================================
+   ORGANIZER
+========================================================= */
+
+.organizer-section {
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  padding-bottom: 25px;
+
+  border-bottom:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.organizer-icon {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(130, 60, 210, 0.16);
+
+  border:
+    1px solid rgba(160, 90, 240, 0.35);
+
+  font-size: 18px;
+}
+
+.organizer-section div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.organizer-section span {
+  font-size: 12px;
+  color: #888;
+}
+
+.organizer-section strong {
   font-size: 15px;
+  color: #eeeeee;
 }
 
-/* ================= INFO GRID ================= */
 
-.details-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+/* =========================================================
+   DESCRIPTION
+========================================================= */
+
+.description-section {
   margin-top: 28px;
 }
 
-.detail-info-item {
+.description-section h2 {
+  margin: 0 0 10px;
+
+  font-size: 19px;
+
+  color: #ffffff;
+}
+
+.description-section p {
+  margin: 0;
+
+  color: #a7a7ad;
+
+  font-size: 14px;
+
+  line-height: 1.8;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   EVENT INFORMATION
+========================================================= */
+
+.event-information {
+  margin-top: 30px;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 12px;
+}
+
+.information-box {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 15px;
+
+  min-width: 0;
+
+  background:
+    rgba(255, 255, 255, 0.025);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 13px;
+
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.information-box:hover {
+  transform: translateY(-2px);
+
+  background:
+    rgba(130, 50, 220, 0.07);
+
+  border-color:
+    rgba(160, 80, 240, 0.35);
+}
+
+.information-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
-  gap: 13px;
-  padding: 16px;
-  border: 1px solid #ededed;
-  border-radius: 13px;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background:
+    rgba(130, 60, 220, 0.12);
+
+  font-size: 17px;
 }
 
-.detail-icon {
-  font-size: 22px;
+.information-box div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
 }
 
-.detail-info-item small {
-  display: block;
-  color: #999;
+.information-box span {
+  color: #777;
+
   font-size: 11px;
-  margin-bottom: 5px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.5px;
 }
 
-.detail-info-item strong {
-  display: block;
+.information-box strong {
+  color: #e8e8e8;
+
+  font-size: 13px;
+
+  line-height: 1.4;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   BOOKING SECTION
+========================================================= */
+
+.booking-section {
+  margin-top: auto;
+
+  padding-top: 28px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.08);
+}
+
+.price-section {
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.price-section span {
+  color: #777;
+
+  font-size: 12px;
+}
+
+.price-section strong {
+  color: #ffffff;
+
+  font-size: 28px;
+
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   BOOK BUTTON
+========================================================= */
+
+.book-ticket-button {
+  border: none;
+
+  padding: 14px 23px;
+
+  border-radius: 11px;
+
+  cursor: pointer;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d28a8,
+      #8e45d4
+    );
+
+  box-shadow:
+    0 8px 25px rgba(120, 40, 190, 0.25);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.book-ticket-button span {
+  margin-left: 9px;
+
+  font-size: 16px;
+}
+
+.book-ticket-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 12px 35px rgba(140, 50, 220, 0.4);
+}
+
+.book-ticket-button:active {
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.details-loading {
+  min-height: 70vh;
+
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 18px;
+}
+
+.details-loading p {
+  color: #999;
+
   font-size: 14px;
 }
 
-/* ================= PRICE ================= */
 
-.details-booking-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-top: 25px;
-  padding: 20px;
-  border-radius: 15px;
-  background: #f7f7f7;
+/* SPINNER */
+
+.details-spinner {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  border:
+    3px solid rgba(255, 255, 255, 0.08);
+
+  border-top-color:
+    #9a4be0;
+
+  animation:
+    detailsSpin 0.8s linear infinite;
 }
 
-.details-booking-info small {
-  display: block;
-  color: #888;
-  margin-bottom: 5px;
+@keyframes detailsSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.details-booking-info strong {
-  font-size: 19px;
-}
 
-.ticket-price {
-  font-size: 24px !important;
-}
-
-/* ================= ORGANIZER ================= */
-
-.organizer-box {
-  margin-top: 25px;
-  padding: 18px;
-  border-left: 4px solid #6c63ff;
-  background: #f8f7ff;
-  border-radius: 10px;
-}
-
-.organizer-box h3 {
-  margin: 0 0 7px;
-  font-size: 15px;
-}
-
-.organizer-box p {
-  margin: 0 0 10px;
-  color: #555;
-  font-weight: 600;
-}
-
-.organizer-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  color: #777;
-  font-size: 13px;
-}
-
-/* ================= BOOK ================= */
-
-.book-event-button {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 25px;
-  padding: 16px;
-  border: none;
-  border-radius: 11px;
-  background: #111827;
-  color: white;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.book-event-button:hover {
-  background: #252c3a;
-}
-
-/* ================= ERROR ================= */
+/* =========================================================
+   ERROR
+========================================================= */
 
 .details-error {
-  min-height: 500px;
+  min-height: 70vh;
+
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
+
   align-items: center;
+
   text-align: center;
-  padding: 20px;
+
+  padding: 30px;
 }
 
-.details-error-icon {
-  font-size: 60px;
+.error-icon {
+  font-size: 55px;
+
+  margin-bottom: 15px;
+
+  filter:
+    drop-shadow(
+      0 0 18px rgba(170, 90, 255, 0.5)
+    );
 }
 
 .details-error h2 {
-  margin: 15px 0 5px;
+  margin: 0 0 10px;
+
+  font-size: 28px;
 }
 
 .details-error p {
-  color: #777;
+  margin: 0 0 25px;
+
+  color: #888;
+
+  max-width: 450px;
 }
 
-.details-error button {
-  margin-top: 15px;
-  padding: 11px 18px;
+
+/* =========================================================
+   ERROR BACK BUTTON
+========================================================= */
+
+.back-events-btn {
   border: none;
-  border-radius: 9px;
-  background: #111827;
-  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 10px;
+
   cursor: pointer;
+
+  color: #ffffff;
+
+  background:
+    rgba(120, 50, 190, 0.2);
+
+  border:
+    1px solid rgba(160, 80, 240, 0.4);
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
 }
 
-/* ================= MOBILE ================= */
+.back-events-btn:hover {
+  transform: translateY(-2px);
 
-@media (max-width: 850px) {
+  background:
+    rgba(130, 50, 220, 0.35);
+}
+
+
+/* =========================================================
+   SPARKLES
+========================================================= */
+
+.details-sparkle {
+  position: absolute;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 10px #ffffff,
+    0 0 20px rgba(150, 70, 240, 0.8);
+
+  opacity: 0.65;
+
+  animation:
+    detailSparkle 3s ease-in-out infinite;
+}
+
+.sparkle-one {
+  top: 18%;
+  left: 8%;
+}
+
+.sparkle-two {
+  top: 30%;
+  right: 9%;
+
+  animation-delay: 0.8s;
+}
+
+.sparkle-three {
+  bottom: 20%;
+  left: 12%;
+
+  animation-delay: 1.5s;
+}
+
+.sparkle-four {
+  bottom: 12%;
+  right: 15%;
+
+  animation-delay: 2.2s;
+}
+
+@keyframes detailSparkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: scale(1.5);
+  }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
 
   .event-details-page {
-    padding: 20px 15px;
+    padding:
+      100px 25px 50px;
   }
 
-  .event-details-container {
+  .event-details-card {
     grid-template-columns: 1fr;
-    gap: 25px;
   }
 
-  .details-poster {
-    height: 400px;
+  .event-details-image-section {
+    min-height: 420px;
   }
 
-  .details-information h1 {
-    font-size: 30px;
+  .event-details-image {
+    min-height: 420px;
+  }
+
+  .event-details-image-placeholder {
+    min-height: 420px;
+  }
+
+  .event-details-content {
+    padding: 35px 30px;
   }
 
 }
 
-@media (max-width: 550px) {
 
-  .details-info-grid {
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .event-details-page {
+    padding:
+      95px 15px 35px;
+  }
+
+  .details-container {
+    width: 100%;
+  }
+
+  .back-button {
+    margin-bottom: 15px;
+  }
+
+  .event-details-card {
+    border-radius: 18px;
+  }
+
+  .event-details-image-section {
+    min-height: 300px;
+  }
+
+  .event-details-image {
+    min-height: 300px;
+  }
+
+  .event-details-image-placeholder {
+    min-height: 300px;
+  }
+
+  .details-category {
+    top: 15px;
+    left: 15px;
+  }
+
+  .details-status {
+    top: 15px;
+    right: 15px;
+  }
+
+  .event-details-content {
+    padding: 28px 20px;
+  }
+
+  .event-details-content h1 {
+    font-size: 31px;
+
+    margin-bottom: 18px;
+  }
+
+  .event-information {
     grid-template-columns: 1fr;
+
+    gap: 10px;
   }
 
-  .details-booking-info {
-    grid-template-columns: 1fr;
-  }
-
-  .details-poster {
-    height: 330px;
-  }
-
-  .organizer-contact {
+  .booking-section {
     flex-direction: column;
-    gap: 8px;
+
+    align-items: stretch;
+
+    gap: 18px;
+  }
+
+  .price-section {
+    align-items: flex-start;
+  }
+
+  .book-ticket-button {
+    width: 100%;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .event-details-content {
+    padding: 24px 16px;
+  }
+
+  .event-details-content h1 {
+    font-size: 27px;
+  }
+
+  .information-box {
+    padding: 13px;
   }
 
 }

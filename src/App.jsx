@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
 import MainLayout from "./components/MainLayout.jsx";
+
 import Login from "./components/login.jsx";
 import Signup from "./components/SignUp.jsx";
 import RoleSelection from "./components/RoleSelection.jsx";
@@ -17,19 +18,43 @@ import Gallery from "./components/Gallery.jsx";
 
 function App() {
   return (
-    <Routes >
+    <Routes>
 
-      {/* Pages WITHOUT Navbar */}
-      <Route path="/" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/roleselection" element={<RoleSelection />} />
-      <Route path="/adminlogin" element={<AdminLogin />} />
+      {/* =========================================
+          PAGES WITHOUT NAVBAR
+      ========================================= */}
+
+      <Route
+        path="/"
+        element={<Login />}
+      />
+
+      <Route
+        path="/signup"
+        element={<Signup />}
+      />
+
+      <Route
+        path="/roleselection"
+        element={<RoleSelection />}
+      />
+
+      <Route
+        path="/adminlogin"
+        element={<AdminLogin />}
+      />
 
 
-      {/* Pages WITH Navbar */}
+      {/* =========================================
+          PAGES WITH NAVBAR
+      ========================================= */}
+
       <Route element={<MainLayout />}>
 
-        <Route path="/home" element={<Home />} />
+        <Route
+          path="/home"
+          element={<Home />}
+        />
 
         <Route
           path="/user-dashboard"
@@ -40,8 +65,9 @@ function App() {
           path="/profile"
           element={<Profile />}
         />
+
         <Route
-          path="organizereq"
+          path="/organizereq"
           element={<OrganizeEvent />}
         />
 
@@ -50,8 +76,9 @@ function App() {
           element={<Events />}
         />
 
+        {/* SINGLE EVENT DETAILS */}
         <Route
-          path="/eventdetails"
+          path="/eventdetails/:id"
           element={<EventDetails />}
         />
 
@@ -59,8 +86,17 @@ function App() {
           path="/signout"
           element={<SignOut />}
         />
-        <Route path="/contact" element={<Contact />}/>
-        <Route path="/gallery" element={<Gallery />}/>
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+
+        <Route
+          path="/gallery"
+          element={<Gallery />}
+        />
+
       </Route>
 
     </Routes>

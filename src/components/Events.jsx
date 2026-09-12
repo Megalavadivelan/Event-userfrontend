@@ -9,27 +9,24 @@ const EVENTS_API =
 const Events = () => {
   const navigate = useNavigate();
 
-
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
-
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-
   const categories = [
-  "All",
-  "Music",
-  "Technology",
-  "Sports",
-  "Workshop",
-  "Conference",
-  "Cultural",
-  "Business",
-];
+    "All",
+    "Music",
+    "Technology",
+    "Sports",
+    "Workshop",
+    "Conference",
+    "Cultural",
+    "Business",
+  ];
+
   // ===================================================
   // FETCH EVENTS
   // ===================================================
@@ -41,34 +38,35 @@ const Events = () => {
 
       const response = await axios.get(EVENTS_API);
 
-      console.log("EVENT API RESPONSE:", response.data);
+      console.log(
+        "EVENT API RESPONSE:",
+        JSON.stringify(response.data, null, 2)
+      );
 
-      // API may return:
-      // { events: [...] }
-      // OR
-      // [...]
+      // Your API response:
+      // {
+      //   success: true,
+      //   data: [...]
+      // }
 
       let eventData = [];
 
       if (Array.isArray(response.data)) {
         eventData = response.data;
-      } else if (Array.isArray(response.data.events)) {
-        eventData = response.data.events;
       } else if (Array.isArray(response.data.data)) {
         eventData = response.data.data;
+      } else if (Array.isArray(response.data.events)) {
+        eventData = response.data.events;
       }
+
+      console.log("EVENT DATA:", eventData);
 
       setEvents(eventData);
       setFilteredEvents(eventData);
     } catch (error) {
-      console.error(
-        "Failed to fetch events:",
-        error
-      );
+      console.error("Failed to fetch events:", error);
 
-      setError(
-        "Unable to load events. Please try again."
-      );
+      setError("Unable to load events. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -83,34 +81,7 @@ const Events = () => {
   }, []);
 
   // ===================================================
-  // GET CATEGORIES
-  // ===================================================
-<div className="category-container">
-
-  <span className="category-label">
-    Category:
-  </span>
-
-  <select
-    value={category}
-    onChange={(e) =>
-      setCategory(e.target.value)
-    }
-  >
-    {categories.map((item) => (
-      <option
-        key={item}
-        value={item}
-      >
-        {item}
-      </option>
-    ))}
-  </select>
-
-</div>
-
-  // ===================================================
-  // SEARCH + FILTER
+  // SEARCH + CATEGORY FILTER
   // ===================================================
 
   useEffect(() => {
@@ -118,13 +89,12 @@ const Events = () => {
 
     // SEARCH
     if (search.trim() !== "") {
-      const searchText =
-        search.toLowerCase();
+      const searchText = search.toLowerCase();
 
       result = result.filter((event) => {
         const eventName = (
-          event.eventName ||
           event.name ||
+          event.eventName ||
           event.title ||
           ""
         ).toLowerCase();
@@ -147,11 +117,17 @@ const Events = () => {
           ""
         ).toLowerCase();
 
+        const organizer = (
+          event.organizer ||
+          ""
+        ).toLowerCase();
+
         return (
           eventName.includes(searchText) ||
           description.includes(searchText) ||
           location.includes(searchText) ||
-          eventCategory.includes(searchText)
+          eventCategory.includes(searchText) ||
+          organizer.includes(searchText)
         );
       });
     }
@@ -179,21 +155,14 @@ const Events = () => {
   // ===================================================
 
   const handleEventClick = (event) => {
-    const eventId =
-      event._id ||
-      event.id;
+    const eventId = event._id || event.id;
 
     if (!eventId) {
-      console.error(
-        "Event ID not found:",
-        event
-      );
+      console.error("Event ID not found:", event);
       return;
     }
 
-    navigate(
-      `/eventdetails/${eventId}`
-    );
+    navigate(`/eventdetails/${eventId}`);
   };
 
   // ===================================================
@@ -206,14 +175,11 @@ const Events = () => {
     }
 
     try {
-      return new Date(date).toLocaleDateString(
-        "en-IN",
-        {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        }
-      );
+      return new Date(date).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
     } catch {
       return date;
     }
@@ -225,13 +191,23 @@ const Events = () => {
 
   const getImageUrl = (event) => {
     const image =
-      event.poster ||
       event.image ||
+      event.poster ||
       event.imageUrl ||
       event.eventImage;
 
     if (!image) {
       return null;
+    }
+
+    // IMPORTANT:
+    // Admin API is returning Base64 image like:
+    // data:image/jpeg;base64,/9j/4AAQ...
+    //
+    // We must use it directly.
+
+    if (image.startsWith("data:image")) {
+      return image;
     }
 
     // Already a complete URL
@@ -242,8 +218,7 @@ const Events = () => {
       return image;
     }
 
-    // If your friend's API returns a relative
-    // upload path, use his backend domain.
+    // Relative upload path
     return `https://api-admin-rouge.vercel.app/${image.replace(
       /^\/+/,
       ""
@@ -263,7 +238,6 @@ const Events = () => {
 
         <div className="events-loading">
           <div className="loading-spinner"></div>
-
           <p>Loading events...</p>
         </div>
       </div>
@@ -278,6 +252,7 @@ const Events = () => {
     <div className="events-page">
 
       {/* LIMITED BACKGROUND SPARKLES */}
+
       <div className="sparkle sparkle-1"></div>
       <div className="sparkle sparkle-2"></div>
       <div className="sparkle sparkle-3"></div>
@@ -299,7 +274,6 @@ const Events = () => {
         {/* SEARCH */}
 
         <div className="search-container">
-
           <span className="search-icon">
             🔍
           </span>
@@ -312,13 +286,11 @@ const Events = () => {
               setSearch(e.target.value)
             }
           />
-
         </div>
 
         {/* CATEGORY FILTER */}
 
         <div className="category-container">
-
           <span className="category-label">
             Category:
           </span>
@@ -338,7 +310,6 @@ const Events = () => {
               </option>
             ))}
           </select>
-
         </div>
 
       </div>
@@ -351,9 +322,7 @@ const Events = () => {
         <div className="events-error">
           <p>{error}</p>
 
-          <button
-            onClick={fetchEvents}
-          >
+          <button onClick={fetchEvents}>
             Try Again
           </button>
         </div>
@@ -409,9 +378,10 @@ const Events = () => {
             const imageUrl =
               getImageUrl(event);
 
+            // YOUR ADMIN API USES "name"
             const eventName =
-              event.eventName ||
               event.name ||
+              event.eventName ||
               event.title ||
               "Untitled Event";
 
@@ -429,9 +399,10 @@ const Events = () => {
               event.date ||
               event.eventDate;
 
+            // YOUR ADMIN API USES "ticketPrice"
             const eventPrice =
-              event.price ??
               event.ticketPrice ??
+              event.price ??
               event.amount;
 
             return (
@@ -460,6 +431,7 @@ const Events = () => {
                   ) : (
                     <div className="event-image-placeholder">
                       <span>✨</span>
+
                       <p>
                         Event
                       </p>
@@ -496,11 +468,23 @@ const Events = () => {
                     </span>
 
                     <span>
-                      {formatDate(
-                        eventDate
-                      )}
+                      {formatDate(eventDate)}
                     </span>
                   </div>
+
+                  {/* TIME */}
+
+                  {event.time && (
+                    <div className="event-info">
+                      <span>
+                        ⏰
+                      </span>
+
+                      <span>
+                        {event.time}
+                      </span>
+                    </div>
+                  )}
 
                   {/* LOCATION */}
 
@@ -520,13 +504,10 @@ const Events = () => {
 
                     <div className="event-price">
 
-                      {eventPrice !==
-                        undefined &&
-                      eventPrice !==
-                        null ? (
+                      {eventPrice !== undefined &&
+                      eventPrice !== null ? (
                         <>
-                          ₹
-                          {eventPrice}
+                          ₹{eventPrice}
                         </>
                       ) : (
                         "Free"
@@ -538,9 +519,8 @@ const Events = () => {
                       className="view-event-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleEventClick(
-                          event
-                        );
+
+                        handleEventClick(event);
                       }}
                     >
                       View Details →

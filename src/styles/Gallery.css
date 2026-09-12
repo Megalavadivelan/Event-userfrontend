@@ -29,7 +29,7 @@
 ===================================================== */
 
 .gallery-hero {
-  min-height: 380px;
+  min-height: 252px;
 
   display: flex;
 
@@ -38,7 +38,7 @@
 
   text-align: center;
 
-  padding: 70px 20px;
+  padding: 4ch 20px;
 
   position: relative;
 
