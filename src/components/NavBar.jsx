@@ -1,17 +1,78 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/NavBar.css";
+
+const API_URL = "https://user-api-iota-six.vercel.app";
 
 const Navbar = () => {
   const [eventOpen, setEventOpen] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSignOut = () => {
-    // If you are storing login information
-    localStorage.removeItem("user");
+  // =====================================================
+  // SIGN OUT
+  // =====================================================
 
-    navigate("/signout");
+  const handleSignOut = async () => {
+    try {
+      // Get logged-in user from localStorage
+      const userData = JSON.parse(
+        localStorage.getItem("user")
+      );
+
+      // If user data is not available
+      if (!userData || !userData.id) {
+        console.log("User information not found");
+
+        localStorage.removeItem("user");
+
+        navigate("/signout");
+
+        return;
+      }
+
+      // =================================================
+      // SAVE LOGOUT TIME
+      // =================================================
+
+      const response = await axios.post(
+        `${API_URL}/loginhistory/logout`,
+        {
+          userId: userData.id,
+        }
+      );
+
+      console.log(
+        "Logout Response:",
+        response.data
+      );
+
+      // =================================================
+      // REMOVE USER FROM LOCAL STORAGE
+      // =================================================
+
+      localStorage.removeItem("user");
+
+      // =================================================
+      // NAVIGATE TO SIGN OUT PAGE
+      // =================================================
+
+      navigate("/signout");
+
+    } catch (error) {
+      console.error(
+        "Logout Error:",
+        error
+      );
+
+      // Even if API fails,
+      // allow user to logout from frontend
+
+      localStorage.removeItem("user");
+
+      navigate("/signout");
+    }
   };
 
   return (
@@ -23,13 +84,28 @@ const Navbar = () => {
 
       <div className="navbar-background">
 
-        <span className="nav-star star-1">✦</span>
-        <span className="nav-star star-2">✦</span>
-        <span className="nav-star star-3">✦</span>
-        <span className="nav-star star-4">✦</span>
-        <span className="nav-star star-5">✦</span>
+        <span className="nav-star star-1">
+          ✦
+        </span>
+
+        <span className="nav-star star-2">
+          ✦
+        </span>
+
+        <span className="nav-star star-3">
+          ✦
+        </span>
+
+        <span className="nav-star star-4">
+          ✦
+        </span>
+
+        <span className="nav-star star-5">
+          ✦
+        </span>
 
         <span className="nav-glow glow-left"></span>
+
         <span className="nav-glow glow-right"></span>
 
       </div>
@@ -41,10 +117,19 @@ const Navbar = () => {
 
       <div
         className="navbar-logo"
-        onClick={() => navigate("/user-dashboard")}
+        onClick={() =>
+          navigate("/user-dashboard")
+        }
       >
-        <span className="logo-star">✦</span>
-        <span className="logo-text">Eventora</span>
+
+        <span className="logo-star">
+          ✦
+        </span>
+
+        <span className="logo-text">
+          Eventora
+        </span>
+
       </div>
 
 
@@ -64,13 +149,7 @@ const Navbar = () => {
         </Link>
 
 
-        {/* =================================
-            EVENTS DROPDOWN
-        ================================= */}
-
-        
-
-        {/* ABOUT */}
+        {/* EVENTS */}
 
         <Link
           to="/events"
@@ -80,7 +159,7 @@ const Navbar = () => {
         </Link>
 
 
-        {/* CONTACT */}
+        {/* ORGANIZE EVENTS */}
 
         <Link
           to="/organizereq"
@@ -98,25 +177,41 @@ const Navbar = () => {
         >
           Profile
         </Link>
+
+
+        {/* =================================
+            MORE DROPDOWN
+        ================================= */}
+
         <div
           className="events-dropdown"
-          onMouseEnter={() => setEventOpen(true)}
-          onMouseLeave={() => setEventOpen(false)}
+          onMouseEnter={() =>
+            setEventOpen(true)
+          }
+          onMouseLeave={() =>
+            setEventOpen(false)
+          }
         >
 
           <button
             className="events-button"
-            onClick={() => setEventOpen(!eventOpen)}
+            onClick={() =>
+              setEventOpen(!eventOpen)
+            }
           >
+
             More
 
             <span
               className={`dropdown-arrow ${
-                eventOpen ? "arrow-up" : ""
+                eventOpen
+                  ? "arrow-up"
+                  : ""
               }`}
             >
               ▾
             </span>
+
           </button>
 
 
@@ -138,6 +233,7 @@ const Navbar = () => {
               >
                 Contacts
               </Link>
+
               <Link
                 to="/gallery"
                 className="dropdown-item"
@@ -152,15 +248,15 @@ const Navbar = () => {
                 My Bookings
               </Link>
 
-              
-
             </div>
           )}
 
         </div>
 
 
-        {/* SIGN OUT */}
+        {/* =================================
+            SIGN OUT
+        ================================= */}
 
         <button
           className="signout-button"
