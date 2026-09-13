@@ -252,10 +252,12 @@ const Booking = () => {
 
     console.log("BOOKING DATA:", bookingData);
 
-    await axios.post(
+  const response = await axios.post(
   "https://user-api-iota-six.vercel.app/booking/create",
   bookingData
 );
+
+console.log("BOOKING RESPONSE:", response.data);
 
     console.log("BOOKING RESPONSE:", response.data);
 
