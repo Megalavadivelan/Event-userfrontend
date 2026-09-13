@@ -15,75 +15,48 @@ const MyBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      setLoading(true);
-
       const storedUser = localStorage.getItem("user");
 
       if (!storedUser) {
-        setBookings([]);
+        setLoading(false);
         return;
       }
 
       const user = JSON.parse(storedUser);
 
-      const userId =
-        user?._id ||
-        user?.id ||
-        user?.userId;
+      console.log("MY BOOKINGS USER:", user);
+
+      const userId = user._id || user.id || user.userId;
 
       if (!userId) {
         console.error("User ID not found");
-        setBookings([]);
+        setLoading(false);
         return;
       }
-
-      console.log("MY BOOKINGS USER:", user);
 
       const response = await axios.get(
         `${API_URL}/booking/user/${userId}`
       );
 
-      console.log("MY BOOKINGS RESPONSE:", response.data);
+      console.log("BOOKINGS RESPONSE:", response.data);
 
-      if (
-        response.data?.success &&
-        Array.isArray(response.data.bookings)
-      ) {
-        setBookings(response.data.bookings);
+      if (response.data?.success) {
+        setBookings(response.data.bookings || []);
       } else {
         setBookings([]);
       }
     } catch (error) {
       console.error("Failed to fetch bookings:", error);
-      console.error(
-        "BOOKING ERROR RESPONSE:",
-        error.response?.data
-      );
-
       setBookings([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const openBooking = (booking) => {
-    setSelectedBooking(booking);
-  };
-
-  const closeBooking = () => {
-    setSelectedBooking(null);
-  };
-
   const formatDate = (date) => {
     if (!date) return "N/A";
 
-    const parsedDate = new Date(date);
-
-    if (isNaN(parsedDate.getTime())) {
-      return "N/A";
-    }
-
-    return parsedDate.toLocaleDateString("en-IN", {
+    return new Date(date).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -93,55 +66,61 @@ const MyBookings = () => {
   const formatTime = (date) => {
     if (!date) return "N/A";
 
-    const parsedDate = new Date(date);
-
-    if (isNaN(parsedDate.getTime())) {
-      return "N/A";
-    }
-
-    return parsedDate.toLocaleTimeString("en-IN", {
+    return new Date(date).toLocaleTimeString("en-IN", {
       hour: "2-digit",
       minute: "2-digit",
     });
   };
 
-  const formatCurrency = (amount) => {
-    const value = Number(amount);
-
-    if (isNaN(value)) {
-      return "₹0";
-    }
-
-    return `₹${value.toLocaleString("en-IN")}`;
+  const closePopup = () => {
+    setSelectedBooking(null);
   };
+
+  if (loading) {
+    return (
+      <div className="my-bookings-page">
+        <div className="bookings-loading">
+          <div className="loading-spinner"></div>
+          <p>Loading your bookings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="my-bookings-page">
 
-      {/* ================= HEADER ================= */}
+      {/* BACKGROUND GLOW */}
+      <div className="booking-glow glow-one"></div>
+      <div className="booking-glow glow-two"></div>
 
-      <div className="my-bookings-header">
-        <h1>My Bookings</h1>
+      <div className="my-bookings-container">
 
-        <p>
-          View and manage all your event bookings
-        </p>
-      </div>
+        {/* HEADER */}
+        <div className="my-bookings-header">
+          <span className="header-line"></span>
 
-      {/* ================= CONTENT ================= */}
+          <div>
+            <p className="booking-small-title">
+              EVENTORA
+            </p>
 
-      <div className="bookings-container">
+            <h1>My Bookings</h1>
 
-        {loading ? (
-          <div className="bookings-message">
-            <div className="loading-spinner"></div>
-            <p>Loading your bookings...</p>
+            <p className="booking-subtitle">
+              Your event tickets, all in one place
+            </p>
           </div>
-        ) : bookings.length === 0 ? (
-          <div className="bookings-message empty-bookings">
-            <div className="empty-icon">📅</div>
 
-            <h2>No Bookings Found</h2>
+          <span className="header-line"></span>
+        </div>
+
+        {/* EMPTY STATE */}
+        {bookings.length === 0 ? (
+          <div className="empty-bookings">
+            <div className="empty-icon">🎟️</div>
+
+            <h2>No Bookings Yet</h2>
 
             <p>
               You haven't booked any events yet.
@@ -150,272 +129,335 @@ const MyBookings = () => {
         ) : (
           <div className="booking-list">
 
-            {bookings.map((booking) => (
+            {bookings.map((booking, index) => (
               <div
-                className="booking-row"
-                key={booking._id}
+                className="booking-row-card"
+                key={booking._id || index}
+                style={{
+                  animationDelay: `${index * 0.08}s`,
+                }}
               >
 
                 {/* EVENT NAME */}
+                <div className="booking-event-section">
+                  <span className="booking-icon">🎫</span>
 
-                <div className="booking-event-name">
-                  <span className="booking-label">
-                    Event
-                  </span>
+                  <div>
+                    <span className="booking-label">
+                      EVENT
+                    </span>
 
-                  <h3>
-                    {booking.eventName || "Event"}
-                  </h3>
+                    <h3>
+                      {booking.eventName || "Event"}
+                    </h3>
+                  </div>
                 </div>
 
-                {/* EVENT DATE */}
-
-                <div className="booking-column">
+                {/* DATE */}
+                <div className="booking-info">
                   <span className="booking-label">
-                    Date
+                    DATE
                   </span>
 
-                  <span className="booking-value">
+                  <strong>
                     {formatDate(booking.eventDate)}
-                  </span>
+                  </strong>
                 </div>
 
-                {/* EVENT TIME */}
-
-                <div className="booking-column">
+                {/* TIME */}
+                <div className="booking-info">
                   <span className="booking-label">
-                    Time
+                    TIME
                   </span>
 
-                  <span className="booking-value">
-                    {booking.eventTime || "N/A"}
+                  <strong>
+                    {booking.eventTime ||
+                      (booking.eventDate
+                        ? formatTime(booking.eventDate)
+                        : "N/A")}
+                  </strong>
+                </div>
+
+                {/* TICKETS */}
+                <div className="booking-info tickets-info">
+                  <span className="booking-label">
+                    TICKETS
                   </span>
+
+                  <strong>
+                    {booking.numberOfTickets || 0}
+                  </strong>
                 </div>
 
                 {/* VIEW BUTTON */}
-
-                <div className="booking-action">
-                  <button
-                    className="view-booking-btn"
-                    onClick={() =>
-                      openBooking(booking)
-                    }
-                  >
-                    View
-                  </button>
-                </div>
+                <button
+                  className="view-booking-btn"
+                  onClick={() =>
+                    setSelectedBooking(booking)
+                  }
+                >
+                  <span>View</span>
+                  <span className="arrow">→</span>
+                </button>
 
               </div>
             ))}
-
           </div>
         )}
-
       </div>
 
-      {/* ================================================= */}
-      {/* BOOKING DETAILS MODAL */}
-      {/* ================================================= */}
+      {/* ================= POPUP ================= */}
 
       {selectedBooking && (
         <div
           className="booking-modal-overlay"
-          onClick={closeBooking}
+          onClick={closePopup}
         >
 
           <div
             className="booking-modal"
-            onClick={(e) =>
-              e.stopPropagation()
-            }
+            onClick={(e) => e.stopPropagation()}
           >
 
-            {/* MODAL HEADER */}
+            {/* TOP GLOW */}
+            <div className="modal-top-glow"></div>
 
+            {/* CLOSE */}
+            <button
+              className="modal-close-btn"
+              onClick={closePopup}
+            >
+              ×
+            </button>
+
+            {/* MODAL HEADER */}
             <div className="modal-header">
 
+              <div className="modal-ticket-icon">
+                🎟️
+              </div>
+
               <div>
-                <span className="modal-small-title">
-                  BOOKING DETAILS
-                </span>
+                <span>BOOKING DETAILS</span>
 
                 <h2>
                   {selectedBooking.eventName ||
-                    "Event Booking"}
+                    "Event"}
                 </h2>
               </div>
 
-              <button
-                className="modal-close-btn"
-                onClick={closeBooking}
-                aria-label="Close"
-              >
-                ×
-              </button>
-
             </div>
 
-            {/* ================= DETAILS ================= */}
+            {/* EVENT DETAILS */}
+            <div className="details-section">
 
-            <div className="details-box">
+              <h3 className="section-title">
+                Event Information
+              </h3>
 
-              <div className="detail-item">
-                <span>Event Name</span>
+              <div className="details-grid">
 
-                <strong>
-                  {selectedBooking.eventName ||
-                    "N/A"}
-                </strong>
+                <div className="detail-box">
+                  <span>📅 Event Date</span>
+
+                  <strong>
+                    {formatDate(
+                      selectedBooking.eventDate
+                    )}
+                  </strong>
+                </div>
+
+                <div className="detail-box">
+                  <span>🕐 Event Time</span>
+
+                  <strong>
+                    {selectedBooking.eventTime ||
+                      (selectedBooking.eventDate
+                        ? formatTime(
+                            selectedBooking.eventDate
+                          )
+                        : "N/A")}
+                  </strong>
+                </div>
+
+                <div className="detail-box">
+                  <span>🎟️ Tickets</span>
+
+                  <strong>
+                    {selectedBooking.numberOfTickets ||
+                      0}
+                  </strong>
+                </div>
+
+                <div className="detail-box">
+                  <span>💰 Ticket Price</span>
+
+                  <strong>
+                    ₹
+                    {selectedBooking.ticketPrice ||
+                      0}
+                  </strong>
+                </div>
+
+                <div className="detail-box total-box">
+                  <span>💵 Total Amount</span>
+
+                  <strong>
+                    ₹
+                    {selectedBooking.totalAmount ||
+                      0}
+                  </strong>
+                </div>
+
               </div>
-
-              <div className="detail-item">
-                <span>Event Date</span>
-
-                <strong>
-                  {formatDate(
-                    selectedBooking.eventDate
-                  )}
-                </strong>
-              </div>
-
-              <div className="detail-item">
-                <span>Event Time</span>
-
-                <strong>
-                  {selectedBooking.eventTime ||
-                    "N/A"}
-                </strong>
-              </div>
-
-              <div className="detail-item">
-                <span>Ticket Price</span>
-
-                <strong>
-                  {formatCurrency(
-                    selectedBooking.ticketPrice
-                  )}
-                </strong>
-              </div>
-
-              <div className="detail-item">
-                <span>Number of Tickets</span>
-
-                <strong>
-                  {selectedBooking.numberOfTickets ||
-                    0}
-                </strong>
-              </div>
-
-              <div className="detail-item total-row">
-                <span>Total Amount</span>
-
-                <strong>
-                  {formatCurrency(
-                    selectedBooking.totalAmount
-                  )}
-                </strong>
-              </div>
-
             </div>
 
-            {/* ================= USER DETAILS ================= */}
+            {/* USER DETAILS */}
+            <div className="details-section">
 
-            <div className="section-title">
-              Attendee Details
+              <h3 className="section-title">
+                Booking User
+              </h3>
+
+              <div className="user-detail-box">
+
+                <div>
+                  <span>Name</span>
+                  <strong>
+                    {selectedBooking.userName ||
+                      "N/A"}
+                  </strong>
+                </div>
+
+                <div>
+                  <span>Email</span>
+                  <strong>
+                    {selectedBooking.userEmail ||
+                      "N/A"}
+                  </strong>
+                </div>
+
+              </div>
             </div>
 
-            <div className="attendees-box">
+            {/* ATTENDEES */}
+            <div className="details-section">
 
-              {Array.isArray(
-                selectedBooking.attendees
-              ) &&
-              selectedBooking.attendees.length > 0 ? (
-                selectedBooking.attendees.map(
-                  (attendee, index) => (
-                    <div
-                      className="attendee-card"
-                      key={index}
-                    >
+              <h3 className="section-title">
+                Attendee Details
+              </h3>
 
-                      <div className="attendee-number">
-                        {index + 1}
+              <div className="attendees-list">
+
+                {selectedBooking.attendees?.length >
+                0 ? (
+                  selectedBooking.attendees.map(
+                    (attendee, index) => (
+                      <div
+                        className="attendee-card"
+                        key={index}
+                        style={{
+                          animationDelay: `${
+                            index * 0.08
+                          }s`,
+                        }}
+                      >
+
+                        <div className="attendee-number">
+                          {index + 1}
+                        </div>
+
+                        <div className="attendee-info">
+
+                          <strong>
+                            {attendee.name}
+                          </strong>
+
+                          <span>
+                            {attendee.email}
+                          </span>
+
+                          <span>
+                            📞 {attendee.phone}
+                          </span>
+
+                        </div>
+
                       </div>
-
-                      <div className="attendee-info">
-
-                        <h4>
-                          {attendee.name ||
-                            "N/A"}
-                        </h4>
-
-                        <p>
-                          <span>Email:</span>{" "}
-                          {attendee.email ||
-                            "N/A"}
-                        </p>
-
-                        <p>
-                          <span>Phone:</span>{" "}
-                          {attendee.phone ||
-                            "N/A"}
-                        </p>
-
-                      </div>
-
-                    </div>
+                    )
                   )
-                )
-              ) : (
-                <p className="no-attendees">
-                  No attendee details available.
-                </p>
-              )}
+                ) : (
+                  <p className="no-attendees">
+                    No attendee details available
+                  </p>
+                )}
 
-            </div>
-
-            {/* ================= BOOKED DATE/TIME ================= */}
-
-            <div className="section-title">
-              Booking Information
-            </div>
-
-            <div className="booking-time-box">
-
-              <div className="booking-time-item">
-                <span>Booked Date</span>
-
-                <strong>
-                  {formatDate(
-                    selectedBooking.createdAt
-                  )}
-                </strong>
               </div>
-
-              <div className="booking-time-item">
-                <span>Booked Time</span>
-
-                <strong>
-                  {formatTime(
-                    selectedBooking.createdAt
-                  )}
-                </strong>
-              </div>
-
             </div>
 
-            {/* ================= CLOSE ================= */}
+            {/* BOOKED DATE + TIME */}
+            <div className="details-section">
 
-            <button
-              className="modal-bottom-close"
-              onClick={closeBooking}
-            >
-              Close
-            </button>
+              <h3 className="section-title">
+                Booking Information
+              </h3>
+
+              <div className="booking-created">
+
+                <div className="created-item">
+
+                  <div className="created-icon">
+                    📆
+                  </div>
+
+                  <div>
+                    <span>Booked Date</span>
+
+                    <strong>
+                      {formatDate(
+                        selectedBooking.createdAt
+                      )}
+                    </strong>
+                  </div>
+
+                </div>
+
+                <div className="created-item">
+
+                  <div className="created-icon">
+                    🕐
+                  </div>
+
+                  <div>
+                    <span>Booked Time</span>
+
+                    <strong>
+                      {formatTime(
+                        selectedBooking.createdAt
+                      )}
+                    </strong>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="modal-footer">
+              <span>Eventora</span>
+
+              <span>
+                Booking ID:{" "}
+                {selectedBooking._id
+                  ? selectedBooking._id.slice(-8)
+                  : "N/A"}
+              </span>
+            </div>
 
           </div>
         </div>
       )}
-
     </div>
   );
 };
