@@ -7,7 +7,7 @@ const Booking = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // EventDetails page-la irundhu event object pass pannuvom
+  // EventDetails page-la irundhu event object
   const event = location.state?.event;
 
   const [ticketCount, setTicketCount] = useState(1);
@@ -20,7 +20,10 @@ const Booking = () => {
     },
   ]);
 
-  // Event data illana
+  // =========================================
+  // EVENT DATA NOT FOUND
+  // =========================================
+
   if (!event) {
     return (
       <div className="booking-error-page">
@@ -31,9 +34,7 @@ const Booking = () => {
             Please select an event and try booking again.
           </p>
 
-          <button
-            onClick={() => navigate("/events")}
-          >
+          <button onClick={() => navigate("/events")}>
             Back to Events
           </button>
         </div>
@@ -56,10 +57,12 @@ const Booking = () => {
       return null;
     }
 
+    // Base64 image
     if (image.startsWith("data:image")) {
       return image;
     }
 
+    // Complete URL
     if (
       image.startsWith("http://") ||
       image.startsWith("https://")
@@ -67,6 +70,7 @@ const Booking = () => {
       return image;
     }
 
+    // Relative image path
     return `https://api-admin-rouge.vercel.app/${image.replace(
       /^\/+/,
       ""
@@ -102,14 +106,18 @@ const Booking = () => {
       return "Date unavailable";
     }
 
-    return new Date(date).toLocaleDateString(
-      "en-IN",
-      {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }
-    );
+    try {
+      return new Date(date).toLocaleDateString(
+        "en-IN",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        }
+      );
+    } catch {
+      return date;
+    }
   };
 
   // =========================================
@@ -181,7 +189,7 @@ const Booking = () => {
         return false;
       }
 
-      // Simple email validation
+      // Email validation
       const emailPattern =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -217,74 +225,145 @@ const Booking = () => {
   // =========================================
 
   const handleConfirmBooking = async () => {
-  if (!validateBooking()) {
-    return;
-  }
-
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-
-    console.log("LOGGED IN USER:", user);
-
-    if (!user) {
-      alert("Please login before booking a ticket.");
-      navigate("/");
+    // Validate attendees
+    if (!validateBooking()) {
       return;
     }
 
-    const bookingData = {
-  userId: user.id || user._id,
-  userName: user.name,
-  userEmail: user.email,
+    try {
+      // Get logged-in user
+      const user = JSON.parse(
+        localStorage.getItem("user")
+      );
 
-  eventId: event._id || event.id,
-  eventName: eventName,
-  eventDate: event.date,
+      console.log("LOGGED IN USER:", user);
 
-  ticketPrice: Number(ticketPrice) || 0,
-  numberOfTickets: ticketCount,
-  attendees: attendees,
+      // User not logged in
+      if (!user) {
+        alert(
+          "Please login before booking a ticket."
+        );
 
-  totalAmount:
-    (Number(ticketPrice) || 0) * ticketCount,
-};
-    
+        navigate("/");
+        return;
+      }
 
-    console.log("BOOKING DATA:", bookingData);
+      // Check user ID
+      const userId =
+        user.id ||
+        user._id ||
+        user.userId;
 
-  const response = await axios.post(
-  "https://user-api-iota-six.vercel.app/booking/create",
-  bookingData
-);
+      // Check user email
+      const userEmail =
+        user.email ||
+        user.userEmail;
 
-console.log("BOOKING RESPONSE:", response.data);
+      if (!userId || !userEmail) {
+        alert(
+          "User information is missing. Please login again."
+        );
 
-    console.log("BOOKING RESPONSE:", response.data);
+        navigate("/");
+        return;
+      }
 
-    if (response.data.success) {
-      alert("Ticket booked successfully!");
+      // Check event ID
+      const eventId =
+        event._id ||
+        event.id;
 
-      navigate("/mybookings");
-    } else {
+      if (!eventId) {
+        alert(
+          "Event ID is missing. Please select the event again."
+        );
+
+        navigate("/events");
+        return;
+      }
+
+      // =========================================
+      // BOOKING DATA
+      // =========================================
+
+      const bookingData = {
+        userId: userId,
+
+        userEmail: userEmail,
+
+        eventId: eventId,
+
+        eventName: eventName,
+
+        eventDate: event.date,
+
+        ticketPrice:
+          Number(ticketPrice) || 0,
+
+        numberOfTickets: ticketCount,
+
+        attendees: attendees,
+
+        totalAmount:
+          (Number(ticketPrice) || 0) *
+          ticketCount,
+      };
+
+      console.log(
+        "BOOKING DATA:",
+        bookingData
+      );
+
+      // =========================================
+      // BACKEND API
+      // =========================================
+
+      const response = await axios.post(
+        "https://user-api-iota-six.vercel.app/booking/create",
+        bookingData
+      );
+
+      console.log(
+        "BOOKING RESPONSE:",
+        response.data
+      );
+
+      // =========================================
+      // SUCCESS
+      // =========================================
+
+      if (response.data.success) {
+        alert(
+          "Ticket booked successfully! 🎟️"
+        );
+
+        // IMPORTANT:
+        // Booking successful -> Events page
+        navigate("/events");
+      } else {
+        alert(
+          response.data.message ||
+            "Booking failed."
+        );
+      }
+    } catch (error) {
+      console.error(
+        "BOOKING ERROR:",
+        error.response?.data || error
+      );
+
       alert(
-        response.data.message ||
-          "Booking failed."
+        error.response?.data?.message ||
+          "Unable to book ticket. Please try again."
       );
     }
+  };
 
-  } catch (error) {
-    console.error(
-      "BOOKING ERROR:",
-      error.response?.data || error
-    );
-
-    alert(
-      error.response?.data?.message ||
-        "Unable to book ticket. Please try again."
-    );
-  }
-};
   const imageUrl = getImageUrl();
+
+  // =========================================
+  // PAGE
+  // =========================================
 
   return (
     <section className="booking-page">
@@ -396,7 +475,9 @@ console.log("BOOKING RESPONSE:", response.data);
 
             <div className="booking-price">
 
-              <span>Ticket Price</span>
+              <span>
+                Ticket Price
+              </span>
 
               <strong>
                 {Number(ticketPrice) > 0
@@ -419,11 +500,13 @@ console.log("BOOKING RESPONSE:", response.data);
           <div className="booking-section-title">
 
             <div>
+
               <span className="step-number">
                 01
               </span>
 
               <div>
+
                 <h2>
                   Number of Tickets
                 </h2>
@@ -431,7 +514,9 @@ console.log("BOOKING RESPONSE:", response.data);
                 <p>
                   You can book maximum 4 tickets.
                 </p>
+
               </div>
+
             </div>
 
           </div>
@@ -450,6 +535,7 @@ console.log("BOOKING RESPONSE:", response.data);
             </button>
 
             <div className="ticket-count">
+
               <strong>
                 {ticketCount}
               </strong>
@@ -459,6 +545,7 @@ console.log("BOOKING RESPONSE:", response.data);
                   ? "Ticket"
                   : "Tickets"}
               </span>
+
             </div>
 
             <button
@@ -489,11 +576,13 @@ console.log("BOOKING RESPONSE:", response.data);
           <div className="booking-section-title">
 
             <div>
+
               <span className="step-number">
                 02
               </span>
 
               <div>
+
                 <h2>
                   Attendee Details
                 </h2>
@@ -502,14 +591,19 @@ console.log("BOOKING RESPONSE:", response.data);
                   Enter details for each ticket
                   holder.
                 </p>
+
               </div>
+
             </div>
 
             <span className="attendee-count">
+
               {ticketCount}{" "}
+
               {ticketCount === 1
                 ? "Attendee"
                 : "Attendees"}
+
             </span>
 
           </div>
@@ -518,6 +612,7 @@ console.log("BOOKING RESPONSE:", response.data);
 
             {attendees.map(
               (attendee, index) => (
+
                 <div
                   className="attendee-card"
                   key={index}
@@ -530,6 +625,7 @@ console.log("BOOKING RESPONSE:", response.data);
                     </div>
 
                     <div>
+
                       <h3>
                         Attendee{" "}
                         {index + 1}
@@ -539,6 +635,7 @@ console.log("BOOKING RESPONSE:", response.data);
                         Ticket{" "}
                         {index + 1}
                       </span>
+
                     </div>
 
                   </div>
@@ -627,6 +724,7 @@ console.log("BOOKING RESPONSE:", response.data);
                   </div>
 
                 </div>
+
               )
             )}
 
@@ -659,12 +757,14 @@ console.log("BOOKING RESPONSE:", response.data);
             </span>
 
             <strong>
+
               {Number(ticketPrice) > 0
                 ? `₹${
                     Number(ticketPrice) *
                     ticketCount
                   }`
                 : "Free"}
+
             </strong>
 
           </div>
