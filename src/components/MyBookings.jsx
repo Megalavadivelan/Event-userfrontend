@@ -1,34 +1,52 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  useNavigate,
-} from "react-router-dom";
-
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 import "../styles/MyBookings.css";
-
-// =====================================================
-// CORRECT API
-// =====================================================
 
 const BOOKINGS_API =
   "https://user-api-iota-six.vercel.app/booking/user";
 
+const EVENTS_API =
+  "https://api-admin-rouge.vercel.app/events/getevents";
+
 const MyBookings = () => {
   const navigate = useNavigate();
 
-  const [bookings, setBookings] =
-    useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [events, setEvents] = useState([]);
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const [error, setError] =
-    useState("");
+  // =====================================================
+  // GET EVENT ID
+  // =====================================================
+
+  const getEventId = (booking) => {
+    return (
+      booking.eventId ||
+      booking.eventID ||
+      booking.event?._id ||
+      booking.event?.id
+    );
+  };
+
+  // =====================================================
+  // GET EVENT FROM EVENTS LIST
+  // =====================================================
+
+  const getEventDetails = (booking) => {
+    const eventId = getEventId(booking);
+
+    if (!eventId) {
+      return null;
+    }
+
+    return events.find(
+      (event) =>
+        String(event._id || event.id) === String(eventId)
+    );
+  };
 
   // =====================================================
   // FETCH MY BOOKINGS
@@ -39,33 +57,17 @@ const MyBookings = () => {
       setLoading(true);
       setError("");
 
-      const storedUser =
-        localStorage.getItem("user");
-
-      // =================================================
-      // USER NOT LOGGED IN
-      // =================================================
+      const storedUser = localStorage.getItem("user");
 
       if (!storedUser) {
-        setError(
-          "Please login to view your bookings."
-        );
-
+        setError("Please login to view your bookings.");
         setLoading(false);
         return;
       }
 
-      const user =
-        JSON.parse(storedUser);
+      const user = JSON.parse(storedUser);
 
-      console.log(
-        "MY BOOKINGS USER:",
-        user
-      );
-
-      // =================================================
-      // USER ID
-      // =================================================
+      console.log("MY BOOKINGS USER:", user);
 
       const userId =
         user.id ||
@@ -94,63 +96,112 @@ const MyBookings = () => {
 
       if (token) {
         config.headers = {
-          Authorization:
-            `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         };
       }
 
       // =================================================
-      // GET USER BOOKINGS
+      // FETCH BOOKINGS + EVENTS
       // =================================================
 
-      const response =
-        await axios.get(
-          `${BOOKINGS_API}/${userId}`,
-          config
-        );
+      const [bookingResponse, eventResponse] =
+        await Promise.all([
+          axios.get(
+            `${BOOKINGS_API}/${userId}`,
+            config
+          ),
+
+          axios.get(EVENTS_API),
+        ]);
 
       console.log(
         "MY BOOKINGS RESPONSE:",
-        response.data
+        bookingResponse.data
+      );
+
+      console.log(
+        "EVENTS RESPONSE:",
+        eventResponse.data
       );
 
       // =================================================
-      // RESPONSE DATA
+      // BOOKING RESPONSE DATA
       // =================================================
 
       let bookingData = [];
 
       if (
         Array.isArray(
-          response.data
+          bookingResponse.data
         )
       ) {
         bookingData =
-          response.data;
+          bookingResponse.data;
       } else if (
         Array.isArray(
-          response.data?.bookings
+          bookingResponse.data?.bookings
         )
       ) {
         bookingData =
-          response.data.bookings;
+          bookingResponse.data.bookings;
       } else if (
         Array.isArray(
-          response.data?.data
+          bookingResponse.data?.data
         )
       ) {
         bookingData =
-          response.data.data;
+          bookingResponse.data.data;
       } else if (
         Array.isArray(
-          response.data?.results
+          bookingResponse.data?.results
         )
       ) {
         bookingData =
-          response.data.results;
+          bookingResponse.data.results;
       }
 
+      // =================================================
+      // EVENTS RESPONSE DATA
+      // =================================================
+
+      let eventData = [];
+
+      if (
+        Array.isArray(
+          eventResponse.data
+        )
+      ) {
+        eventData =
+          eventResponse.data;
+      } else if (
+        Array.isArray(
+          eventResponse.data?.events
+        )
+      ) {
+        eventData =
+          eventResponse.data.events;
+      } else if (
+        Array.isArray(
+          eventResponse.data?.data
+        )
+      ) {
+        eventData =
+          eventResponse.data.data;
+      }
+
+      console.log(
+        "BOOKINGS:",
+        bookingData
+      );
+
+      console.log(
+        "EVENTS:",
+        eventData
+      );
+
       setBookings(bookingData);
+      setEvents(eventData);
+
     } catch (err) {
       console.error(
         "Failed to fetch bookings:",
@@ -189,9 +240,7 @@ const MyBookings = () => {
     }
 
     try {
-      return new Date(
-        date
-      ).toLocaleDateString(
+      return new Date(date).toLocaleDateString(
         "en-IN",
         {
           weekday: "short",
@@ -206,27 +255,52 @@ const MyBookings = () => {
   };
 
   // =====================================================
-  // GET EVENT ID
+  // IMAGE URL
   // =====================================================
 
-  const getEventId = (booking) => {
-    return (
-      booking.eventId ||
-      booking.eventID ||
-      booking.event?._id ||
-      booking.event?.id
-    );
+  const getImageUrl = (event) => {
+    if (!event) {
+      return null;
+    }
+
+    const image =
+      event.image ||
+      event.poster ||
+      event.imageUrl ||
+      event.eventImage;
+
+    if (!image) {
+      return null;
+    }
+
+    // Base64 image
+    if (
+      image.startsWith("data:image")
+    ) {
+      return image;
+    }
+
+    // Complete URL
+    if (
+      image.startsWith("http://") ||
+      image.startsWith("https://")
+    ) {
+      return image;
+    }
+
+    // Relative image path
+    return `https://api-admin-rouge.vercel.app/${image.replace(
+      /^\/+/,
+      ""
+    )}`;
   };
 
   // =====================================================
   // VIEW EVENT
   // =====================================================
 
-  const handleViewEvent = (
-    booking
-  ) => {
-    const eventId =
-      getEventId(booking);
+  const handleViewEvent = (booking) => {
+    const eventId = getEventId(booking);
 
     if (!eventId) {
       console.error(
@@ -435,52 +509,119 @@ const MyBookings = () => {
             <div className="bookings-list">
 
               {bookings.map(
-                (
-                  booking,
-                  index
-                ) => {
+                (booking, index) => {
+
+                  // =================================================
+                  // FIND ORIGINAL EVENT
+                  // =================================================
+
+                  const event =
+                    getEventDetails(
+                      booking
+                    );
+
+                  // =================================================
+                  // EVENT NAME
+                  // =================================================
 
                   const eventName =
+                    event?.name ||
+                    event?.eventName ||
+                    event?.title ||
                     booking.eventName ||
                     "Untitled Event";
+
+                  // =================================================
+                  // EVENT ID
+                  // =================================================
 
                   const eventId =
                     getEventId(
                       booking
                     );
 
+                  // =================================================
+                  // EVENT DATE
+                  // =================================================
+
                   const date =
+                    event?.date ||
                     booking.eventDate ||
                     booking.date ||
                     booking.bookingDate;
 
+                  // =================================================
+                  // EVENT TIME
+                  // =================================================
+
                   const time =
+                    event?.time ||
                     booking.eventTime ||
                     booking.time ||
                     "Time not available";
 
+                  // =================================================
+                  // EVENT LOCATION
+                  // =================================================
+
                   const location =
+                    event?.location ||
+                    event?.venue ||
                     booking.location ||
                     booking.venue ||
                     "Location not available";
+
+                  // =================================================
+                  // EVENT IMAGE
+                  // =================================================
+
+                  const imageUrl =
+                    getImageUrl(event);
+
+                  // =================================================
+                  // CATEGORY
+                  // =================================================
+
+                  const category =
+                    event?.category ||
+                    event?.eventCategory ||
+                    booking.category ||
+                    "EVENT";
+
+                  // =================================================
+                  // TICKETS
+                  // =================================================
 
                   const tickets =
                     booking.numberOfTickets ||
                     1;
 
+                  // =================================================
+                  // TOTAL
+                  // =================================================
+
                   const totalAmount =
                     booking.totalAmount ??
                     0;
 
+                  // =================================================
+                  // TICKET PRICE
+                  // =================================================
+
                   const ticketPrice =
                     booking.ticketPrice ??
                     0;
+
+                  // =================================================
+                  // STATUS
+                  // =================================================
 
                   const status =
                     booking.status ||
                     "Confirmed";
 
                   return (
+
                     <div
                       className="booking-card"
                       key={
@@ -492,35 +633,58 @@ const MyBookings = () => {
 
                       <div className="booking-content">
 
-                        {/* EVENT HEADING */}
+                        {/* EVENT IMAGE + DETAILS */}
 
-                        <div className="booking-event-heading">
+                        <div className="booking-event-top">
 
-                          <div>
+                          <div className="booking-event-image">
 
-                            <span className="booking-label">
-                              EVENT
-                            </span>
-
-                            <h2>
-                              {eventName}
-                            </h2>
+                            {imageUrl ? (
+                              <img
+                                src={imageUrl}
+                                alt={eventName}
+                              />
+                            ) : (
+                              <div className="booking-image-placeholder">
+                                🎟️
+                              </div>
+                            )}
 
                           </div>
 
-                          <div className="booking-ticket-icon">
-                            🎟️
+                          <div className="booking-event-main">
+
+                            <div className="booking-event-heading">
+
+                              <div>
+
+                                <span className="booking-label">
+                                  {category}
+                                </span>
+
+                                <h2>
+                                  {eventName}
+                                </h2>
+
+                              </div>
+
+                              <div className="booking-ticket-icon">
+                                🎟️
+                              </div>
+
+                            </div>
+
+                            {/* STATUS */}
+
+                            <div className="booking-status">
+
+                              <span className="status-dot"></span>
+
+                              {status}
+
+                            </div>
+
                           </div>
-
-                        </div>
-
-                        {/* STATUS */}
-
-                        <div className="booking-status">
-
-                          <span className="status-dot"></span>
-
-                          {status}
 
                         </div>
 
@@ -687,10 +851,12 @@ const MyBookings = () => {
                                     </div>
 
                                   </div>
+
                                 )
                               )}
 
                             </div>
+
                           )}
 
                         {/* BOTTOM */}
@@ -754,11 +920,14 @@ const MyBookings = () => {
                       </div>
 
                     </div>
+
                   );
+
                 }
               )}
 
             </div>
+
           )}
 
       </div>
