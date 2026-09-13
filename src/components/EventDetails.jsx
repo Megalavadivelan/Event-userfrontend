@@ -507,18 +507,17 @@ const EventDetails = () => {
               </div>
 
               <button
-                className="book-ticket-button"
-                onClick={() => {
-                  alert(
-                    "Booking feature will be available soon!"
-                  );
-                }}
-              >
-                Book Tickets
-                <span>
-                  →
-                </span>
-              </button>
+  className="book-ticket-btn"
+  onClick={() =>
+    navigate("/booktickets", {
+      state: {
+        event: event,
+      },
+    })
+  }
+>
+  Book Ticket →
+</button>
 
             </div>
 

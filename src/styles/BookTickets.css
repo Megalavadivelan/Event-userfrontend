@@ -1,0 +1,542 @@
+.booking-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(100, 50, 180, 0.15),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(150, 70, 220, 0.1),
+      transparent 30%
+    ),
+    #050505;
+
+  color: #ffffff;
+  padding: 52px 6% 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* =========================================
+   SPARKLES
+========================================= */
+
+.booking-sparkle {
+  position: absolute;
+  color: #ffffff;
+  opacity: 0.35;
+  animation: bookingSparkle 3s ease-in-out infinite;
+}
+
+.booking-sparkle-1 {
+  top: 140px;
+  left: 8%;
+  font-size: 14px;
+}
+
+.booking-sparkle-2 {
+  top: 400px;
+  right: 10%;
+  font-size: 18px;
+  animation-delay: 1s;
+}
+
+.booking-sparkle-3 {
+  bottom: 150px;
+  left: 15%;
+  font-size: 12px;
+  animation-delay: 2s;
+}
+
+@keyframes bookingSparkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.booking-header {
+  max-width: 1200px;
+  margin: 0 auto 45px;
+}
+
+.booking-back-btn {
+  background: transparent;
+  border: none;
+  color: #b8b8b8;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 25px;
+  transition: 0.3s;
+}
+
+.booking-back-btn:hover {
+  color: #ffffff;
+  transform: translateX(-4px);
+}
+
+.booking-small-title {
+  color: #b979ff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+}
+
+.booking-header h1 {
+  font-size: 48px;
+  margin: 10px 0;
+  line-height: 1.1;
+}
+
+.booking-header h1 span {
+  color: #a855f7;
+}
+
+.booking-header p {
+  color: #9c9c9c;
+  font-size: 16px;
+}
+
+/* =========================================
+   CONTAINER
+========================================= */
+
+.booking-container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* =========================================
+   EVENT CARD
+========================================= */
+
+.booking-event-card {
+  display: flex;
+  gap: 28px;
+  padding: 22px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 20px;
+  background: rgba(20, 20, 20, 0.85);
+  box-shadow:
+    0 0 35px rgba(120, 50, 200, 0.08);
+
+  margin-bottom: 30px;
+}
+
+.booking-event-image {
+  width: 220px;
+  height: 150px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.booking-event-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.booking-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #151515;
+  font-size: 35px;
+}
+
+.booking-event-info {
+  flex: 1;
+}
+
+.booking-event-category {
+  color: #b979ff;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.booking-event-info h2 {
+  font-size: 27px;
+  margin: 7px 0 15px;
+}
+
+.booking-event-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  color: #aaaaaa;
+  font-size: 14px;
+}
+
+.booking-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #292929;
+}
+
+.booking-price span {
+  color: #888888;
+}
+
+.booking-price strong {
+  color: #ffffff;
+  font-size: 21px;
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.booking-section {
+  background: rgba(15, 15, 15, 0.9);
+  border: 1px solid #242424;
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 25px;
+}
+
+.booking-section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.booking-section-title > div {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.step-number {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.12);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b979ff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.booking-section-title h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.booking-section-title p {
+  margin: 5px 0 0;
+  color: #858585;
+  font-size: 14px;
+}
+
+.attendee-count {
+  color: #b979ff;
+  font-size: 14px;
+}
+
+/* =========================================
+   TICKET COUNTER
+========================================= */
+
+.ticket-counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+
+.ticket-counter > button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: #111111;
+  color: #ffffff;
+  font-size: 25px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ticket-counter > button:hover:not(:disabled) {
+  background: rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 18px rgba(168, 85, 247, 0.25);
+}
+
+.ticket-counter > button:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.ticket-count {
+  text-align: center;
+  min-width: 90px;
+}
+
+.ticket-count strong {
+  display: block;
+  font-size: 35px;
+  color: #ffffff;
+}
+
+.ticket-count span {
+  color: #8f8f8f;
+  font-size: 13px;
+}
+
+.ticket-limit {
+  text-align: center;
+  margin-top: 18px;
+  color: #666666;
+  font-size: 12px;
+}
+
+/* =========================================
+   ATTENDEE CARDS
+========================================= */
+
+.attendees-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.attendee-card {
+  border: 1px solid #292929;
+  background: #0b0b0b;
+  border-radius: 16px;
+  padding: 23px;
+}
+
+.attendee-header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 23px;
+}
+
+.attendee-number {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #a855f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.attendee-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.attendee-header span {
+  display: block;
+  color: #707070;
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.attendee-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 14px;
+  border-radius: 10px;
+  border: 1px solid #303030;
+  outline: none;
+  background: #111111;
+  color: #ffffff;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.form-group input::placeholder {
+  color: #555555;
+}
+
+.form-group input:focus {
+  border-color: #a855f7;
+  box-shadow:
+    0 0 0 2px rgba(168, 85, 247, 0.08);
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.booking-summary {
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  padding: 22px 25px;
+  border-radius: 18px;
+  background: #111111;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  position: sticky;
+  bottom: 15px;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.summary-left,
+.summary-middle {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.summary-left span,
+.summary-middle span {
+  color: #777777;
+  font-size: 12px;
+}
+
+.summary-left strong {
+  font-size: 20px;
+}
+
+.summary-middle strong {
+  font-size: 22px;
+  color: #b979ff;
+}
+
+.confirm-booking-btn {
+  margin-left: auto;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 23px;
+  background: #a855f7;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.confirm-booking-btn span {
+  margin-left: 10px;
+  font-size: 17px;
+}
+
+.confirm-booking-btn:hover {
+  background: #9333ea;
+  box-shadow:
+    0 0 25px rgba(168, 85, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   ERROR
+========================================= */
+
+.booking-error-page {
+  min-height: 100vh;
+  background: #050505;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.booking-error-card {
+  text-align: center;
+  padding: 40px;
+}
+
+.booking-error-card h2 {
+  font-size: 28px;
+}
+
+.booking-error-card p {
+  color: #888888;
+}
+
+.booking-error-card button {
+  margin-top: 15px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #a855f7;
+  color: white;
+  cursor: pointer;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 800px) {
+  .booking-page {
+    padding: 100px 20px 40px;
+  }
+
+  .booking-header h1 {
+    font-size: 35px;
+  }
+
+  .booking-event-card {
+    flex-direction: column;
+  }
+
+  .booking-event-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .attendee-form {
+    grid-template-columns: 1fr;
+  }
+
+  .booking-section {
+    padding: 20px;
+  }
+
+  .booking-summary {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .confirm-booking-btn {
+    width: 100%;
+    margin-left: 0;
+  }
+}
