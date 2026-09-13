@@ -224,6 +224,8 @@ const Booking = () => {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
+    console.log("LOGGED IN USER:", user);
+
     if (!user) {
       alert("Please login before booking a ticket.");
       navigate("/");
@@ -231,27 +233,30 @@ const Booking = () => {
     }
 
     const bookingData = {
-      userId: user.id || user._id,
-      userEmail: user.email,
+  userId: user.id || user._id,
+  userName: user.name,
+  userEmail: user.email,
 
-      eventId: event._id || event.id,
-      eventName: eventName,
+  eventId: event._id || event.id,
+  eventName: eventName,
+  eventDate: event.date,
 
-      ticketPrice: Number(ticketPrice) || 0,
-      numberOfTickets: ticketCount,
+  ticketPrice: Number(ticketPrice) || 0,
+  numberOfTickets: ticketCount,
 
-      attendees: attendees,
+  attendees: attendees,
 
-      totalAmount:
-        (Number(ticketPrice) || 0) * ticketCount,
-    };
+  totalAmount:
+    (Number(ticketPrice) || 0) * ticketCount,
+};
+    
 
     console.log("BOOKING DATA:", bookingData);
 
-    const response = await axios.post(
-      "http://localhost:2005/booking/create",
-      bookingData
-    );
+    await axios.post(
+  "https://user-api-iota-six.vercel.app/booking/create",
+  bookingData
+);
 
     console.log("BOOKING RESPONSE:", response.data);
 
