@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/BookTickets.css";
@@ -215,39 +216,68 @@ const Booking = () => {
   // CONFIRM BOOKING
   // =========================================
 
-  const handleConfirmBooking = () => {
-    if (!validateBooking()) {
+  const handleConfirmBooking = async () => {
+  if (!validateBooking()) {
+    return;
+  }
+
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      alert("Please login before booking a ticket.");
+      navigate("/");
       return;
     }
 
     const bookingData = {
-      eventId: event._id || event.id,
+      userId: user.id || user._id,
+      userEmail: user.email,
 
+      eventId: event._id || event.id,
       eventName: eventName,
 
-      ticketCount: ticketCount,
+      ticketPrice: Number(ticketPrice) || 0,
+      numberOfTickets: ticketCount,
 
       attendees: attendees,
 
       totalAmount:
-        Number(ticketPrice) * ticketCount,
+        (Number(ticketPrice) || 0) * ticketCount,
     };
 
-    console.log(
-      "BOOKING DATA:",
+    console.log("BOOKING DATA:", bookingData);
+
+    const response = await axios.post(
+      "http://localhost:2005/booking/create",
       bookingData
     );
 
-    /*
-      Backend connect pannumbodhu
-      inga axios POST request add pannuvom.
-    */
+    console.log("BOOKING RESPONSE:", response.data);
+
+    if (response.data.success) {
+      alert("Ticket booked successfully!");
+
+      navigate("/mybookings");
+    } else {
+      alert(
+        response.data.message ||
+          "Booking failed."
+      );
+    }
+
+  } catch (error) {
+    console.error(
+      "BOOKING ERROR:",
+      error.response?.data || error
+    );
 
     alert(
-      "Booking details are ready!"
+      error.response?.data?.message ||
+        "Unable to book ticket. Please try again."
     );
-  };
-
+  }
+};
   const imageUrl = getImageUrl();
 
   return (
