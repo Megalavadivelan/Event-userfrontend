@@ -1,229 +1,155 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+} from "react-router-dom";
+
 import axios from "axios";
+
 import "../styles/MyBookings.css";
 
 const BOOKINGS_API =
   "https://user-api-iota-six.vercel.app/booking/user";
 
-const EVENTS_API =
-  "https://api-admin-rouge.vercel.app/events/getevents";
-
 const MyBookings = () => {
-  const navigate = useNavigate();
+  const navigate =
+    useNavigate();
 
-  const [bookings, setBookings] = useState([]);
-  const [events, setEvents] = useState([]);
+  const [bookings, setBookings] =
+    useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [loading, setLoading] =
+    useState(true);
 
-  // =====================================================
-  // GET EVENT ID
-  // =====================================================
-
-  const getEventId = (booking) => {
-    return (
-      booking.eventId ||
-      booking.eventID ||
-      booking.event?._id ||
-      booking.event?.id
-    );
-  };
+  const [error, setError] =
+    useState("");
 
   // =====================================================
-  // GET EVENT FROM EVENTS LIST
+  // GET USER ID
   // =====================================================
 
-  const getEventDetails = (booking) => {
-    const eventId = getEventId(booking);
+  const getLoggedInUser = () => {
+    const storedUser =
+      localStorage.getItem(
+        "user"
+      );
 
-    if (!eventId) {
+    if (!storedUser) {
       return null;
     }
 
-    return events.find(
-      (event) =>
-        String(event._id || event.id) === String(eventId)
-    );
-  };
-
-  // =====================================================
-  // FETCH MY BOOKINGS
-  // =====================================================
-
-  const fetchBookings = async () => {
     try {
-      setLoading(true);
-      setError("");
-
-      const storedUser = localStorage.getItem("user");
-
-      if (!storedUser) {
-        setError("Please login to view your bookings.");
-        setLoading(false);
-        return;
-      }
-
-      const user = JSON.parse(storedUser);
-
-      console.log("MY BOOKINGS USER:", user);
-
-      const userId =
-        user.id ||
-        user._id ||
-        user.userId;
-
-      if (!userId) {
-        setError(
-          "User ID not found. Please login again."
-        );
-
-        setLoading(false);
-        return;
-      }
-
-      // =================================================
-      // TOKEN
-      // =================================================
-
-      const token =
-        localStorage.getItem("token") ||
-        localStorage.getItem("authToken") ||
-        user.token;
-
-      const config = {};
-
-      if (token) {
-        config.headers = {
-          Authorization: `Bearer ${token}`,
-        };
-      }
-
-      // =================================================
-      // FETCH BOOKINGS + EVENTS
-      // =================================================
-
-      const [bookingResponse, eventResponse] =
-        await Promise.all([
-          axios.get(
-            `${BOOKINGS_API}/${userId}`,
-            config
-          ),
-
-          axios.get(EVENTS_API),
-        ]);
-
-      console.log(
-        "MY BOOKINGS RESPONSE:",
-        bookingResponse.data
+      return JSON.parse(
+        storedUser
       );
-
-      console.log(
-        "EVENTS RESPONSE:",
-        eventResponse.data
-      );
-
-      // =================================================
-      // BOOKING RESPONSE DATA
-      // =================================================
-
-      let bookingData = [];
-
-      if (
-        Array.isArray(
-          bookingResponse.data
-        )
-      ) {
-        bookingData =
-          bookingResponse.data;
-      } else if (
-        Array.isArray(
-          bookingResponse.data?.bookings
-        )
-      ) {
-        bookingData =
-          bookingResponse.data.bookings;
-      } else if (
-        Array.isArray(
-          bookingResponse.data?.data
-        )
-      ) {
-        bookingData =
-          bookingResponse.data.data;
-      } else if (
-        Array.isArray(
-          bookingResponse.data?.results
-        )
-      ) {
-        bookingData =
-          bookingResponse.data.results;
-      }
-
-      // =================================================
-      // EVENTS RESPONSE DATA
-      // =================================================
-
-      let eventData = [];
-
-      if (
-        Array.isArray(
-          eventResponse.data
-        )
-      ) {
-        eventData =
-          eventResponse.data;
-      } else if (
-        Array.isArray(
-          eventResponse.data?.events
-        )
-      ) {
-        eventData =
-          eventResponse.data.events;
-      } else if (
-        Array.isArray(
-          eventResponse.data?.data
-        )
-      ) {
-        eventData =
-          eventResponse.data.data;
-      }
-
-      console.log(
-        "BOOKINGS:",
-        bookingData
-      );
-
-      console.log(
-        "EVENTS:",
-        eventData
-      );
-
-      setBookings(bookingData);
-      setEvents(eventData);
-
-    } catch (err) {
-      console.error(
-        "Failed to fetch bookings:",
-        err
-      );
-
-      console.error(
-        "BOOKING ERROR RESPONSE:",
-        err.response?.data
-      );
-
-      setError(
-        err.response?.data?.message ||
-          "Unable to load your bookings. Please try again."
-      );
-    } finally {
-      setLoading(false);
+    } catch {
+      return null;
     }
   };
 
   // =====================================================
-  // PAGE LOAD
+  // FETCH BOOKINGS
+  // =====================================================
+
+  const fetchBookings =
+    async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const user =
+          getLoggedInUser();
+
+        if (!user) {
+          setError(
+            "Please login to view your bookings."
+          );
+
+          return;
+        }
+
+        const userId =
+          user.id ||
+          user._id ||
+          user.userId;
+
+        if (!userId) {
+          setError(
+            "User ID not found. Please login again."
+          );
+
+          return;
+        }
+
+        console.log(
+          "MY BOOKINGS USER:",
+          user
+        );
+
+        const response =
+          await axios.get(
+            `${BOOKINGS_API}/${userId}`
+          );
+
+        console.log(
+          "MY BOOKINGS RESPONSE:",
+          response.data
+        );
+
+        let bookingData = [];
+
+        if (
+          Array.isArray(
+            response.data
+          )
+        ) {
+          bookingData =
+            response.data;
+        } else if (
+          Array.isArray(
+            response.data?.bookings
+          )
+        ) {
+          bookingData =
+            response.data.bookings;
+        } else if (
+          Array.isArray(
+            response.data?.data
+          )
+        ) {
+          bookingData =
+            response.data.data;
+        }
+
+        setBookings(
+          bookingData
+        );
+      } catch (error) {
+        console.error(
+          "FAILED TO FETCH BOOKINGS:",
+          error
+        );
+
+        console.error(
+          "BOOKING ERROR RESPONSE:",
+          error.response?.data
+        );
+
+        setError(
+          error.response?.data
+            ?.message ||
+            "Unable to load your bookings."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  // =====================================================
+  // LOAD
   // =====================================================
 
   useEffect(() => {
@@ -234,13 +160,17 @@ const MyBookings = () => {
   // FORMAT DATE
   // =====================================================
 
-  const formatDate = (date) => {
+  const formatDate = (
+    date
+  ) => {
     if (!date) {
-      return "Date not available";
+      return "Date unavailable";
     }
 
     try {
-      return new Date(date).toLocaleDateString(
+      return new Date(
+        date
+      ).toLocaleDateString(
         "en-IN",
         {
           weekday: "short",
@@ -250,75 +180,46 @@ const MyBookings = () => {
         }
       );
     } catch {
-      return "Date not available";
+      return "Date unavailable";
     }
   };
 
   // =====================================================
-  // IMAGE URL
+  // GET EVENT ID
   // =====================================================
 
-  const getImageUrl = (event) => {
-    if (!event) {
-      return null;
-    }
-
-    const image =
-      event.image ||
-      event.poster ||
-      event.imageUrl ||
-      event.eventImage;
-
-    if (!image) {
-      return null;
-    }
-
-    // Base64 image
-    if (
-      image.startsWith("data:image")
-    ) {
-      return image;
-    }
-
-    // Complete URL
-    if (
-      image.startsWith("http://") ||
-      image.startsWith("https://")
-    ) {
-      return image;
-    }
-
-    // Relative image path
-    return `https://api-admin-rouge.vercel.app/${image.replace(
-      /^\/+/,
-      ""
-    )}`;
+  const getEventId = (
+    booking
+  ) => {
+    return (
+      booking.eventId ||
+      booking.eventID ||
+      booking.event?._id ||
+      booking.event?.id
+    );
   };
 
   // =====================================================
   // VIEW EVENT
   // =====================================================
 
-  const handleViewEvent = (booking) => {
-    const eventId = getEventId(booking);
+  const handleViewEvent =
+    (booking) => {
+      const eventId =
+        getEventId(booking);
 
-    if (!eventId) {
-      console.error(
-        "Event ID not found:",
-        booking
+      if (!eventId) {
+        alert(
+          "Event details are not available."
+        );
+
+        return;
+      }
+
+      navigate(
+        `/eventdetails/${eventId}`
       );
-
-      alert(
-        "Event details are not available."
-      );
-
-      return;
-    }
-
-    navigate(
-      `/eventdetails/${eventId}`
-    );
-  };
+    };
 
   // =====================================================
   // LOADING
@@ -327,22 +228,6 @@ const MyBookings = () => {
   if (loading) {
     return (
       <div className="my-bookings-page">
-
-        <div className="booking-sparkle sparkle-one">
-          ✦
-        </div>
-
-        <div className="booking-sparkle sparkle-two">
-          ✦
-        </div>
-
-        <div className="booking-sparkle sparkle-three">
-          ✦
-        </div>
-
-        <div className="booking-sparkle sparkle-four">
-          ✦
-        </div>
 
         <div className="bookings-loading">
 
@@ -364,8 +249,6 @@ const MyBookings = () => {
 
   return (
     <div className="my-bookings-page">
-
-      {/* BACKGROUND SPARKLES */}
 
       <div className="booking-sparkle sparkle-one">
         ✦
@@ -404,8 +287,8 @@ const MyBookings = () => {
             </h1>
 
             <p className="bookings-subtitle">
-              Keep track of all your registered
-              events in one place.
+              Keep track of all the
+              events you have booked.
             </p>
 
           </div>
@@ -450,7 +333,7 @@ const MyBookings = () => {
           </div>
         )}
 
-        {/* BOOKING COUNT */}
+        {/* COUNT */}
 
         {!error &&
           bookings.length > 0 && (
@@ -468,7 +351,7 @@ const MyBookings = () => {
             </div>
           )}
 
-        {/* EMPTY STATE */}
+        {/* EMPTY */}
 
         {!error &&
           bookings.length === 0 && (
@@ -483,15 +366,19 @@ const MyBookings = () => {
               </h2>
 
               <p>
-                You haven't booked any events yet.
-                Explore our events and find something
+                You haven't booked
+                any events yet.
+                Explore our events
+                and find something
                 exciting to attend.
               </p>
 
               <button
                 className="empty-explore-btn"
                 onClick={() =>
-                  navigate("/events")
+                  navigate(
+                    "/events"
+                  )
                 }
               >
                 Explore Events
@@ -501,7 +388,7 @@ const MyBookings = () => {
             </div>
           )}
 
-        {/* BOOKINGS LIST */}
+        {/* BOOKINGS */}
 
         {!error &&
           bookings.length > 0 && (
@@ -509,119 +396,56 @@ const MyBookings = () => {
             <div className="bookings-list">
 
               {bookings.map(
-                (booking, index) => {
-
-                  // =================================================
-                  // FIND ORIGINAL EVENT
-                  // =================================================
-
-                  const event =
-                    getEventDetails(
-                      booking
-                    );
-
-                  // =================================================
-                  // EVENT NAME
-                  // =================================================
-
-                  const eventName =
-                    event?.name ||
-                    event?.eventName ||
-                    event?.title ||
-                    booking.eventName ||
-                    "Untitled Event";
-
-                  // =================================================
-                  // EVENT ID
-                  // =================================================
+                (
+                  booking,
+                  index
+                ) => {
 
                   const eventId =
                     getEventId(
                       booking
                     );
 
-                  // =================================================
-                  // EVENT DATE
-                  // =================================================
+                  const eventName =
+                    booking.eventName ||
+                    "Untitled Event";
 
                   const date =
-                    event?.date ||
-                    booking.eventDate ||
-                    booking.date ||
-                    booking.bookingDate;
-
-                  // =================================================
-                  // EVENT TIME
-                  // =================================================
+                    booking.eventDate;
 
                   const time =
-                    event?.time ||
                     booking.eventTime ||
-                    booking.time ||
-                    "Time not available";
+                    "Time unavailable";
 
-                  // =================================================
-                  // EVENT LOCATION
-                  // =================================================
-
-                  const location =
-                    event?.location ||
-                    event?.venue ||
-                    booking.location ||
-                    booking.venue ||
-                    "Location not available";
-
-                  // =================================================
-                  // EVENT IMAGE
-                  // =================================================
-
-                  const imageUrl =
-                    getImageUrl(event);
-
-                  // =================================================
-                  // CATEGORY
-                  // =================================================
+                  const eventLocation =
+                    booking.eventLocation ||
+                    "Location unavailable";
 
                   const category =
-                    event?.category ||
-                    event?.eventCategory ||
-                    booking.category ||
-                    "EVENT";
-
-                  // =================================================
-                  // TICKETS
-                  // =================================================
+                    booking.eventCategory ||
+                    "Event";
 
                   const tickets =
                     booking.numberOfTickets ||
                     1;
 
-                  // =================================================
-                  // TOTAL
-                  // =================================================
+                  const ticketPrice =
+                    Number(
+                      booking.ticketPrice ||
+                        0
+                    );
 
                   const totalAmount =
-                    booking.totalAmount ??
-                    0;
-
-                  // =================================================
-                  // TICKET PRICE
-                  // =================================================
-
-                  const ticketPrice =
-                    booking.ticketPrice ??
-                    0;
-
-                  // =================================================
-                  // STATUS
-                  // =================================================
+                    Number(
+                      booking.totalAmount ||
+                        0
+                    );
 
                   const status =
                     booking.status ||
                     "Confirmed";
 
                   return (
-
                     <div
                       className="booking-card"
                       key={
@@ -631,172 +455,131 @@ const MyBookings = () => {
                       }
                     >
 
-                      <div className="booking-content">
+                      <div className="booking-card-top">
 
-                        {/* EVENT IMAGE + DETAILS */}
+                        <div>
 
-                        <div className="booking-event-top">
+                          <span className="booking-label">
+                            {category}
+                          </span>
 
-                          <div className="booking-event-image">
+                          <h2>
+                            {eventName}
+                          </h2>
 
-                            {imageUrl ? (
-                              <img
-                                src={imageUrl}
-                                alt={eventName}
-                              />
-                            ) : (
-                              <div className="booking-image-placeholder">
-                                🎟️
-                              </div>
-                            )}
+                        </div>
 
-                          </div>
+                        <div
+                          className={`booking-status ${
+                            status ===
+                            "Cancelled"
+                              ? "cancelled"
+                              : "confirmed"
+                          }`}
+                        >
+                          <span className="status-dot"></span>
 
-                          <div className="booking-event-main">
+                          {status}
+                        </div>
 
-                            <div className="booking-event-heading">
+                      </div>
 
-                              <div>
+                      {/* EVENT DETAILS */}
 
-                                <span className="booking-label">
-                                  {category}
-                                </span>
+                      <div className="booking-info-grid">
 
-                                <h2>
-                                  {eventName}
-                                </h2>
+                        <div className="booking-info-item">
 
-                              </div>
+                          <span className="info-icon">
+                            📅
+                          </span>
 
-                              <div className="booking-ticket-icon">
-                                🎟️
-                              </div>
+                          <div>
+                            <small>
+                              Event Date
+                            </small>
 
-                            </div>
-
-                            {/* STATUS */}
-
-                            <div className="booking-status">
-
-                              <span className="status-dot"></span>
-
-                              {status}
-
-                            </div>
-
+                            <strong>
+                              {formatDate(
+                                date
+                              )}
+                            </strong>
                           </div>
 
                         </div>
 
-                        {/* BOOKING INFO */}
+                        <div className="booking-info-item">
 
-                        <div className="booking-info-grid">
+                          <span className="info-icon">
+                            ⏰
+                          </span>
 
-                          {/* DATE */}
+                          <div>
+                            <small>
+                              Time
+                            </small>
 
-                          <div className="booking-info-item">
-
-                            <span className="info-icon">
-                              📅
-                            </span>
-
-                            <div>
-
-                              <small>
-                                Date
-                              </small>
-
-                              <strong>
-                                {formatDate(
-                                  date
-                                )}
-                              </strong>
-
-                            </div>
-
-                          </div>
-
-                          {/* TIME */}
-
-                          <div className="booking-info-item">
-
-                            <span className="info-icon">
-                              ⏰
-                            </span>
-
-                            <div>
-
-                              <small>
-                                Time
-                              </small>
-
-                              <strong>
-                                {time}
-                              </strong>
-
-                            </div>
-
-                          </div>
-
-                          {/* LOCATION */}
-
-                          <div className="booking-info-item">
-
-                            <span className="info-icon">
-                              📍
-                            </span>
-
-                            <div>
-
-                              <small>
-                                Location
-                              </small>
-
-                              <strong>
-                                {location}
-                              </strong>
-
-                            </div>
-
-                          </div>
-
-                          {/* TICKETS */}
-
-                          <div className="booking-info-item">
-
-                            <span className="info-icon">
-                              🎫
-                            </span>
-
-                            <div>
-
-                              <small>
-                                Tickets
-                              </small>
-
-                              <strong>
-                                {tickets}
-                              </strong>
-
-                            </div>
-
+                            <strong>
+                              {time}
+                            </strong>
                           </div>
 
                         </div>
 
-                        {/* ATTENDEES */}
+                        <div className="booking-info-item">
 
-                        {Array.isArray(
-                          booking.attendees
-                        ) &&
-                          booking.attendees.length >
-                            0 && (
+                          <span className="info-icon">
+                            📍
+                          </span>
 
-                            <div className="booking-attendees">
+                          <div>
+                            <small>
+                              Location
+                            </small>
 
-                              <h3>
-                                Attendee Details
-                              </h3>
+                            <strong>
+                              {eventLocation}
+                            </strong>
+                          </div>
+
+                        </div>
+
+                        <div className="booking-info-item">
+
+                          <span className="info-icon">
+                            🎫
+                          </span>
+
+                          <div>
+                            <small>
+                              Tickets
+                            </small>
+
+                            <strong>
+                              {tickets}
+                            </strong>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      {/* ATTENDEES */}
+
+                      {Array.isArray(
+                        booking.attendees
+                      ) &&
+                        booking.attendees
+                          .length >
+                          0 && (
+
+                          <div className="booking-attendees">
+
+                            <h3>
+                              Attendee Details
+                            </h3>
+
+                            <div className="attendees-grid">
 
                               {booking.attendees.map(
                                 (
@@ -813,7 +596,6 @@ const MyBookings = () => {
                                   >
 
                                     <div>
-
                                       <small>
                                         Attendee{" "}
                                         {attendeeIndex +
@@ -821,33 +603,34 @@ const MyBookings = () => {
                                       </small>
 
                                       <strong>
-                                        {attendee.name}
+                                        {
+                                          attendee.name
+                                        }
                                       </strong>
-
                                     </div>
 
                                     <div>
-
                                       <small>
                                         Email
                                       </small>
 
                                       <strong>
-                                        {attendee.email}
+                                        {
+                                          attendee.email
+                                        }
                                       </strong>
-
                                     </div>
 
                                     <div>
-
                                       <small>
                                         Phone
                                       </small>
 
                                       <strong>
-                                        {attendee.phone}
+                                        {
+                                          attendee.phone
+                                        }
                                       </strong>
-
                                     </div>
 
                                   </div>
@@ -857,77 +640,68 @@ const MyBookings = () => {
 
                             </div>
 
-                          )}
-
-                        {/* BOTTOM */}
-
-                        <div className="booking-bottom">
-
-                          <div className="booking-total">
-
-                            <span>
-                              Ticket Price
-                            </span>
-
-                            <strong>
-                              {Number(
-                                ticketPrice
-                              ) > 0
-                                ? `₹${ticketPrice}`
-                                : "Free"}
-                            </strong>
-
                           </div>
+                        )}
 
-                          <div className="booking-total">
+                      {/* BOTTOM */}
 
-                            <span>
-                              Total Amount
-                            </span>
+                      <div className="booking-bottom">
 
-                            <strong>
-                              {Number(
-                                totalAmount
-                              ) > 0
-                                ? `₹${totalAmount}`
-                                : "Free"}
-                            </strong>
+                        <div className="booking-total">
 
-                          </div>
+                          <span>
+                            Ticket Price
+                          </span>
 
-                          <button
-                            className="booking-view-btn"
-                            onClick={() => {
-
-                              if (
-                                eventId
-                              ) {
-                                handleViewEvent(
-                                  booking
-                                );
-                              }
-
-                            }}
-                          >
-                            View Event
-                            <span>
-                              →
-                            </span>
-                          </button>
+                          <strong>
+                            {ticketPrice >
+                            0
+                              ? `₹${ticketPrice}`
+                              : "Free"}
+                          </strong>
 
                         </div>
+
+                        <div className="booking-total">
+
+                          <span>
+                            Total Amount
+                          </span>
+
+                          <strong>
+                            {totalAmount >
+                            0
+                              ? `₹${totalAmount}`
+                              : "Free"}
+                          </strong>
+
+                        </div>
+
+                        <button
+                          className="booking-view-btn"
+                          onClick={() =>
+                            handleViewEvent(
+                              booking
+                            )
+                          }
+                          disabled={
+                            !eventId
+                          }
+                        >
+                          View Event
+                          <span>
+                            →
+                          </span>
+                        </button>
 
                       </div>
 
                     </div>
-
                   );
-
                 }
               )}
 
             </div>
-
           )}
 
       </div>

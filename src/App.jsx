@@ -13,14 +13,14 @@ import SignOut from "./components/SignOut.jsx";
 
 import OrganizeEvent from "./components/OrganizeEvents.jsx";
 import Profile from "./components/Profile.jsx";
+
 import Events from "./components/Events.jsx";
-
-import BookTickets from "./components/BookTickets.jsx";
 import EventDetails from "./components/EventDetails.jsx";
-
-import Contact from "./components/Contact";
-import Gallery from "./components/Gallery.jsx";
+import BookTickets from "./components/BookTickets.jsx";
 import MyBookings from "./components/MyBookings.jsx";
+
+import Contact from "./components/Contact.jsx";
+import Gallery from "./components/Gallery.jsx";
 import About from "./components/About.jsx";
 
 function App() {
@@ -28,7 +28,7 @@ function App() {
     <Routes>
 
       {/* =========================================
-          PAGES WITHOUT NAVBAR
+          WITHOUT NAVBAR
       ========================================= */}
 
       <Route
@@ -51,98 +51,78 @@ function App() {
         element={<AdminLogin />}
       />
 
-
       {/* =========================================
-          PAGES WITH NAVBAR
+          WITH NAVBAR
       ========================================= */}
 
-      <Route element={<MainLayout />}>
+      <Route
+        element={<MainLayout />}
+      >
 
-        {/* HOME */}
         <Route
           path="/home"
           element={<Home />}
         />
 
-        {/* USER DASHBOARD */}
         <Route
           path="/user-dashboard"
           element={<UserDashboard />}
         />
 
-        {/* PROFILE */}
         <Route
           path="/profile"
           element={<Profile />}
         />
 
-        {/* ORGANIZE EVENT */}
         <Route
           path="/organizereq"
           element={<OrganizeEvent />}
         />
 
-        {/* EVENTS */}
         <Route
           path="/events"
           element={<Events />}
         />
 
-        {/* =========================================
-            SINGLE EVENT DETAILS
-        ========================================= */}
+        {/* EVENT DETAILS */}
 
         <Route
           path="/eventdetails/:id"
           element={<EventDetails />}
         />
 
-
-        {/* =========================================
-            BOOK TICKETS
-        ========================================= */}
+        {/* BOOK TICKETS */}
 
         <Route
           path="/booktickets"
           element={<BookTickets />}
         />
 
-
-        {/* =========================================
-            SIGN OUT
-        ========================================= */}
-
-        <Route
-          path="/signout"
-          element={<SignOut />}
-        />
-
-
-        {/* CONTACT */}
-        <Route
-          path="/contact"
-          element={<Contact />}
-        />
-
-
-        {/* GALLERY */}
-        <Route
-          path="/gallery"
-          element={<Gallery />}
-        />
-
-
         {/* MY BOOKINGS */}
+
         <Route
           path="/mybookings"
           element={<MyBookings />}
         />
 
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
 
-        {/* ABOUT */}
+        <Route
+          path="/gallery"
+          element={<Gallery />}
+        />
+
         <Route
           path="/about"
           element={<About />}
+        />
+
+        <Route
+          path="/signout"
+          element={<SignOut />}
         />
 
       </Route>

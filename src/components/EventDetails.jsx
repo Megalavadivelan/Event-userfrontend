@@ -1,6 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from "react";
+
+import {
+  useNavigate,
+  useParams,
+} from "react-router-dom";
+
 import axios from "axios";
+
 import "../styles/EventDetails.css";
 
 const EVENTS_API =
@@ -8,15 +17,21 @@ const EVENTS_API =
 
 const EventDetails = () => {
   const { id } = useParams();
+
   const navigate = useNavigate();
 
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [event, setEvent] =
+    useState(null);
 
-  // ===================================================
-  // FETCH SINGLE EVENT
-  // ===================================================
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
+
+  // =====================================================
+  // FETCH EVENT
+  // =====================================================
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -24,58 +39,55 @@ const EventDetails = () => {
         setLoading(true);
         setError("");
 
-        const response = await axios.get(EVENTS_API);
+        const response =
+          await axios.get(EVENTS_API);
 
-        console.log(
-          "EVENT DETAILS API RESPONSE:",
-          response.data
-        );
+        let events = [];
 
-        let eventData = [];
-
-        // API returns array
-        if (Array.isArray(response.data)) {
-          eventData = response.data;
+        if (
+          Array.isArray(response.data)
+        ) {
+          events = response.data;
+        } else if (
+          Array.isArray(
+            response.data?.data
+          )
+        ) {
+          events = response.data.data;
+        } else if (
+          Array.isArray(
+            response.data?.events
+          )
+        ) {
+          events =
+            response.data.events;
         }
 
-        // API returns { data: [] }
-        else if (Array.isArray(response.data?.data)) {
-          eventData = response.data.data;
-        }
-
-        // API returns { events: [] }
-        else if (Array.isArray(response.data?.events)) {
-          eventData = response.data.events;
-        }
-
-        console.log("ALL EVENTS:", eventData);
-
-        // Find selected event using URL ID
-        const selectedEvent = eventData.find(
-          (item) =>
-            String(item._id || item.id) === String(id)
-        );
-
-        console.log(
-          "SELECTED EVENT:",
-          selectedEvent
-        );
+        const selectedEvent =
+          events.find(
+            (item) =>
+              String(
+                item._id || item.id
+              ) === String(id)
+          );
 
         if (!selectedEvent) {
+          setError(
+            "Event not found."
+          );
           setEvent(null);
-          setError("Event not found.");
           return;
         }
 
         setEvent(selectedEvent);
-      } catch (err) {
+      } catch (error) {
         console.error(
           "Failed to fetch event:",
-          err
+          error
         );
 
         setError(
-          "Unable to load event details. Please try again."
+          "Unable to load event details."
         );
       } finally {
         setLoading(false);
@@ -85,9 +97,9 @@ const EventDetails = () => {
     fetchEvent();
   }, [id]);
 
-  // ===================================================
-  // FORMAT DATE
-  // ===================================================
+  // =====================================================
+  // DATE
+  // =====================================================
 
   const formatDate = (date) => {
     if (!date) {
@@ -95,7 +107,9 @@ const EventDetails = () => {
     }
 
     try {
-      return new Date(date).toLocaleDateString(
+      return new Date(
+        date
+      ).toLocaleDateString(
         "en-IN",
         {
           weekday: "long",
@@ -105,13 +119,13 @@ const EventDetails = () => {
         }
       );
     } catch {
-      return date;
+      return "Date not available";
     }
   };
 
-  // ===================================================
-  // IMAGE URL
-  // ===================================================
+  // =====================================================
+  // IMAGE
+  // =====================================================
 
   const getImageUrl = () => {
     if (!event) return null;
@@ -126,12 +140,12 @@ const EventDetails = () => {
       return null;
     }
 
-    // Base64 image
-    if (image.startsWith("data:image")) {
+    if (
+      image.startsWith("data:image")
+    ) {
       return image;
     }
 
-    // Complete URL
     if (
       image.startsWith("http://") ||
       image.startsWith("https://")
@@ -139,51 +153,38 @@ const EventDetails = () => {
       return image;
     }
 
-    // Relative image path
     return `https://api-admin-rouge.vercel.app/${image.replace(
       /^\/+/,
       ""
     )}`;
   };
 
-  // ===================================================
+  // =====================================================
   // LOADING
-  // ===================================================
+  // =====================================================
 
   if (loading) {
     return (
       <div className="event-details-page">
-
-        <div className="details-sparkle sparkle-one"></div>
-        <div className="details-sparkle sparkle-two"></div>
-        <div className="details-sparkle sparkle-three"></div>
-
         <div className="details-loading">
-
           <div className="details-spinner"></div>
 
           <p>
             Loading event details...
           </p>
-
         </div>
       </div>
     );
   }
 
-  // ===================================================
+  // =====================================================
   // ERROR
-  // ===================================================
+  // =====================================================
 
   if (error || !event) {
     return (
       <div className="event-details-page">
-
-        <div className="details-sparkle sparkle-one"></div>
-        <div className="details-sparkle sparkle-two"></div>
-
         <div className="details-error">
-
           <div className="error-icon">
             ✨
           </div>
@@ -194,7 +195,7 @@ const EventDetails = () => {
 
           <p>
             {error ||
-              "The event you are looking for does not exist."}
+              "The event does not exist."}
           </p>
 
           <button
@@ -205,17 +206,20 @@ const EventDetails = () => {
           >
             ← Back to Events
           </button>
-
         </div>
       </div>
     );
   }
 
-  // ===================================================
+  // =====================================================
   // EVENT DATA
-  // ===================================================
+  // =====================================================
 
-  const imageUrl = getImageUrl();
+  const eventId =
+    event._id || event.id;
+
+  const imageUrl =
+    getImageUrl();
 
   const eventName =
     event.name ||
@@ -243,9 +247,12 @@ const EventDetails = () => {
     "No description available.";
 
   const ticketPrice =
-    event.ticketPrice ??
-    event.price ??
-    event.amount;
+    Number(
+      event.ticketPrice ??
+        event.price ??
+        event.amount ??
+        0
+    );
 
   const tickets =
     event.tickets;
@@ -254,29 +261,30 @@ const EventDetails = () => {
     event.status ||
     "Upcoming";
 
-  // ===================================================
+  // =====================================================
   // PAGE
-  // ===================================================
+  // =====================================================
 
   return (
     <div className="event-details-page">
 
-      {/* =========================================
-          BACKGROUND SPARKLES
-      ========================================= */}
+      <div className="details-sparkle sparkle-one">
+        ✦
+      </div>
 
-      <div className="details-sparkle sparkle-one"></div>
-      <div className="details-sparkle sparkle-two"></div>
-      <div className="details-sparkle sparkle-three"></div>
-      <div className="details-sparkle sparkle-four"></div>
+      <div className="details-sparkle sparkle-two">
+        ✦
+      </div>
 
-      {/* =========================================
-          MAIN CONTAINER
-      ========================================= */}
+      <div className="details-sparkle sparkle-three">
+        ✦
+      </div>
+
+      <div className="details-sparkle sparkle-four">
+        ✦
+      </div>
 
       <div className="details-container">
-
-        {/* BACK BUTTON */}
 
         <button
           className="back-button"
@@ -287,15 +295,7 @@ const EventDetails = () => {
           ← Back to Events
         </button>
 
-        {/* =========================================
-            EVENT CARD
-        ========================================= */}
-
         <div className="event-details-card">
-
-          {/* =======================================
-              IMAGE
-          ======================================= */}
 
           <div className="event-details-image-section">
 
@@ -307,49 +307,36 @@ const EventDetails = () => {
               />
             ) : (
               <div className="event-details-image-placeholder">
-
-                <span>
-                  ✨
-                </span>
+                <span>✨</span>
 
                 <p>
                   No Image Available
                 </p>
-
               </div>
             )}
-
-            {/* CATEGORY */}
 
             <div className="details-category">
               {category}
             </div>
 
-            {/* STATUS */}
-
             <div
               className={`details-status ${status
                 .toLowerCase()
-                .replace(/\s+/g, "-")}`}
+                .replace(
+                  /\s+/g,
+                  "-"
+                )}`}
             >
               {status}
             </div>
 
           </div>
 
-          {/* =======================================
-              CONTENT
-          ======================================= */}
-
           <div className="event-details-content">
-
-            {/* EVENT TITLE */}
 
             <h1>
               {eventName}
             </h1>
-
-            {/* ORGANIZER */}
 
             <div className="organizer-section">
 
@@ -358,7 +345,6 @@ const EventDetails = () => {
               </div>
 
               <div>
-
                 <span>
                   Organized by
                 </span>
@@ -366,12 +352,9 @@ const EventDetails = () => {
                 <strong>
                   {organizer}
                 </strong>
-
               </div>
 
             </div>
-
-            {/* DESCRIPTION */}
 
             <div className="description-section">
 
@@ -385,44 +368,32 @@ const EventDetails = () => {
 
             </div>
 
-            {/* ===================================
-                EVENT INFORMATION
-            =================================== */}
-
             <div className="event-information">
 
-              {/* DATE */}
-
               <div className="information-box">
-
                 <div className="information-icon">
                   📅
                 </div>
 
                 <div>
-
                   <span>
                     Date
                   </span>
 
                   <strong>
-                    {formatDate(event.date)}
+                    {formatDate(
+                      event.date
+                    )}
                   </strong>
-
                 </div>
-
               </div>
 
-              {/* TIME */}
-
               <div className="information-box">
-
                 <div className="information-icon">
                   ⏰
                 </div>
 
                 <div>
-
                   <span>
                     Time
                   </span>
@@ -431,21 +402,15 @@ const EventDetails = () => {
                     {event.time ||
                       "Time not available"}
                   </strong>
-
                 </div>
-
               </div>
 
-              {/* LOCATION */}
-
               <div className="information-box">
-
                 <div className="information-icon">
                   📍
                 </div>
 
                 <div>
-
                   <span>
                     Location
                   </span>
@@ -453,80 +418,66 @@ const EventDetails = () => {
                   <strong>
                     {location}
                   </strong>
-
                 </div>
-
               </div>
 
-              {/* TICKETS */}
-
               <div className="information-box">
-
                 <div className="information-icon">
                   🎟️
                 </div>
 
                 <div>
-
                   <span>
                     Available Tickets
                   </span>
 
                   <strong>
-                    {tickets !== undefined &&
+                    {tickets !==
+                      undefined &&
                     tickets !== null
                       ? tickets
                       : "Available"}
                   </strong>
-
                 </div>
-
               </div>
 
             </div>
 
-            {/* ===================================
-                BOOKING SECTION
-            =================================== */}
-
             <div className="booking-section">
 
               <div className="price-section">
-
                 <span>
                   Ticket Price
                 </span>
 
                 <strong>
-                  {ticketPrice !== undefined &&
-                  ticketPrice !== null
+                  {ticketPrice > 0
                     ? `₹${ticketPrice}`
                     : "Free"}
                 </strong>
-
               </div>
 
               <button
-  className="book-ticket-btn"
-  onClick={() =>
-    navigate("/booktickets", {
-      state: {
-        event: event,
-      },
-    })
-  }
->
-  Book Ticket →
-</button>
+                className="book-ticket-btn"
+                onClick={() =>
+                  navigate(
+                    "/booktickets",
+                    {
+                      state: {
+                        event,
+                      },
+                    }
+                  )
+                }
+              >
+                Book Ticket →
+              </button>
 
             </div>
 
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 };

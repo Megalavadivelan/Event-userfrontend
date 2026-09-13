@@ -1,85 +1,81 @@
+import React, {
+  useState,
+} from "react";
+
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
 import axios from "axios";
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+
 import "../styles/BookTickets.css";
 
-const Booking = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+const BOOKING_API =
+  "https://user-api-iota-six.vercel.app/booking/create";
 
-  // EventDetails page-la irundhu event object
-  const event = location.state?.event;
+const BookTickets = () => {
+  const navigate =
+    useNavigate();
 
-  const [ticketCount, setTicketCount] = useState(1);
+  const location =
+    useLocation();
 
-  const [attendees, setAttendees] = useState([
-    {
-      name: "",
-      email: "",
-      phone: "",
-    },
-  ]);
+  const event =
+    location.state?.event;
 
-  // =========================================
-  // EVENT DATA NOT FOUND
-  // =========================================
+  const [ticketCount, setTicketCount] =
+    useState(1);
+
+  const [attendees, setAttendees] =
+    useState([
+      {
+        name: "",
+        email: "",
+        phone: "",
+      },
+    ]);
+
+  const [submitting, setSubmitting] =
+    useState(false);
+
+  // =====================================================
+  // EVENT NOT FOUND
+  // =====================================================
 
   if (!event) {
     return (
       <div className="booking-error-page">
         <div className="booking-error-card">
-          <h2>Event not found</h2>
+
+          <h2>
+            Event not found
+          </h2>
 
           <p>
-            Please select an event and try booking again.
+            Please select an event
+            before booking.
           </p>
 
-          <button onClick={() => navigate("/events")}>
+          <button
+            onClick={() =>
+              navigate("/events")
+            }
+          >
             Back to Events
           </button>
+
         </div>
       </div>
     );
   }
 
-  // =========================================
-  // IMAGE URL
-  // =========================================
+  // =====================================================
+  // EVENT DATA
+  // =====================================================
 
-  const getImageUrl = () => {
-    const image =
-      event.image ||
-      event.poster ||
-      event.imageUrl ||
-      event.eventImage;
-
-    if (!image) {
-      return null;
-    }
-
-    // Base64 image
-    if (image.startsWith("data:image")) {
-      return image;
-    }
-
-    // Complete URL
-    if (
-      image.startsWith("http://") ||
-      image.startsWith("https://")
-    ) {
-      return image;
-    }
-
-    // Relative image path
-    return `https://api-admin-rouge.vercel.app/${image.replace(
-      /^\/+/,
-      ""
-    )}`;
-  };
-
-  // =========================================
-  // EVENT NAME
-  // =========================================
+  const eventId =
+    event._id || event.id;
 
   const eventName =
     event.name ||
@@ -87,19 +83,17 @@ const Booking = () => {
     event.title ||
     "Untitled Event";
 
-  // =========================================
-  // PRICE
-  // =========================================
-
   const ticketPrice =
-    event.ticketPrice ??
-    event.price ??
-    event.amount ??
-    0;
+    Number(
+      event.ticketPrice ??
+        event.price ??
+        event.amount ??
+        0
+    );
 
-  // =========================================
+  // =====================================================
   // DATE
-  // =========================================
+  // =====================================================
 
   const formatDate = (date) => {
     if (!date) {
@@ -107,7 +101,9 @@ const Booking = () => {
     }
 
     try {
-      return new Date(date).toLocaleDateString(
+      return new Date(
+        date
+      ).toLocaleDateString(
         "en-IN",
         {
           day: "2-digit",
@@ -116,25 +112,34 @@ const Booking = () => {
         }
       );
     } catch {
-      return date;
+      return "Date unavailable";
     }
   };
 
-  // =========================================
+  // =====================================================
   // CHANGE TICKET COUNT
-  // =========================================
+  // =====================================================
 
-  const handleTicketChange = (count) => {
-    if (count < 1 || count > 4) {
+  const handleTicketChange = (
+    count
+  ) => {
+    if (
+      count < 1 ||
+      count > 4
+    ) {
       return;
     }
 
     setTicketCount(count);
 
     setAttendees((previous) => {
-      const updated = [...previous];
+      const updated = [
+        ...previous,
+      ];
 
-      while (updated.length < count) {
+      while (
+        updated.length < count
+      ) {
         updated.push({
           name: "",
           email: "",
@@ -142,38 +147,50 @@ const Booking = () => {
         });
       }
 
-      return updated.slice(0, count);
+      return updated.slice(
+        0,
+        count
+      );
     });
   };
 
-  // =========================================
-  // ATTENDEE INPUT CHANGE
-  // =========================================
+  // =====================================================
+  // ATTENDEE CHANGE
+  // =====================================================
 
   const handleAttendeeChange = (
     index,
     field,
     value
   ) => {
-    setAttendees((previous) => {
-      const updated = [...previous];
+    setAttendees(
+      (previous) => {
+        const updated = [
+          ...previous,
+        ];
 
-      updated[index] = {
-        ...updated[index],
-        [field]: value,
-      };
+        updated[index] = {
+          ...updated[index],
+          [field]: value,
+        };
 
-      return updated;
-    });
+        return updated;
+      }
+    );
   };
 
-  // =========================================
+  // =====================================================
   // VALIDATION
-  // =========================================
+  // =====================================================
 
   const validateBooking = () => {
-    for (let i = 0; i < attendees.length; i++) {
-      const attendee = attendees[i];
+    for (
+      let i = 0;
+      i < attendees.length;
+      i++
+    ) {
+      const attendee =
+        attendees[i];
 
       if (
         !attendee.name.trim() ||
@@ -183,34 +200,41 @@ const Booking = () => {
         alert(
           `Please fill all details for Attendee ${
             i + 1
-          }`
+          }.`
         );
 
         return false;
       }
 
-      // Email validation
       const emailPattern =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailPattern.test(attendee.email)) {
+      if (
+        !emailPattern.test(
+          attendee.email
+        )
+      ) {
         alert(
           `Please enter a valid email for Attendee ${
             i + 1
-          }`
+          }.`
         );
 
         return false;
       }
 
-      // Indian phone validation
-      const phonePattern = /^[6-9]\d{9}$/;
+      const phonePattern =
+        /^[6-9]\d{9}$/;
 
-      if (!phonePattern.test(attendee.phone)) {
+      if (
+        !phonePattern.test(
+          attendee.phone
+        )
+      ) {
         alert(
           `Please enter a valid 10-digit phone number for Attendee ${
             i + 1
-          }`
+          }.`
         );
 
         return false;
@@ -220,189 +244,217 @@ const Booking = () => {
     return true;
   };
 
-  // =========================================
+  // =====================================================
   // CONFIRM BOOKING
-  // =========================================
+  // =====================================================
 
-  const handleConfirmBooking = async () => {
-    if (!validateBooking()) {
-      return;
-    }
-
-    try {
-      // =========================================
-      // GET LOGGED-IN USER
-      // =========================================
-
-      const storedUser =
-        localStorage.getItem("user");
-
-      if (!storedUser) {
-        alert(
-          "Please login before booking a ticket."
-        );
-
-        navigate("/");
+  const handleConfirmBooking =
+    async () => {
+      if (
+        submitting
+      ) {
         return;
       }
 
-      const user = JSON.parse(storedUser);
+      if (
+        !validateBooking()
+      ) {
+        return;
+      }
 
-      console.log(
-        "LOGGED IN USER:",
-        user
-      );
+      try {
+        setSubmitting(true);
 
-      // =========================================
-      // USER DETAILS
-      // =========================================
+        // ===============================================
+        // GET LOGGED-IN USER
+        // ===============================================
 
-      const userId =
-        user.id ||
-        user._id ||
-        user.userId;
+        const storedUser =
+          localStorage.getItem(
+            "user"
+          );
 
-      const userName =
-        user.name ||
-        user.userName ||
-        "";
+        if (!storedUser) {
+          alert(
+            "Please login before booking a ticket."
+          );
 
-      const userEmail =
-        user.email ||
-        user.userEmail ||
-        "";
+          navigate("/");
+          return;
+        }
 
-      // =========================================
-      // CHECK USER DATA
-      // =========================================
+        const user =
+          JSON.parse(
+            storedUser
+          );
 
-      if (!userId || !userName || !userEmail) {
+        // ===============================================
+        // USER ID
+        // ===============================================
+
+        const userId =
+          user.id ||
+          user._id ||
+          user.userId;
+
+        const userName =
+          user.name ||
+          user.userName ||
+          "";
+
+        const userEmail =
+          user.email ||
+          user.userEmail ||
+          "";
+
+        if (
+          !userId ||
+          !userName ||
+          !userEmail
+        ) {
+          alert(
+            "User information is missing. Please login again."
+          );
+
+          localStorage.removeItem(
+            "user"
+          );
+
+          localStorage.removeItem(
+            "token"
+          );
+
+          localStorage.removeItem(
+            "authToken"
+          );
+
+          navigate("/");
+          return;
+        }
+
+        // ===============================================
+        // EVENT ID
+        // ===============================================
+
+        if (!eventId) {
+          alert(
+            "Event ID is missing."
+          );
+
+          navigate("/events");
+          return;
+        }
+
+        // ===============================================
+        // TOTAL
+        // ===============================================
+
+        const totalAmount =
+          ticketPrice *
+          ticketCount;
+
+        // ===============================================
+        // BOOKING DATA
+        // ===============================================
+
+        const bookingData = {
+          userId,
+
+          userName,
+
+          userEmail,
+
+          eventId,
+
+          eventName,
+
+          eventDate:
+            event.date || null,
+
+          eventTime:
+            event.time || "",
+
+          eventLocation:
+            event.location ||
+            event.venue ||
+            "",
+
+          eventCategory:
+            event.category ||
+            event.eventCategory ||
+            "Event",
+
+          ticketPrice,
+
+          numberOfTickets:
+            ticketCount,
+
+          attendees,
+
+          totalAmount,
+        };
+
+        console.log(
+          "SENDING BOOKING:",
+          bookingData
+        );
+
+        // ===============================================
+        // CREATE BOOKING
+        // ===============================================
+
+        const response =
+          await axios.post(
+            BOOKING_API,
+            bookingData
+          );
+
+        console.log(
+          "BOOKING RESPONSE:",
+          response.data
+        );
+
+        if (
+          response.data?.success
+        ) {
+          alert(
+            "Ticket booked successfully!"
+          );
+
+          // Go to My Bookings
+          navigate(
+            "/mybookings"
+          );
+        } else {
+          alert(
+            response.data
+              ?.message ||
+              "Booking failed."
+          );
+        }
+      } catch (error) {
         console.error(
-          "USER DATA MISSING:",
-          user
+          "BOOKING ERROR:",
+          error.response
+            ?.data || error
         );
 
         alert(
-          "User information is missing. Please login again."
+          error.response?.data
+            ?.message ||
+            "Unable to book ticket. Please try again."
         );
-
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-        localStorage.removeItem("authToken");
-
-        navigate("/");
-        return;
+      } finally {
+        setSubmitting(false);
       }
+    };
 
-      // =========================================
-      // EVENT ID
-      // =========================================
-
-      const eventId =
-        event._id ||
-        event.id;
-
-      if (!eventId) {
-        alert(
-          "Event ID is missing. Please select the event again."
-        );
-
-        navigate("/events");
-        return;
-      }
-
-      // =========================================
-      // BOOKING DATA
-      // =========================================
-
-      const price =
-        Number(ticketPrice) || 0;
-
-      const totalAmount =
-        price * ticketCount;
-
-      const bookingData = {
-        userId: userId,
-
-        // IMPORTANT
-        userName: userName,
-
-        userEmail: userEmail,
-
-        eventId: eventId,
-
-        eventName: eventName,
-
-        eventDate: event.date,
-
-        ticketPrice: price,
-
-        numberOfTickets: ticketCount,
-
-        attendees: attendees,
-
-        totalAmount: totalAmount,
-      };
-
-      console.log(
-        "BOOKING DATA:",
-        bookingData
-      );
-
-      // =========================================
-      // CREATE BOOKING
-      // =========================================
-
-      const response = await axios.post(
-        "https://user-api-iota-six.vercel.app/booking/create",
-        bookingData
-      );
-
-      console.log(
-        "BOOKING RESPONSE:",
-        response.data
-      );
-
-      // =========================================
-      // SUCCESS
-      // =========================================
-
-      if (response.data.success) {
-        alert(
-          "Ticket booked successfully!"
-        );
-
-        // Booking successful -> same Event Details page
-        navigate(`/eventdetails/${eventId}`);
-      } else {
-        alert(
-          response.data.message ||
-            "Booking failed."
-        );
-      }
-    } catch (error) {
-      console.error(
-        "BOOKING ERROR:",
-        error.response?.data || error
-      );
-
-      alert(
-        error.response?.data?.message ||
-          "Unable to book ticket. Please try again."
-      );
-    }
-  };
-
-  const imageUrl = getImageUrl();
-
-  // =========================================
+  // =====================================================
   // PAGE
-  // =========================================
+  // =====================================================
 
   return (
     <section className="booking-page">
-
-      {/* BACKGROUND */}
 
       <div className="booking-sparkle booking-sparkle-1">
         ✦
@@ -416,13 +468,13 @@ const Booking = () => {
         ✦
       </div>
 
-      {/* HEADER */}
-
       <div className="booking-header">
 
         <button
           className="booking-back-btn"
-          onClick={() => navigate(-1)}
+          onClick={() =>
+            navigate(-1)
+          }
         >
           ← Back
         </button>
@@ -433,39 +485,26 @@ const Booking = () => {
           </span>
 
           <h1>
-            Book Your <span>Tickets</span>
+            Book Your{" "}
+            <span>
+              Tickets
+            </span>
           </h1>
 
           <p>
-            Reserve your seats and share attendee
+            Reserve your seats
+            and share attendee
             details.
           </p>
         </div>
 
       </div>
 
-      {/* MAIN CONTAINER */}
-
       <div className="booking-container">
 
         {/* EVENT SUMMARY */}
 
         <div className="booking-event-card">
-
-          <div className="booking-event-image">
-
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt={eventName}
-              />
-            ) : (
-              <div className="booking-image-placeholder">
-                ✨
-              </div>
-            )}
-
-          </div>
 
           <div className="booking-event-info">
 
@@ -475,13 +514,17 @@ const Booking = () => {
                 "EVENT"}
             </span>
 
-            <h2>{eventName}</h2>
+            <h2>
+              {eventName}
+            </h2>
 
             <div className="booking-event-details">
 
               <span>
                 📅{" "}
-                {formatDate(event.date)}
+                {formatDate(
+                  event.date
+                )}
               </span>
 
               <span>
@@ -493,7 +536,8 @@ const Booking = () => {
 
               {event.time && (
                 <span>
-                  🕐 {event.time}
+                  🕐{" "}
+                  {event.time}
                 </span>
               )}
 
@@ -506,7 +550,7 @@ const Booking = () => {
               </span>
 
               <strong>
-                {Number(ticketPrice) > 0
+                {ticketPrice > 0
                   ? `₹${ticketPrice}`
                   : "Free"}
               </strong>
@@ -523,24 +567,19 @@ const Booking = () => {
 
           <div className="booking-section-title">
 
+            <span className="step-number">
+              01
+            </span>
+
             <div>
+              <h2>
+                Number of Tickets
+              </h2>
 
-              <span className="step-number">
-                01
-              </span>
-
-              <div>
-
-                <h2>
-                  Number of Tickets
-                </h2>
-
-                <p>
-                  You can book maximum 4 tickets.
-                </p>
-
-              </div>
-
+              <p>
+                You can book maximum
+                4 tickets.
+              </p>
             </div>
 
           </div>
@@ -553,7 +592,9 @@ const Booking = () => {
                   ticketCount - 1
                 )
               }
-              disabled={ticketCount === 1}
+              disabled={
+                ticketCount === 1
+              }
             >
               −
             </button>
@@ -578,7 +619,9 @@ const Booking = () => {
                   ticketCount + 1
                 )
               }
-              disabled={ticketCount === 4}
+              disabled={
+                ticketCount === 4
+              }
             >
               +
             </button>
@@ -586,7 +629,8 @@ const Booking = () => {
           </div>
 
           <div className="ticket-limit">
-            Maximum 4 tickets per booking
+            Maximum 4 tickets
+            per booking
           </div>
 
         </div>
@@ -597,35 +641,26 @@ const Booking = () => {
 
           <div className="booking-section-title">
 
+            <span className="step-number">
+              02
+            </span>
+
             <div>
+              <h2>
+                Attendee Details
+              </h2>
 
-              <span className="step-number">
-                02
-              </span>
-
-              <div>
-
-                <h2>
-                  Attendee Details
-                </h2>
-
-                <p>
-                  Enter details for each ticket
-                  holder.
-                </p>
-
-              </div>
-
+              <p>
+                Enter details for
+                each ticket holder.
+              </p>
             </div>
 
             <span className="attendee-count">
-
               {ticketCount}{" "}
-
               {ticketCount === 1
                 ? "Attendee"
                 : "Attendees"}
-
             </span>
 
           </div>
@@ -633,8 +668,10 @@ const Booking = () => {
           <div className="attendees-container">
 
             {attendees.map(
-              (attendee, index) => (
-
+              (
+                attendee,
+                index
+              ) => (
                 <div
                   className="attendee-card"
                   key={index}
@@ -647,7 +684,6 @@ const Booking = () => {
                     </div>
 
                     <div>
-
                       <h3>
                         Attendee{" "}
                         {index + 1}
@@ -657,14 +693,11 @@ const Booking = () => {
                         Ticket{" "}
                         {index + 1}
                       </span>
-
                     </div>
 
                   </div>
 
                   <div className="attendee-form">
-
-                    {/* NAME */}
 
                     <div className="form-group">
 
@@ -689,8 +722,6 @@ const Booking = () => {
 
                     </div>
 
-                    {/* EMAIL */}
-
                     <div className="form-group">
 
                       <label>
@@ -714,8 +745,6 @@ const Booking = () => {
 
                     </div>
 
-                    {/* PHONE */}
-
                     <div className="form-group">
 
                       <label>
@@ -724,8 +753,8 @@ const Booking = () => {
 
                       <input
                         type="tel"
-                        placeholder="10-digit phone number"
                         maxLength="10"
+                        placeholder="10-digit phone number"
                         value={
                           attendee.phone
                         }
@@ -746,7 +775,6 @@ const Booking = () => {
                   </div>
 
                 </div>
-
               )
             )}
 
@@ -754,7 +782,7 @@ const Booking = () => {
 
         </div>
 
-        {/* BOOKING SUMMARY */}
+        {/* SUMMARY */}
 
         <div className="booking-summary">
 
@@ -777,14 +805,12 @@ const Booking = () => {
             </span>
 
             <strong>
-
-              {Number(ticketPrice) > 0
+              {ticketPrice > 0
                 ? `₹${
-                    Number(ticketPrice) *
+                    ticketPrice *
                     ticketCount
                   }`
                 : "Free"}
-
             </strong>
 
           </div>
@@ -794,17 +820,24 @@ const Booking = () => {
             onClick={
               handleConfirmBooking
             }
+            disabled={submitting}
           >
-            Confirm Booking
-            <span>→</span>
+            {submitting
+              ? "Booking..."
+              : "Confirm Booking"}
+
+            {!submitting && (
+              <span>
+                →
+              </span>
+            )}
           </button>
 
         </div>
 
       </div>
-
     </section>
   );
 };
 
-export default Booking;
+export default BookTickets;
