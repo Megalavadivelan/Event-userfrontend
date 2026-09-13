@@ -203,7 +203,7 @@ const Booking = () => {
         return false;
       }
 
-      // Indian phone number validation
+      // Indian phone validation
       const phonePattern = /^[6-9]\d{9}$/;
 
       if (!phonePattern.test(attendee.phone)) {
@@ -225,21 +225,19 @@ const Booking = () => {
   // =========================================
 
   const handleConfirmBooking = async () => {
-    // Validate attendees
     if (!validateBooking()) {
       return;
     }
 
     try {
-      // Get logged-in user
-      const user = JSON.parse(
-        localStorage.getItem("user")
-      );
+      // =========================================
+      // GET LOGGED-IN USER
+      // =========================================
 
-      console.log("LOGGED IN USER:", user);
+      const storedUser =
+        localStorage.getItem("user");
 
-      // User not logged in
-      if (!user) {
+      if (!storedUser) {
         alert(
           "Please login before booking a ticket."
         );
@@ -248,27 +246,58 @@ const Booking = () => {
         return;
       }
 
-      // Check user ID
+      const user = JSON.parse(storedUser);
+
+      console.log(
+        "LOGGED IN USER:",
+        user
+      );
+
+      // =========================================
+      // USER DETAILS
+      // =========================================
+
       const userId =
         user.id ||
         user._id ||
         user.userId;
 
-      // Check user email
+      const userName =
+        user.name ||
+        user.userName ||
+        "";
+
       const userEmail =
         user.email ||
-        user.userEmail;
+        user.userEmail ||
+        "";
 
-      if (!userId || !userEmail) {
+      // =========================================
+      // CHECK USER DATA
+      // =========================================
+
+      if (!userId || !userName || !userEmail) {
+        console.error(
+          "USER DATA MISSING:",
+          user
+        );
+
         alert(
           "User information is missing. Please login again."
         );
+
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("authToken");
 
         navigate("/");
         return;
       }
 
-      // Check event ID
+      // =========================================
+      // EVENT ID
+      // =========================================
+
       const eventId =
         event._id ||
         event.id;
@@ -286,8 +315,17 @@ const Booking = () => {
       // BOOKING DATA
       // =========================================
 
+      const price =
+        Number(ticketPrice) || 0;
+
+      const totalAmount =
+        price * ticketCount;
+
       const bookingData = {
         userId: userId,
+
+        // IMPORTANT
+        userName: userName,
 
         userEmail: userEmail,
 
@@ -297,16 +335,13 @@ const Booking = () => {
 
         eventDate: event.date,
 
-        ticketPrice:
-          Number(ticketPrice) || 0,
+        ticketPrice: price,
 
         numberOfTickets: ticketCount,
 
         attendees: attendees,
 
-        totalAmount:
-          (Number(ticketPrice) || 0) *
-          ticketCount,
+        totalAmount: totalAmount,
       };
 
       console.log(
@@ -315,7 +350,7 @@ const Booking = () => {
       );
 
       // =========================================
-      // BACKEND API
+      // CREATE BOOKING
       // =========================================
 
       const response = await axios.post(
@@ -333,10 +368,13 @@ const Booking = () => {
       // =========================================
 
       if (response.data.success) {
-  alert("Ticket booked successfully!");
+        alert(
+          "Ticket booked successfully!"
+        );
 
-  navigate(`/eventdetails/${event._id || event.id}`);
-}else {
+        // Booking successful -> same Event Details page
+        navigate(`/eventdetails/${eventId}`);
+      } else {
         alert(
           response.data.message ||
             "Booking failed."
@@ -364,9 +402,7 @@ const Booking = () => {
   return (
     <section className="booking-page">
 
-      {/* =========================================
-          BACKGROUND
-      ========================================= */}
+      {/* BACKGROUND */}
 
       <div className="booking-sparkle booking-sparkle-1">
         ✦
@@ -380,9 +416,7 @@ const Booking = () => {
         ✦
       </div>
 
-      {/* =========================================
-          HEADER
-      ========================================= */}
+      {/* HEADER */}
 
       <div className="booking-header">
 
@@ -410,15 +444,11 @@ const Booking = () => {
 
       </div>
 
-      {/* =========================================
-          MAIN CONTAINER
-      ========================================= */}
+      {/* MAIN CONTAINER */}
 
       <div className="booking-container">
 
-        {/* =========================================
-            EVENT SUMMARY
-        ========================================= */}
+        {/* EVENT SUMMARY */}
 
         <div className="booking-event-card">
 
@@ -487,9 +517,7 @@ const Booking = () => {
 
         </div>
 
-        {/* =========================================
-            TICKET COUNT
-        ========================================= */}
+        {/* TICKET COUNT */}
 
         <div className="booking-section">
 
@@ -563,9 +591,7 @@ const Booking = () => {
 
         </div>
 
-        {/* =========================================
-            ATTENDEE DETAILS
-        ========================================= */}
+        {/* ATTENDEE DETAILS */}
 
         <div className="booking-section">
 
@@ -728,9 +754,7 @@ const Booking = () => {
 
         </div>
 
-        {/* =========================================
-            BOOKING SUMMARY
-        ========================================= */}
+        {/* BOOKING SUMMARY */}
 
         <div className="booking-summary">
 
