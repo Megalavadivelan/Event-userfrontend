@@ -333,14 +333,10 @@ const Booking = () => {
       // =========================================
 
       if (response.data.success) {
-        alert(
-          "Ticket booked successfully! 🎟️"
-        );
+  alert("Ticket booked successfully!");
 
-        // IMPORTANT:
-        // Booking successful -> Events page
-        navigate("/events");
-      } else {
+  navigate(`/eventdetails/${event._id || event.id}`);
+}else {
         alert(
           response.data.message ||
             "Booking failed."
