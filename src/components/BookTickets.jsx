@@ -243,7 +243,6 @@ const Booking = () => {
 
   ticketPrice: Number(ticketPrice) || 0,
   numberOfTickets: ticketCount,
-
   attendees: attendees,
 
   totalAmount:
