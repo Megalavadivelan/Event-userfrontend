@@ -10,15 +10,12 @@ import AdminLogin from "./components/AdminLogin.jsx";
 import UserDashboard from "./components/UserDashboard.jsx";
 import Home from "./components/Home.jsx";
 import SignOut from "./components/SignOut.jsx";
-
 import OrganizeEvent from "./components/OrganizeEvents.jsx";
 import Profile from "./components/Profile.jsx";
-
 import Events from "./components/Events.jsx";
 import EventDetails from "./components/EventDetails.jsx";
 import BookTickets from "./components/BookTickets.jsx";
 import MyBookings from "./components/MyBookings.jsx";
-
 import Contact from "./components/Contact.jsx";
 import Gallery from "./components/Gallery.jsx";
 import About from "./components/About.jsx";
@@ -26,20 +23,18 @@ import About from "./components/About.jsx";
 function App() {
   return (
     <Routes>
-
       {/* =========================================
           WITHOUT NAVBAR
       ========================================= */}
 
-      <Route
-        path="/"
-        element={<Login />}
-      />
+      <Route path="/" element={<Login />} />
 
-      <Route
-        path="/signup"
-        element={<Signup />}
-      />
+      {/* IMPORTANT:
+          Logout redirects here
+      */}
+      <Route path="/login" element={<Login />} />
+
+      <Route path="/signup" element={<Signup />} />
 
       <Route
         path="/roleselection"
@@ -55,10 +50,7 @@ function App() {
           WITH NAVBAR
       ========================================= */}
 
-      <Route
-        element={<MainLayout />}
-      >
-
+      <Route element={<MainLayout />}>
         <Route
           path="/home"
           element={<Home />}
@@ -84,21 +76,15 @@ function App() {
           element={<Events />}
         />
 
-        {/* EVENT DETAILS */}
-
         <Route
           path="/eventdetails/:id"
           element={<EventDetails />}
         />
 
-        {/* BOOK TICKETS */}
-
         <Route
           path="/booktickets"
           element={<BookTickets />}
         />
-
-        {/* MY BOOKINGS */}
 
         <Route
           path="/mybookings"
@@ -124,9 +110,7 @@ function App() {
           path="/signout"
           element={<SignOut />}
         />
-
       </Route>
-
     </Routes>
   );
 }
