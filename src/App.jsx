@@ -17,7 +17,6 @@ import EventDetails from "./components/EventDetails.jsx";
 import BookTickets from "./components/BookTickets.jsx";
 import MyBookings from "./components/MyBookings.jsx";
 import Contact from "./components/Contact.jsx";
-import Gallery from "./components/Gallery.jsx";
 import About from "./components/About.jsx";
 
 function App() {
@@ -96,10 +95,7 @@ function App() {
           element={<Contact />}
         />
 
-        <Route
-          path="/gallery"
-          element={<Gallery />}
-        />
+       
 
         <Route
           path="/about"

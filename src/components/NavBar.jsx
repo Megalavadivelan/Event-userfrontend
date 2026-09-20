@@ -120,10 +120,6 @@ const Navbar = () => {
                 Contacts
               </Link>
 
-              <Link to="/gallery" className="dropdown-item">
-                Gallery
-              </Link>
-
               <Link to="/mybookings" className="dropdown-item">
                 My Bookings
               </Link>
