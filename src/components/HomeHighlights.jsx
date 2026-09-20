@@ -6,68 +6,11 @@ import "../styles/HomeHighlights.css";
 const EVENTS_API =
   "https://api-admin-rouge.vercel.app/events/getevents";
 
-// உங்கள் Gallery backend API இருந்தால் இதை மட்டும் மாற்றுங்கள்
-const GALLERY_API =
-  "https://api-admin-rouge.vercel.app/gallery/getgallery";
-
 function HomeHighlights() {
   const navigate = useNavigate();
 
-  const [gallery, setGallery] = useState([]);
   const [events, setEvents] = useState([]);
-
-  const [galleryLoading, setGalleryLoading] = useState(true);
   const [eventsLoading, setEventsLoading] = useState(true);
-
-  /* =====================================================
-     FETCH GALLERY
-  ===================================================== */
-
-  useEffect(() => {
-    const fetchGallery = async () => {
-      try {
-        const response = await axios.get(GALLERY_API);
-
-        console.log("HOME GALLERY RESPONSE:", response.data);
-
-        let galleryData = [];
-
-        if (Array.isArray(response.data)) {
-          galleryData = response.data;
-        } else if (Array.isArray(response.data.data)) {
-          galleryData = response.data.data;
-        } else if (Array.isArray(response.data.gallery)) {
-          galleryData = response.data.gallery;
-        }
-
-        // Latest first
-        galleryData.sort((a, b) => {
-          const dateA = new Date(
-            a.createdAt || a.created_at || 0
-          );
-
-          const dateB = new Date(
-            b.createdAt || b.created_at || 0
-          );
-
-          return dateB - dateA;
-        });
-
-        setGallery(galleryData.slice(0, 4));
-      } catch (error) {
-        console.error(
-          "Failed to fetch gallery:",
-          error
-        );
-
-        setGallery([]);
-      } finally {
-        setGalleryLoading(false);
-      }
-    };
-
-    fetchGallery();
-  }, []);
 
   /* =====================================================
      FETCH EVENTS
@@ -115,7 +58,7 @@ function HomeHighlights() {
      IMAGE URL
   ===================================================== */
 
-  const getImageUrl = (item, type = "event") => {
+  const getImageUrl = (item) => {
     if (!item) return null;
 
     const image =
@@ -123,8 +66,7 @@ function HomeHighlights() {
       item.poster ||
       item.imageUrl ||
       item.eventImage ||
-      item.photo ||
-      item.galleryImage;
+      item.photo;
 
     if (!image) {
       return null;
@@ -145,9 +87,7 @@ function HomeHighlights() {
 
     // Relative image path
     const baseURL =
-      type === "gallery"
-        ? "https://api-admin-rouge.vercel.app"
-        : "https://api-admin-rouge.vercel.app";
+      "https://api-admin-rouge.vercel.app";
 
     return `${baseURL}/${image.replace(/^\/+/, "")}`;
   };
@@ -197,108 +137,6 @@ function HomeHighlights() {
       <div className="home-sparkle home-sparkle-3"></div>
       <div className="home-sparkle home-sparkle-4"></div>
       <div className="home-sparkle home-sparkle-5"></div>
-
-      {/* =================================================
-          GALLERY SECTION
-      ================================================= */}
-
-      <div className="highlight-section">
-
-        <div className="section-heading-row">
-
-          <div>
-            <span className="section-small-title">
-              ✦ MOMENTS
-            </span>
-
-            <h2>
-              Latest from our{" "}
-              <span>Gallery</span>
-            </h2>
-
-            <p>
-              Take a look at the latest moments
-              captured from our events.
-            </p>
-          </div>
-
-          <button
-            className="view-all-btn"
-            onClick={() => navigate("/gallery")}
-          >
-            View All
-            <span>→</span>
-          </button>
-
-        </div>
-
-        <div className="gallery-highlight-grid">
-
-          {galleryLoading ? (
-            <>
-              {[1, 2, 3, 4].map((item) => (
-                <div
-                  className="gallery-skeleton"
-                  key={item}
-                ></div>
-              ))}
-            </>
-          ) : gallery.length > 0 ? (
-            gallery.map((item, index) => {
-
-              const imageUrl = getImageUrl(
-                item,
-                "gallery"
-              );
-
-              return (
-                <div
-                  className="gallery-highlight-card"
-                  key={
-                    item._id ||
-                    item.id ||
-                    index
-                  }
-                >
-
-                  {imageUrl ? (
-                    <img
-                      src={imageUrl}
-                      alt={
-                        item.title ||
-                        "Event Gallery"
-                      }
-                    />
-                  ) : (
-                    <div className="gallery-placeholder">
-                      ✨
-                    </div>
-                  )}
-
-                  <div className="gallery-card-overlay">
-
-                    <span>
-                      {item.title ||
-                        item.caption ||
-                        "Event Moment"}
-                    </span>
-
-                  </div>
-
-                </div>
-              );
-            })
-          ) : (
-            <div className="empty-highlight">
-              <span>✨</span>
-              <p>No gallery images yet</p>
-            </div>
-          )}
-
-        </div>
-
-      </div>
-
 
       {/* =================================================
           EVENTS SECTION
@@ -424,7 +262,7 @@ function HomeHighlights() {
 
                       <strong>
                         {eventPrice !==
-                        undefined &&
+                          undefined &&
                         eventPrice !== null
                           ? `₹${eventPrice}`
                           : "Free"}
@@ -457,7 +295,6 @@ function HomeHighlights() {
 
       </div>
 
-
       {/* =================================================
           HAPPY ORGANIZERS
       ================================================= */}
@@ -481,7 +318,6 @@ function HomeHighlights() {
           </p>
 
         </div>
-
 
         <div className="organizer-cards">
 
@@ -517,7 +353,6 @@ function HomeHighlights() {
 
           </div>
 
-
           <div className="organizer-card">
 
             <div className="quote-icon">
@@ -549,7 +384,6 @@ function HomeHighlights() {
             </div>
 
           </div>
-
 
           <div className="organizer-card">
 
