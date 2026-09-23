@@ -39,7 +39,7 @@ try {
   setLoading(true);
 
   const response = await axios.post(
-    "https://user-api-iota-six.vercel.app/organizer-requests/getrequests",
+    "https://user-api-iota-six.vercel.app/organizer-requests/create",
     formData,
     {
       headers: {
